@@ -2,11 +2,13 @@ package com.fmatheus.app.controller.security;
 
 import com.fmatheus.app.config.properties.JksProperties;
 import com.fmatheus.app.config.properties.RegistredClientProperties;
+import com.fmatheus.app.controller.util.CharacterUtil;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -55,6 +57,7 @@ import java.util.stream.Collectors;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -88,6 +91,61 @@ public class SecurityConfig {
 
     }
 
+    @Bean
+    @Order(2)
+    public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .formLogin(withDefaults())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .build();
+    }
+
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+
+        CharSequence clientCredentialsSecret = new StringBuilder(this.registredClientProperties.getClientSecretOne());
+        RegisteredClient registeredClientCredentials = RegisteredClient
+                .withId(UUID.randomUUID().toString())
+                .clientId(this.registredClientProperties.getClientIdOne())
+                .clientSecret(passwordEncoder().encode(clientCredentialsSecret))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .scope(OidcScopes.OPENID)
+                .scope("read")
+                .scope("write")
+                .build();
+
+        CharSequence secret = new StringBuilder(this.registredClientProperties.getClientSecretTwo());
+        RegisteredClient registeredPassword = RegisteredClient.withId("client")
+                .clientId(this.registredClientProperties.getClientIdTwo())
+                .clientSecret(passwordEncoder().encode(secret))
+                .scope("read")
+                .scope(OidcScopes.OPENID)
+                .scope(OidcScopes.PROFILE)
+                .scope("read")
+                .scope("write")
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2")
+                .redirectUri("http://insomnia")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.JWT_BEARER)
+                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofHours(1))
+                        .refreshTokenTimeToLive(Duration.ofDays(1))
+                        .reuseRefreshTokens(false)
+                        .build())
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false) // True - Requer a confirmacao dos escopos.
+                        .requireProofKey(false) // True - Requer  uma chave para cada solicitacao de autorizacao.
+                        .build())
+                .build();
+
+        return new InMemoryRegisteredClientRepository(registeredClientCredentials, registeredPassword);
+    }
+
     private JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
@@ -117,21 +175,14 @@ public class SecurityConfig {
 
 
     private Consumer<List<AuthenticationProvider>> getProviders() {
-        return a -> a.forEach(System.out::println);
+        return a -> a.forEach(provider -> log.info(provider.toString()));
+
     }
 
     private Consumer<List<AuthenticationConverter>> getConverters() {
-        return a -> a.forEach(System.out::println);
+        return a -> a.forEach(converter -> log.info(converter.toString()));
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .formLogin(withDefaults())
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-                .build();
-    }
 
     @Bean
     public OAuth2AuthorizationService authorizationService() {
@@ -150,48 +201,13 @@ public class SecurityConfig {
     }
 
 
-
-    @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-        CharSequence secret = new StringBuilder(this.registredClientProperties.getClientSecretTwo());
-        RegisteredClient registeredClient = RegisteredClient.withId("client")
-                .clientId(this.registredClientProperties.getClientIdTwo())
-                .clientSecret(passwordEncoder().encode(secret))
-                .scope("read")
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.PROFILE)
-                .scope("read")
-                .scope("write")
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2")
-                .redirectUri("http://insomnia")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .authorizationGrantType(AuthorizationGrantType.JWT_BEARER)
-                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofHours(1))
-                        .refreshTokenTimeToLive(Duration.ofDays(1))
-                        .reuseRefreshTokens(false)
-                        .build())
-                .clientSettings(ClientSettings.builder()
-                        .requireAuthorizationConsent(false) // True - Requer a confirmacao dos escopos.
-                        .requireProofKey(false) // True - Requer  uma chave para cada solicitacao de autorizacao.
-                        .build())
-                .build();
-
-        return new InMemoryRegisteredClientRepository(registeredClient);
-    }
-
-
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
     }
 
     @Bean
-    public OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator() {
+    public OAuth2TokenGenerator<OAuth2Token> tokenGenerator() {
         NimbusJwtEncoder jwtEncoder = new NimbusJwtEncoder(jwkSource());
         JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
         jwtGenerator.setJwtCustomizer(tokenCustomizer());
@@ -215,8 +231,9 @@ public class SecurityConfig {
                 if (context.getTokenType().getValue().equals("access_token")) {
                     context.getClaims()
                             .claim("id", customUserDetails.getUser().getId().toString())
-                            .claim("authorities", authorities)
-                            .claim("username", customUserDetails.getUsername());
+                            .claim("username", customUserDetails.getUsername())
+                            .claim("fullname", Objects.requireNonNull(CharacterUtil.convertFirstUppercaseCharacter(customUserDetails.getUser().getPerson().getName())))
+                            .claim("authorities", authorities);
                 }
 
             }
