@@ -150,6 +150,7 @@ public class SecurityConfig {
     }
 
 
+
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         CharSequence secret = new StringBuilder(this.registredClientProperties.getClientSecretTwo());
