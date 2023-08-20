@@ -1,7 +1,9 @@
 package com.fmatheus.app.controller.enumerable;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public enum MessagesEnum {
     SUCCESS_CREATE(HttpStatus.CREATED, "message.success.create"),
     SUCCESS_UPDATE(HttpStatus.CREATED, "message.success.update"),
@@ -14,12 +16,10 @@ public enum MessagesEnum {
     ERROR_NOT_READABLE(HttpStatus.BAD_REQUEST, "message.error.not-readable"),
     ERROR_NOT_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "message.error.unauthorized"),
     ERROR_EXIST_RECORD(HttpStatus.BAD_REQUEST, "message.error.exist-record"),
-    ERROR_USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "message.error.user-not-found"),
     ERROR_EXIST_DOCUMENT(HttpStatus.BAD_REQUEST, "message.error.exist-document"),
     ERROR_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "message.error.exist-email"),
     ERROR_RECORD_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.record-not-exist"),
-    ERROR_DATA_INTEGRITY_VIOLATION(HttpStatus.NOT_ACCEPTABLE, "message.error.data-integrity-violation"),
-    ERROR_USER_INATIVE(HttpStatus.UNAUTHORIZED, "message.error.user-inative");
+    ERROR_DATA_INTEGRITY_VIOLATION(HttpStatus.NOT_ACCEPTABLE, "message.error.data-integrity-violation");
 
 
     private final HttpStatus httpSttus;
@@ -30,11 +30,4 @@ public enum MessagesEnum {
         this.message = message;
     }
 
-    public HttpStatus getHttpSttus() {
-        return this.httpSttus;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
 }
