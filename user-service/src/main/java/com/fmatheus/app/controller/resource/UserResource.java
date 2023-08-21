@@ -3,7 +3,7 @@ package com.fmatheus.app.controller.resource;
 
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.rule.UserRule;
-import com.fmatheus.app.controller.security.authorize.AllAuthorize;
+import com.fmatheus.app.controller.security.authorize.ReadAuthorize;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ public class UserResource {
 
     private final UserRule rule;
 
-    @AllAuthorize
+    @ReadAuthorize
     @GetMapping
     public ResponseEntity<Page<UserResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var response = this.rule.findAllFilter(pageable, filter);
