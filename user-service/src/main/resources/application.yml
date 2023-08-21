@@ -3,6 +3,8 @@ logging:
     level: '%5p [${spring.properties.name:},%X{traceId:-},%X{spanId:-}]'
 server:
   port: 9100
+  servlet:
+    context-path: /api/v1
 spring:
   application:
     name: user-server
@@ -28,4 +30,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: ${JPA_SHOW_SQL:false}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
 

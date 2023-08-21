@@ -20,6 +20,16 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -42,4 +52,9 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <commons-lang3.version>3.13.0</commons-lang3.version>
+        <modelmapper.version>3.1.1</modelmapper.version>
+    </properties>
 </project>

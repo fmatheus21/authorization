@@ -1,7 +1,5 @@
 package com.fmatheus.app.controller.dto.response;
 
-
-import com.fmatheus.app.model.entity.Base;
 import lombok.*;
 
 
@@ -9,7 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PermissionResponse extends Base {
+public class SystemsResponse extends BaseResponse {
     private String name;
-    private SystemsResponse system;
 }
