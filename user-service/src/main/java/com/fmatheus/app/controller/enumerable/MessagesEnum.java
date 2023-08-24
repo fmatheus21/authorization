@@ -19,7 +19,8 @@ public enum MessagesEnum {
     ERROR_EXIST_DOCUMENT(HttpStatus.BAD_REQUEST, "message.error.exist-document"),
     ERROR_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "message.error.exist-email"),
     ERROR_RECORD_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.record-not-exist"),
-    ERROR_DATA_INTEGRITY_VIOLATION(HttpStatus.NOT_ACCEPTABLE, "message.error.data-integrity-violation");
+    ERROR_DATA_INTEGRITY_VIOLATION(HttpStatus.NOT_ACCEPTABLE, "message.error.data-integrity-violation"),
+    ERROR_USER_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.user-not-exist");
 
 
     private final HttpStatus httpSttus;

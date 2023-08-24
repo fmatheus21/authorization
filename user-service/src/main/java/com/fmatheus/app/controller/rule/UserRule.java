@@ -2,6 +2,7 @@ package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.controller.converter.UserConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
+import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.UserPartialResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
@@ -39,8 +40,9 @@ public class UserRule {
         return this.userConverter.converterToResponse(response);
     }
 
-    public UserResponse update(UUID id, Jwt jwt) {
+    public UserResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
+        var result =this.userService.findByUsername(username).orElseThrow(this.messageResponse::errorUserdNotExist);
         return null;
     }
 }

@@ -13,4 +13,6 @@ public class PersonResponse {
     private String name;
     private String document;
     private LocalDateTime createdAt;
+    private AddressResponse address;
+    private ContactResponse contact;
 }

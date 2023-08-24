@@ -1,6 +1,5 @@
 package com.fmatheus.app.controller.dto.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateRequest extends BaseRequest {
-    private String username;
-    private PersonUpdateRequest person;
-    private AddressUpdateRequest address;
+public class PersonUpdateRequest {
+    private String name;
 }

@@ -18,7 +18,7 @@ public class UserConverterImpl implements UserConverter {
     private final ModelMapper mapper;
     private final ParmissionConverter parmissionConverter;
     private final PersonConverter personConverter;
-    private final AddressConverter addressConverter;
+
 
     @Override
     public User converterToEntity(Object o) {
@@ -27,12 +27,9 @@ public class UserConverterImpl implements UserConverter {
 
     @Override
     public UserResponse converterToResponse(User user) {
+        this.personConverter.converterToResponse(user.getPerson());
         var response = this.mapper.map(user, UserResponse.class);
-        var person = this.personConverter.converterToResponse(user.getPerson());
-        var address = this.addressConverter.converterToResponse(user.getPerson().getAddress());
         var permissions = user.getPermissions().stream().map(this.parmissionConverter::converterToResponse).toList();
-        response.setPerson(person);
-        response.setAddress(address);
         response.setPermissions(permissions);
         return response;
     }

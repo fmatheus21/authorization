@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class ParmissionConverterImpl implements ParmissionConverter {
+public class PermissionConverterImpl implements ParmissionConverter {
 
     private final ModelMapper mapper;
     private final SystemConverter systemConverter;

@@ -50,6 +50,10 @@ public class MessageResponse {
         return new BadRequestException(MessagesEnum.ERROR_RECORD_NOT_EXIST);
     }
 
+    public BadRequestException errorUserdNotExist() {
+        return new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST);
+    }
+
     public BadRequestException errorExistRecord() {
         return new BadRequestException(MessagesEnum.ERROR_EXIST_RECORD);
     }
