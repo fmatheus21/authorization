@@ -23,17 +23,6 @@ public class UserUpdateConverterImpl implements UserUpdateConverter {
         return user;
     }
 
-    @Override
-    public User converterToEntity(UserUpdateRequest request) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Object converterToResponse(User user) {
-        throw new UnsupportedOperationException();
-    }
-
-
     private Address converteAddress(Address address, AddressUpdateRequest request) {
         address.setCity(CharacterUtil.convertAllUppercaseCharacters(request.getCity()));
         address.setNumber(CharacterUtil.convertAllUppercaseCharacters(request.getNumber()));
