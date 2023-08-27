@@ -1,6 +1,7 @@
 package com.fmatheus.app.controller.dto.request;
 
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserUpdateRequest extends BaseRequest {
-    private String username;
+
+    @Valid
     private PersonUpdateRequest person;
-    private AddressUpdateRequest address;
+
 }

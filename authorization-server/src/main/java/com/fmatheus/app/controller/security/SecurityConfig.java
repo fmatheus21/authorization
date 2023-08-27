@@ -17,7 +17,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,20 +40,17 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.*;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.io.InputStream;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -150,33 +146,6 @@ public class SecurityConfig {
         return new InMemoryRegisteredClientRepository(registeredClientCredentials, registeredPassword);
     }
 
-    private JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-
-        converter.setJwtGrantedAuthoritiesConverter(
-                jwt -> {
-                    List<String> userRoleAuthorities = jwt.getClaimAsStringList("authorities");
-
-                    if (userRoleAuthorities == null) {
-                        userRoleAuthorities = Collections.emptyList();
-                    }
-
-                    JwtGrantedAuthoritiesConverter scopesConverter = new JwtGrantedAuthoritiesConverter();
-
-                    Collection<GrantedAuthority> scopeAuthorities = scopesConverter.convert(jwt);
-
-                    scopeAuthorities
-                            .addAll(userRoleAuthorities.stream()
-                                    .map(SimpleGrantedAuthority::new)
-                                    .toList());
-
-                    return scopeAuthorities;
-                }
-        );
-
-        return converter;
-    }
-
 
     private Consumer<List<AuthenticationProvider>> getProviders() {
         return a -> a.forEach(provider -> log.info(provider.toString()));
@@ -266,22 +235,4 @@ public class SecurityConfig {
     }
 
 
-    private static RSAKey generateRsa() {
-        KeyPair keyPair = generateRsaKey();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        return new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(UUID.randomUUID().toString()).build();
-    }
-
-    private static KeyPair generateRsaKey() {
-        KeyPair keyPair;
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            keyPair = keyPairGenerator.generateKeyPair();
-        } catch (Exception ex) {
-            throw new IllegalStateException(ex);
-        }
-        return keyPair;
-    }
 }

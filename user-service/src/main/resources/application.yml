@@ -24,7 +24,7 @@ spring:
     url: jdbc:mysql://localhost:3306/authorization-server?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
     username: root
   jackson:
-    default-property-inclusion: non_null
+    #default-property-inclusion: non_null
     serialization:
       fail_on_empty_beans: false
   jpa:

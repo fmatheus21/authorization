@@ -1,6 +1,7 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.AddressConverter;
+import com.fmatheus.app.controller.converter.ContactConverter;
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
@@ -15,6 +16,7 @@ public class PersonConverterImpl implements PersonConverter {
 
     private final ModelMapper mapper;
     private final AddressConverter addressConverter;
+    private final ContactConverter contactConverter;
 
     @Override
     public Person converterToEntity(Object o) {
@@ -25,6 +27,7 @@ public class PersonConverterImpl implements PersonConverter {
     public PersonResponse converterToResponse(Person person) {
         person.setName(CharacterUtil.convertFirstUppercaseCharacter(person.getName()));
         this.addressConverter.converterToResponse(person.getAddress());
+        this.contactConverter.converterToResponse(person.getContact());
         return this.mapper.map(person, PersonResponse.class);
     }
 }

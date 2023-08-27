@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        throw new UnsupportedOperationException();
+       return this.repository.save(user);
     }
 
 

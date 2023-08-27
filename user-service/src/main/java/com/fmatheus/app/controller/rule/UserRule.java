@@ -2,6 +2,7 @@ package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.controller.converter.UserConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
+import com.fmatheus.app.controller.converter.UserUpdateConverter;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.UserPartialResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
@@ -23,9 +24,12 @@ public class UserRule {
 
     private final UserService userService;
 
+
     private final UserConverter userConverter;
 
     private final UserPartialConverter userPartialConverter;
+
+    private final UserUpdateConverter userUpdateConverter;
 
     private final MessageResponse messageResponse;
 
@@ -42,7 +46,12 @@ public class UserRule {
 
     public UserResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
-        var result =this.userService.findByUsername(username).orElseThrow(this.messageResponse::errorUserdNotExist);
-        return null;
+        var result = this.userService.findByUsername(username).orElseThrow(this.messageResponse::errorUserdNotExist);
+        var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
+        var converter = this.userConverter.converterToResponse(commit);
+        converter.setMessage(this.messageResponse.messageSuccessUpdate());
+        return converter;
     }
+
+
 }

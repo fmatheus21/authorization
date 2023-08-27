@@ -18,7 +18,5 @@ public class Systems extends Base {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy = "system", fetch = FetchType.EAGER)
-    private Collection<Permission> permissions;*/
 
 }
