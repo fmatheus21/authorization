@@ -89,7 +89,6 @@ class UserRuleTest {
         verify(this.service).findAllFilter(pageable, filter);
 
         var result = this.userRule.findAllFilter(pageable, filter);
-
         assertFalse(result.isEmpty());
 
     }
