@@ -1,6 +1,7 @@
 package com.fmatheus.app.controller.resource;
 
 
+import com.fmatheus.app.controller.dto.request.PasswordRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.UserPartialResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
@@ -37,15 +38,24 @@ public class UserResource {
 
 
     @ReadAuthorize
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(this.rule.findById(id));
+    public UserResponse findById(@PathVariable UUID id) {
+        return this.rule.findById(id);
     }
 
     @UpdateAuthorize
+
     @PutMapping
-    public ResponseEntity<UserResponse> update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(this.rule.update(request, jwt));
+    public UserResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
+        return this.rule.update(request, jwt);
+    }
+
+    @UpdateAuthorize
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/password")
+    public void updatePassword(@RequestBody @Valid PasswordRequest request, @AuthenticationPrincipal Jwt jwt) {
+        this.rule.updatePassword(request, jwt);
     }
 
 }

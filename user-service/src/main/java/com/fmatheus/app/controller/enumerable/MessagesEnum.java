@@ -20,13 +20,14 @@ public enum MessagesEnum {
     ERROR_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "message.error.exist-email"),
     ERROR_RECORD_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.record-not-exist"),
     ERROR_DATA_INTEGRITY_VIOLATION(HttpStatus.NOT_ACCEPTABLE, "message.error.data-integrity-violation"),
-    ERROR_USER_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.user-not-exist");
+    ERROR_USER_NOT_EXIST(HttpStatus.BAD_REQUEST, "message.error.user-not-exist"),
+    ERROR_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "message.error.password-not-match");
 
 
     private final HttpStatus httpSttus;
     private final String message;
 
-    private MessagesEnum(HttpStatus httpSttus, String message) {
+    MessagesEnum(HttpStatus httpSttus, String message) {
         this.httpSttus = httpSttus;
         this.message = message;
     }

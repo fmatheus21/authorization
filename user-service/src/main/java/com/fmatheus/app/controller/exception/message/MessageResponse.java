@@ -4,6 +4,7 @@ package com.fmatheus.app.controller.exception.message;
 import com.fmatheus.app.controller.enumerable.MessagesEnum;
 import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
+import com.fmatheus.app.controller.exception.PasswordNotMatchException;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,8 +18,8 @@ public class MessageResponse {
     private MessageSource messageSource;
 
 
-    public MessageResponseHandler messageResponse(MessagesEnum messagesEnum) {
-        String message = this.messageSource.getMessage(messagesEnum.getMessage(), (Object[]) null, LocaleContextHolder.getLocale());
+    private MessageResponseHandler messageResponse(MessagesEnum messagesEnum) {
+        String message = this.messageSource.getMessage(messagesEnum.getMessage(), null, LocaleContextHolder.getLocale());
         return new MessageResponseHandler(messagesEnum, messagesEnum.getHttpSttus().getReasonPhrase(), message);
     }
 
@@ -32,10 +33,6 @@ public class MessageResponse {
 
     public MessageResponseHandler messageSuccessDelete() {
         return this.messageResponse(MessagesEnum.SUCCESS_DELETE);
-    }
-
-    public BadRequestException errorBadRequest(MessagesEnum messagesEnum) {
-        return new BadRequestException(messagesEnum);
     }
 
     public BadRequestException errorExistDocument() {
@@ -54,15 +51,19 @@ public class MessageResponse {
         return new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST);
     }
 
-    public BadRequestException errorExistRecord() {
-        return new BadRequestException(MessagesEnum.ERROR_EXIST_RECORD);
+    public void errorExistRecord() {
+        throw new BadRequestException(MessagesEnum.ERROR_EXIST_RECORD);
     }
 
-    public ForbiddenException errorForbidden() {
-        return new ForbiddenException(MessagesEnum.ERROR_FORBIDDEN.getMessage());
+    public void errorForbidden() {
+        throw new ForbiddenException();
     }
 
-    public DataIntegrityViolationException errorDataIntegrityViolationException() {
+    public void errorDataIntegrityViolationException() {
         throw new DataIntegrityViolationException(MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION.getMessage());
+    }
+
+    public void errorPasswordNotMatchException() {
+        throw new PasswordNotMatchException();
     }
 }

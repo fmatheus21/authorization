@@ -8,6 +8,7 @@ import java.util.Collection;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

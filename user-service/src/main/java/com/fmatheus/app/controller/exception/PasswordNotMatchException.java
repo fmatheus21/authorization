@@ -1,5 +1,7 @@
 package com.fmatheus.app.controller.exception;
 
+
+
 import com.fmatheus.app.controller.enumerable.MessagesEnum;
 
 import java.io.Serial;
@@ -9,13 +11,13 @@ import java.io.Serial;
  *
  * @author Fernando Matheus
  */
-public class ForbiddenException extends RuntimeException {
+public class PasswordNotMatchException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public ForbiddenException() {
-        super(MessagesEnum.ERROR_FORBIDDEN.getMessage());
+    public PasswordNotMatchException() {
+        super(MessagesEnum.ERROR_PASSWORD_NOT_MATCH.getMessage());
     }
 
 }

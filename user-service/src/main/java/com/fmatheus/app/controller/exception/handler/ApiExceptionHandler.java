@@ -4,6 +4,7 @@ package com.fmatheus.app.controller.exception.handler;
 import com.fmatheus.app.controller.enumerable.MessagesEnum;
 import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
+import com.fmatheus.app.controller.exception.PasswordNotMatchException;
 import com.fmatheus.app.controller.exception.UserInactiveException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +59,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<Object> handleBadRequestException(RuntimeException ex, WebRequest request) {
+        var messageEnum = MessagesEnum.ERROR_BAD_REQUEST;
         this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
         this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var erro = this.erroMessageResponse(MessagesEnum.ERROR_BAD_REQUEST, this.cause, this.message);
-        return handleExceptionInternal(ex, erro, new HttpHeaders(), MessagesEnum.ERROR_BAD_REQUEST.getHttpSttus(), request);
+        var erro = this.erroMessageResponse(messageEnum, this.cause, this.message);
+        return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
+    }
+
+    @ExceptionHandler({PasswordNotMatchException.class})
+    public ResponseEntity<Object> handlePasswordNotMatchException(RuntimeException ex, WebRequest request) {
+        var messageEnum = MessagesEnum.ERROR_PASSWORD_NOT_MATCH;
+        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
+        this.cause = ExceptionUtils.getRootCauseMessage(ex);
+        var erro = this.erroMessageResponse(messageEnum, this.cause, this.message);
+        return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class})
