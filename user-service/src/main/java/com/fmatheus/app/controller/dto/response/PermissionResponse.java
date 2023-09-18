@@ -5,6 +5,7 @@ import com.fmatheus.app.model.entity.Base;
 import lombok.*;
 
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

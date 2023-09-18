@@ -4,6 +4,7 @@ import com.fmatheus.app.UserMock;
 import com.fmatheus.app.controller.converter.UserConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
+import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -22,6 +23,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +37,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 @ContextConfiguration(classes = {UserRule.class})
 @ExtendWith(SpringExtension.class)
 class UserRuleTest {
+
+    private static final UUID ID = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
 
     @Mock
     private UserService service;
@@ -56,18 +61,16 @@ class UserRuleTest {
     @MockBean
     private MessageResponse messageResponse;
 
-    private UserRule userRule;
+    private UserRule rule;
 
     @BeforeEach
     public void setUp() {
         openMocks(this);
-        userRule = new UserRule(passwordEncoder, service, userConverter, userPartialConverter, userUpdateConverter, messageResponse);
+        rule = new UserRule(passwordEncoder, service, userConverter, userPartialConverter, userUpdateConverter, messageResponse);
     }
 
     /**
      * Metodo de teste: {@link UserRule#findAllFilter(Pageable, UserRepositoryFilter)}
-     *
-     * @author fernando.matheus
      */
     @Test
     @Order(1)
@@ -88,11 +91,14 @@ class UserRuleTest {
         assertEquals(PageImpl.class, actualResult.getClass());
         verify(this.service).findAllFilter(pageable, filter);
 
-        var result = this.userRule.findAllFilter(pageable, filter);
+        var result = this.rule.findAllFilter(pageable, filter);
         assertFalse(result.isEmpty());
 
     }
 
+    /**
+     * Metodo de teste: {@link UserRule#findAllFilter(Pageable, UserRepositoryFilter)}
+     */
     @Test
     @Order(2)
     @DisplayName("Sucesso na listagem de registros vazia.")
@@ -106,9 +112,48 @@ class UserRuleTest {
         assertTrue(actualResult.isEmpty());
         verify(this.service).findAllFilter(pageable, filter);
 
-        var result = userRule.findAllFilter(pageable, filter);
+        var result = rule.findAllFilter(pageable, filter);
 
         assertTrue(result.isEmpty());
     }
+
+    /**
+     * Metodo de teste: {@link UserRule#findById(UUID)}
+     */
+    @Test
+    @Order(3)
+    @DisplayName("Sucesso ao encontrar o registro pelo ID")
+    void findByIdSuccess() {
+
+        var ID_CONSULT = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
+        var optional = Optional.of(UserMock.loadUser());
+        var response = UserMock.loadUserResponse();
+
+        when(this.userConverter.converterToResponse(any(User.class))).thenReturn(response);
+        when(this.service.findById(ID_CONSULT)).thenReturn(optional);
+
+        var actualResult = this.service.findById(ID);
+        assertSame(optional, actualResult);
+        assertTrue(actualResult.isPresent());
+        assertEquals(User.class, actualResult.get().getClass());
+        verify(this.service).findById(ID);
+
+        UserResponse result = rule.findById(ID);
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
+
+    /**
+     * Metodo de teste: {@link UserRule#findById(UUID)}
+     */
+    @Test
+    @Order(4)
+    @DisplayName("Erro ao pesquisar o registro pelo ID")
+    void findByIdException() {
+        UUID uuid = UUID.randomUUID();
+        when(service.findById(any(UUID.class))).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> rule.findById(uuid));
+    }
+
 
 }

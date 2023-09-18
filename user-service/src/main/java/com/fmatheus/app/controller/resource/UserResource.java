@@ -45,7 +45,7 @@ public class UserResource {
     }
 
     @UpdateAuthorize
-
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping
     public UserResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         return this.rule.update(request, jwt);

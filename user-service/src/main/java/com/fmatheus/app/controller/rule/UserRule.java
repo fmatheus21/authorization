@@ -37,17 +37,41 @@ public class UserRule {
 
     private final MessageResponse messageResponse;
 
+
+    /**
+     * Retorna uma lista de usuarios (paginado) de acordo com o filtro informado.
+     *
+     * @param pageable Pageable
+     * @param filter   Objeto contendo os filtros de pesquisa.
+     * @return Page<UserPartialResponse>
+     * @author fernando.matheus
+     */
     public Page<UserPartialResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var list = this.userService.findAllFilter(pageable, filter);
         var listConverter = list.map(this.userPartialConverter::converterToResponse).stream().toList();
         return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
     }
 
+    /**
+     * Pesquisa o usuario pelo ID.
+     *
+     * @param id ID do usuario enviado na variavel de requisicao.
+     * @return UserResponse
+     * @author fernando.matheus
+     */
     public UserResponse findById(UUID id) {
         var response = this.userService.findById(id).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.userConverter.converterToResponse(response);
     }
 
+    /**
+     * Atualiza dados do usuario (nome, endereco e contato). Somente o proprio usuario poderar alterar.
+     *
+     * @param request Objeto enviado no corpo da requisicao.
+     * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
+     * @return UserResponse
+     * @author fernando.matheus
+     */
     public UserResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
@@ -57,7 +81,13 @@ public class UserRule {
         return converter;
     }
 
-
+    /**
+     * Atualiza a senha do usuario. Somente o proprio usuario poderar alterar.
+     *
+     * @param request Objeto enviado no corpo da requisicao.
+     * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
+     * @author fernando.matheus
+     */
     public void updatePassword(PasswordRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
@@ -69,6 +99,13 @@ public class UserRule {
         this.userService.save(result);
     }
 
+    /**
+     * Pesquisa pelo nome de usuario.
+     *
+     * @param username Username do usuario.
+     * @return User
+     * @author fernando.matheus
+     */
     private User findUser(String username) {
         return this.userService.findByUsername(username).orElseThrow(this.messageResponse::errorUserdNotExist);
     }
