@@ -1,6 +1,6 @@
-package com.fmatheus.app.controller.dto.request;
+package com.fmatheus.app.controller.dto.request.update;
 
-
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,15 +13,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordRequest extends BaseRequest {
+public class PersonUpdateRequest {
+
 
     @NotNull
     @NotBlank
-    @Size(min = 8, max = 12)
-    private String password;
+    @Size(max = 70)
+    private String name;
 
-    @NotNull
-    @NotBlank
-    private String confirmPassword;
+    @Valid
+    private AddressUpdateRequest address;
 
+    @Valid
+    private ContactUpdateRequest contact;
 }

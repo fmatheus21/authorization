@@ -1,11 +1,13 @@
 package com.fmatheus.app.controller.resource;
 
 
-import com.fmatheus.app.controller.dto.request.PasswordRequest;
-import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
+import com.fmatheus.app.controller.dto.request.update.PasswordUpdateRequest;
+import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.UserPartialResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.rule.UserRule;
+import com.fmatheus.app.controller.security.authorize.CreateAuthorize;
 import com.fmatheus.app.controller.security.authorize.ReadAuthorize;
 import com.fmatheus.app.controller.security.authorize.UpdateAuthorize;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -54,8 +56,15 @@ public class UserResource {
     @UpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/password")
-    public void updatePassword(@RequestBody @Valid PasswordRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public void updatePassword(@RequestBody @Valid PasswordUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         this.rule.updatePassword(request, jwt);
+    }
+
+    @CreateAuthorize
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping
+    public UserResponse create(@RequestBody @Valid UserCreateRequest request) {
+        return this.rule.create(request);
     }
 
 }

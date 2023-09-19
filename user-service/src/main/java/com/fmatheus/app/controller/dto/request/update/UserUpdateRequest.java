@@ -1,6 +1,7 @@
-package com.fmatheus.app.controller.dto.request;
+package com.fmatheus.app.controller.dto.request.update;
 
 
+import com.fmatheus.app.controller.dto.request.BaseRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

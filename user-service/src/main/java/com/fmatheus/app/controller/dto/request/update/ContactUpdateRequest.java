@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.request;
+package com.fmatheus.app.controller.dto.request.update;
 
 
 import jakarta.validation.constraints.Email;

@@ -10,6 +10,7 @@ message:
     not-found: Registro não encontrado.
     exist-document: O Documento já está cadastrado.
     exist-email: O Email já está cadastrado.
+    exist-phone: O Telefone já está cadastrado.
     record-not-exist: O registro não encontrado.
     data-integrity-violation: O regitro não pôde ser excluído devido a uma Violação de Integridade. Este registro está protegido pelo sistema.
     user-not-exist: Usuário não encontrado.

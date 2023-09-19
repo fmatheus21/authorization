@@ -1,6 +1,7 @@
 package com.fmatheus.app.model.service.impl;
 
 
+import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.UserRepository;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-       return this.repository.save(user);
+        return this.repository.save(user);
     }
 
 
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return this.repository.findByUsername(username);
+        return this.repository.findByUsername(CharacterUtil.removeSpecialCharacters(username));
     }
 
 

@@ -1,15 +1,19 @@
 package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.controller.converter.UserConverter;
+import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.PasswordRequest;
-import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
+import com.fmatheus.app.controller.dto.request.update.PasswordUpdateRequest;
+import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.UserPartialResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
+import com.fmatheus.app.model.service.ContactService;
+import com.fmatheus.app.model.service.PersonService;
 import com.fmatheus.app.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -29,11 +34,17 @@ public class UserRule {
 
     private final UserService userService;
 
+    private final PersonService personService;
+
+    private final ContactService contactService;
+
     private final UserConverter userConverter;
 
     private final UserPartialConverter userPartialConverter;
 
     private final UserUpdateConverter userUpdateConverter;
+
+    private final UserCreateConverter userCreateConverter;
 
     private final MessageResponse messageResponse;
 
@@ -88,15 +99,37 @@ public class UserRule {
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
      * @author fernando.matheus
      */
-    public void updatePassword(PasswordRequest request, Jwt jwt) {
+    public void updatePassword(PasswordUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         if (!request.getPassword().equals(request.getConfirmPassword())) {
-            this.messageResponse.errorPasswordNotMatchException();
+            throw this.messageResponse.errorPasswordNotMatchException();
         }
         var password = this.passwordEncoder.encode(request.getPassword());
         result.setPassword(password);
         this.userService.save(result);
+    }
+
+    public UserResponse create(UserCreateRequest request) {
+        var user = this.userService.findByUsername(request.getPerson().getDocument()).orElse(null);
+        if (Objects.nonNull(user)) {
+            throw this.messageResponse.errorExistDocument();
+        }
+
+        var contact = this.contactService.findByEmail(request.getPerson().getContact().getEmail()).orElse(null);
+        if (Objects.nonNull(contact)) {
+            throw this.messageResponse.errorExistEmail();
+        }
+
+        contact = this.contactService.findByPhone(request.getPerson().getContact().getPhone()).orElse(null);
+        if (Objects.nonNull(contact)) {
+            throw this.messageResponse.errorExistPhone();
+        }
+
+        var person = this.userCreateConverter.converterToEntity(request);
+        var commit = this.personService.save(person);
+
+        return null;
     }
 
     /**

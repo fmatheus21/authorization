@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Builder
@@ -32,9 +31,6 @@ public class Person extends Base {
     @Column(name = "document", nullable = false, length = 20)
     private String document;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Address address;
 
@@ -44,5 +40,8 @@ public class Person extends Base {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Contact contact;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    private User user;
 
 }

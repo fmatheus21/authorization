@@ -1,0 +1,39 @@
+package com.fmatheus.app.model.service.impl;
+
+import com.fmatheus.app.model.entity.Person;
+import com.fmatheus.app.model.repository.PersonRepository;
+import com.fmatheus.app.model.service.PersonService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+
+@RequiredArgsConstructor
+@Service
+public class PersonServiceImpl implements PersonService {
+
+    private final PersonRepository repository;
+
+    @Override
+    public List<Person> findAll() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<Person> findById(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Person save(Person person) {
+        return this.repository.save(person);
+    }
+
+    @Override
+    public void deleteById(UUID uuid) {
+        throw new UnsupportedOperationException();
+    }
+}

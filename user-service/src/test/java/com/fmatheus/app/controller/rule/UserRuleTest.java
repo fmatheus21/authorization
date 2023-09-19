@@ -2,13 +2,18 @@ package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.UserMock;
 import com.fmatheus.app.controller.converter.UserConverter;
+import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
+import com.fmatheus.app.model.service.ContactService;
+import com.fmatheus.app.model.service.PersonService;
 import com.fmatheus.app.model.service.UserService;
+import com.fmatheus.app.model.service.impl.ContactServiceImpl;
+import com.fmatheus.app.model.service.impl.PersonServiceImpl;
 import com.fmatheus.app.model.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,13 +46,24 @@ class UserRuleTest {
     private static final UUID ID = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
 
     @Mock
-    private UserService service;
+    private UserService userService;
+    @Mock
+    private ContactService contactService;
+
+    @Mock
+    private PersonService personService;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
 
     @MockBean
-    private UserServiceImpl userService;
+    private UserServiceImpl userServiceImpl;
+
+    @MockBean
+    private PersonServiceImpl personServiceImpl;
+
+    @MockBean
+    private ContactServiceImpl contactServiceImpl;
 
     @MockBean
     private UserConverter userConverter;
@@ -59,6 +75,9 @@ class UserRuleTest {
     private UserUpdateConverter userUpdateConverter;
 
     @MockBean
+    private UserCreateConverter userCreateConverter;
+
+    @MockBean
     private MessageResponse messageResponse;
 
     private UserRule rule;
@@ -66,7 +85,8 @@ class UserRuleTest {
     @BeforeEach
     public void setUp() {
         openMocks(this);
-        rule = new UserRule(passwordEncoder, service, userConverter, userPartialConverter, userUpdateConverter, messageResponse);
+        rule = new UserRule(passwordEncoder, userService, personService, contactService, userConverter, userPartialConverter,
+                userUpdateConverter, userCreateConverter, messageResponse);
     }
 
     /**
@@ -82,14 +102,14 @@ class UserRuleTest {
         var user = UserMock.loadUser();
         var page = new PageImpl<>(Collections.singletonList(user));
 
-        when(this.service.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
+        when(this.userService.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
         when(this.userPartialConverter.converterToResponse(any(User.class))).thenReturn(UserMock.loadUserPartialResponse());
-        when(this.service.totalPaginator(any(UserRepositoryFilter.class))).thenReturn(1L);
+        when(this.userService.totalPaginator(any(UserRepositoryFilter.class))).thenReturn(1L);
 
-        var actualResult = this.service.findAllFilter(pageable, filter);
+        var actualResult = this.userService.findAllFilter(pageable, filter);
         assertFalse(actualResult.isEmpty());
         assertEquals(PageImpl.class, actualResult.getClass());
-        verify(this.service).findAllFilter(pageable, filter);
+        verify(this.userService).findAllFilter(pageable, filter);
 
         var result = this.rule.findAllFilter(pageable, filter);
         assertFalse(result.isEmpty());
@@ -106,11 +126,11 @@ class UserRuleTest {
         Pageable pageable = PageRequest.of(0, 10);
         UserRepositoryFilter filter = UserMock.loadUserRepositoryFilter();
         Page<User> page = Page.empty();
-        when(this.service.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
+        when(this.userService.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
 
-        var actualResult = this.service.findAllFilter(pageable, filter);
+        var actualResult = this.userService.findAllFilter(pageable, filter);
         assertTrue(actualResult.isEmpty());
-        verify(this.service).findAllFilter(pageable, filter);
+        verify(this.userService).findAllFilter(pageable, filter);
 
         var result = rule.findAllFilter(pageable, filter);
 
@@ -130,13 +150,13 @@ class UserRuleTest {
         var response = UserMock.loadUserResponse();
 
         when(this.userConverter.converterToResponse(any(User.class))).thenReturn(response);
-        when(this.service.findById(ID_CONSULT)).thenReturn(optional);
+        when(this.userService.findById(ID_CONSULT)).thenReturn(optional);
 
-        var actualResult = this.service.findById(ID);
+        var actualResult = this.userService.findById(ID);
         assertSame(optional, actualResult);
         assertTrue(actualResult.isPresent());
         assertEquals(User.class, actualResult.get().getClass());
-        verify(this.service).findById(ID);
+        verify(this.userService).findById(ID);
 
         UserResponse result = rule.findById(ID);
         assertNotNull(result);
@@ -151,7 +171,7 @@ class UserRuleTest {
     @DisplayName("Erro ao pesquisar o registro pelo ID")
     void findByIdException() {
         UUID uuid = UUID.randomUUID();
-        when(service.findById(any(UUID.class))).thenReturn(Optional.empty());
+        when(userService.findById(any(UUID.class))).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> rule.findById(uuid));
     }
 

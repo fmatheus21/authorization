@@ -43,6 +43,10 @@ public class MessageResponse {
         return new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL);
     }
 
+    public BadRequestException errorExistPhone() {
+        return new BadRequestException(MessagesEnum.ERROR_EXIST_PHONE);
+    }
+
     public BadRequestException errorRecordNotExist() {
         return new BadRequestException(MessagesEnum.ERROR_RECORD_NOT_EXIST);
     }
@@ -51,19 +55,19 @@ public class MessageResponse {
         return new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST);
     }
 
-    public void errorExistRecord() {
-        throw new BadRequestException(MessagesEnum.ERROR_EXIST_RECORD);
+    public BadRequestException errorExistRecord() {
+        return new BadRequestException(MessagesEnum.ERROR_EXIST_RECORD);
     }
 
-    public void errorForbidden() {
-        throw new ForbiddenException();
+    public ForbiddenException errorForbidden() {
+        return new ForbiddenException();
     }
 
-    public void errorDataIntegrityViolationException() {
-        throw new DataIntegrityViolationException(MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION.getMessage());
+    public DataIntegrityViolationException errorDataIntegrityViolationException() {
+        return new DataIntegrityViolationException(MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION.getMessage());
     }
 
-    public void errorPasswordNotMatchException() {
-        throw new PasswordNotMatchException();
+    public PasswordNotMatchException errorPasswordNotMatchException() {
+        return new PasswordNotMatchException();
     }
 }

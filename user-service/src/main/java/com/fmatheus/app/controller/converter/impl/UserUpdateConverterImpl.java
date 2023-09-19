@@ -1,9 +1,9 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.AddressUpdateRequest;
-import com.fmatheus.app.controller.dto.request.ContactUpdateRequest;
-import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.request.update.AddressUpdateRequest;
+import com.fmatheus.app.controller.dto.request.update.ContactUpdateRequest;
+import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Address;
 import com.fmatheus.app.model.entity.Contact;
