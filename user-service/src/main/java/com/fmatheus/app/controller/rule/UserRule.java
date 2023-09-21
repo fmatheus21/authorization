@@ -111,17 +111,17 @@ public class UserRule {
     }
 
     public UserResponse create(UserCreateRequest request) {
-        var user = this.userService.findByUsername(request.getPerson().getDocument()).orElse(null);
+        var user = this.userService.findByUsername(request.getDocument()).orElse(null);
         if (Objects.nonNull(user)) {
             throw this.messageResponse.errorExistDocument();
         }
 
-        var contact = this.contactService.findByEmail(request.getPerson().getContact().getEmail()).orElse(null);
+        var contact = this.contactService.findByEmail(request.getContact().getEmail()).orElse(null);
         if (Objects.nonNull(contact)) {
             throw this.messageResponse.errorExistEmail();
         }
 
-        contact = this.contactService.findByPhone(request.getPerson().getContact().getPhone()).orElse(null);
+        contact = this.contactService.findByPhone(request.getContact().getPhone()).orElse(null);
         if (Objects.nonNull(contact)) {
             throw this.messageResponse.errorExistPhone();
         }
