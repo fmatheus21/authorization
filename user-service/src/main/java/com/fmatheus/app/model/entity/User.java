@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -36,6 +37,12 @@ public class User extends Base {
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @ToString.Exclude
     @JoinColumn(name = "id_person", referencedColumnName = "id", nullable = false)

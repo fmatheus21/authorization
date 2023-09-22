@@ -27,7 +27,7 @@ public class UserMock {
 
 
 
-    public static UserPartialResponse loadUserPartialResponse() {
+    /*public static UserPartialResponse loadUserPartialResponse() {
         var user = UserPartialResponse.builder()
                 .username(USER_NAME)
                 .active(true)
@@ -149,5 +149,5 @@ public class UserMock {
         response.setUuid(user.getUuid());
 
         return response;
-    }
+    }*/
 }

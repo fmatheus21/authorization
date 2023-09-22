@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response;
+package com.fmatheus.app.controller.dto;
 
 import lombok.*;
 
@@ -10,6 +10,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseResponse {
+public class BaseUuid {
     private UUID uuid;
 }

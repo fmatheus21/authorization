@@ -17,9 +17,9 @@ public class UserUpdateConverterImpl implements UserUpdateConverter {
 
     @Override
     public User converterToUpdate(User user, UserUpdateRequest request) {
-        user.getPerson().setName(CharacterUtil.convertAllUppercaseCharacters(request.getPerson().getName()));
-        user.getPerson().setAddress(this.converteAddress(user.getPerson().getAddress(), request.getPerson().getAddress()));
-        user.getPerson().setContact(this.converterContact(user.getPerson().getContact(), request.getPerson().getContact()));
+        user.getPerson().setName(CharacterUtil.convertAllUppercaseCharacters(request.getName()));
+        user.getPerson().setAddress(this.converteAddress(user.getPerson().getAddress(), request.getAddress()));
+        user.getPerson().setContact(this.converterContact(user.getPerson().getContact(), request.getContact()));
         return user;
     }
 

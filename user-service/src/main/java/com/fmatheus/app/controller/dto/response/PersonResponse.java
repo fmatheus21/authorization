@@ -1,9 +1,11 @@
 package com.fmatheus.app.controller.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter
@@ -12,7 +14,8 @@ import java.time.LocalDateTime;
 public class PersonResponse {
     private String name;
     private String document;
-    private LocalDateTime createdAt;
     private AddressResponse address;
     private ContactResponse contact;
+    private UserResponse user;
+    private MessageResponseHandler message;
 }

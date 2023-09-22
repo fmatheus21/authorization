@@ -31,12 +31,12 @@ public class Person extends Base {
     @Column(name = "document", nullable = false, length = 20)
     private String document;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
-    private Address address;
-
     @JoinColumn(name = "id_person_type", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private PersonType personType;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    private Address address;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Contact contact;

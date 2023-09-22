@@ -1,8 +1,11 @@
 package com.fmatheus.app.controller.dto.request.update;
 
 
-import com.fmatheus.app.controller.dto.request.BaseRequest;
+
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +15,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateRequest extends BaseRequest {
+public class UserUpdateRequest {
+
+    @NotNull
+    @NotBlank
+    @Size(max = 70)
+    private String name;
 
     @Valid
-    private PersonUpdateRequest person;
+    private AddressUpdateRequest address;
+
+    @Valid
+    private ContactUpdateRequest contact;
 
 }

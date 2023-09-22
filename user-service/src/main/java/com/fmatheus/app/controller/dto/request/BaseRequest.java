@@ -2,7 +2,6 @@ package com.fmatheus.app.controller.dto.request;
 
 import lombok.*;
 
-import java.util.UUID;
 
 @Getter
 @Setter

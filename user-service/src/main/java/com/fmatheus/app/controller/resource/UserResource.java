@@ -4,8 +4,7 @@ package com.fmatheus.app.controller.resource;
 import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
 import com.fmatheus.app.controller.dto.request.update.PasswordUpdateRequest;
 import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.UserPartialResponse;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.rule.UserRule;
 import com.fmatheus.app.controller.security.authorize.CreateAuthorize;
 import com.fmatheus.app.controller.security.authorize.ReadAuthorize;
@@ -33,7 +32,7 @@ public class UserResource {
 
     @ReadAuthorize
     @GetMapping
-    public ResponseEntity<Page<UserPartialResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public ResponseEntity<Page<PersonResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var response = this.rule.findAllFilter(pageable, filter);
         return !response.isEmpty() ? ResponseEntity.ok(response) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -42,14 +41,14 @@ public class UserResource {
     @ReadAuthorize
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public UserResponse findByUuid(@PathVariable UUID uuid) {
+    public PersonResponse findByUuid(@PathVariable UUID uuid) {
         return this.rule.findByUuid(uuid);
     }
 
     @UpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
-    public UserResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public PersonResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         return this.rule.update(request, jwt);
     }
 
@@ -63,7 +62,7 @@ public class UserResource {
     @CreateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public UserResponse create(@RequestBody @Valid UserCreateRequest request) {
+    public PersonResponse create(@RequestBody @Valid UserCreateRequest request) {
         return this.rule.create(request);
     }
 

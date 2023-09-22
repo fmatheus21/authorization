@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @Builder
 @Getter

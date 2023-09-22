@@ -1,13 +1,13 @@
 package com.fmatheus.app.controller.rule;
 
-import com.fmatheus.app.controller.converter.UserConverter;
+import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserPartialConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
 import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
 import com.fmatheus.app.controller.dto.request.update.PasswordUpdateRequest;
 import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.UserPartialResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
@@ -38,9 +38,7 @@ public class UserRule {
 
     private final ContactService contactService;
 
-    private final UserConverter userConverter;
-
-    private final UserPartialConverter userPartialConverter;
+    private final PersonConverter personConverter;
 
     private final UserUpdateConverter userUpdateConverter;
 
@@ -54,12 +52,12 @@ public class UserRule {
      *
      * @param pageable Pageable
      * @param filter   Objeto contendo os filtros de pesquisa.
-     * @return Page<UserPartialResponse>
+     * @return Page<PersonResponse>
      * @author fernando.matheus
      */
-    public Page<UserPartialResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public Page<PersonResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var list = this.userService.findAllFilter(pageable, filter);
-        var listConverter = list.map(this.userPartialConverter::converterToResponse).stream().toList();
+        var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson())).stream().toList();
         return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
     }
 
@@ -67,12 +65,12 @@ public class UserRule {
      * Pesquisa o usuario pelo UUID.
      *
      * @param uuid ID do usuario enviado na variavel de requisicao.
-     * @return UserResponse
+     * @return PersonResponse
      * @author fernando.matheus
      */
-    public UserResponse findByUuid(UUID uuid) {
+    public PersonResponse findByUuid(UUID uuid) {
         var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
-        return this.userConverter.converterToResponse(response);
+        return this.personConverter.converterToResponse(response.getPerson());
     }
 
     /**
@@ -80,15 +78,16 @@ public class UserRule {
      *
      * @param request Objeto enviado no corpo da requisicao.
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
-     * @return UserResponse
+     * @return PersonResponse
      * @author fernando.matheus
      */
-    public UserResponse update(UserUpdateRequest request, Jwt jwt) {
+    public PersonResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
-        var converter = this.userConverter.converterToResponse(commit);
+        var converter = this.personConverter.converterToResponse(commit.getPerson());
         converter.setMessage(this.messageResponse.messageSuccessUpdate());
+        converter.setUser(null);
         return converter;
     }
 
@@ -110,7 +109,7 @@ public class UserRule {
         this.userService.save(result);
     }
 
-    public UserResponse create(UserCreateRequest request) {
+    public PersonResponse create(UserCreateRequest request) {
         var user = this.userService.findByUsername(request.getDocument()).orElse(null);
         if (Objects.nonNull(user)) {
             throw this.messageResponse.errorExistDocument();
@@ -128,7 +127,8 @@ public class UserRule {
 
         var commit = this.personService.save(this.userCreateConverter.converterToEntity(request));
 
-        return this.userConverter.converterToResponse(commit.getUser());
+        //return this.personConverter.converterToResponse(commit.getUser());
+        return null;
     }
 
     /**
