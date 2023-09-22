@@ -24,9 +24,9 @@ public class Base implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Integer id;
 
 
 }

@@ -11,5 +11,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseResponse {
-    private UUID id;
+    private UUID uuid;
 }

@@ -138,41 +138,41 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#findById(UUID)}
+     * Metodo de teste: {@link UserRule#findByUuid(UUID)} (UUID)}
      */
     @Test
     @Order(3)
     @DisplayName("Sucesso ao encontrar o registro pelo ID")
-    void findByIdSuccess() {
+    void findByUuidSuccess() {
 
         var ID_CONSULT = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
         var optional = Optional.of(UserMock.loadUser());
         var response = UserMock.loadUserResponse();
 
         when(this.userConverter.converterToResponse(any(User.class))).thenReturn(response);
-        when(this.userService.findById(ID_CONSULT)).thenReturn(optional);
+        when(this.userService.findByUuid(ID_CONSULT)).thenReturn(optional);
 
-        var actualResult = this.userService.findById(ID);
+        var actualResult = this.userService.findByUuid(ID);
         assertSame(optional, actualResult);
         assertTrue(actualResult.isPresent());
         assertEquals(User.class, actualResult.get().getClass());
-        verify(this.userService).findById(ID);
+        verify(this.userService).findByUuid(ID);
 
-        UserResponse result = rule.findById(ID);
+        UserResponse result = rule.findByUuid(ID);
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     /**
-     * Metodo de teste: {@link UserRule#findById(UUID)}
+     * Metodo de teste: {@link UserRule#findByUuid(UUID)}
      */
     @Test
     @Order(4)
     @DisplayName("Erro ao pesquisar o registro pelo ID")
-    void findByIdException() {
+    void findByUuidException() {
         UUID uuid = UUID.randomUUID();
-        when(userService.findById(any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(RuntimeException.class, () -> rule.findById(uuid));
+        when(userService.findByUuid(any(UUID.class))).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> rule.findByUuid(uuid));
     }
 
 

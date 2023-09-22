@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UserMock {
 
-    private static final UUID ID = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
+    private static final UUID uuid = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
     private static final String USER_NAME = "67780886050";
     private static final String NAME = "Fernando Braga Matheus";
     private static final String EMAIL = "fernando.matheuss@hotmail.com";
@@ -23,7 +23,7 @@ public class UserMock {
     private static final String CITY = "Rio De Janeiro";
     private static final String STATE = "RJ";
     private static final String ZIPCODE = "22793082";
-    private static final UUID ID_PERSON = UUID.fromString("581c2c14-f5f4-11ed-9216-7085c2be6d69");
+    private static final Integer ID_PERSON = 1;
 
 
 
@@ -40,7 +40,7 @@ public class UserMock {
                         .phone(PHONE)
                         .build())
                 .build();
-        user.setId(ID);
+        user.setUuid(uuid);
         return user;
     }
 
@@ -50,7 +50,7 @@ public class UserMock {
                 .active(true)
                 .person(loadPerson())
                 .build();
-        user.setId(ID);
+        user.setUuid(uuid);
         return user;
     }
 
@@ -65,7 +65,6 @@ public class UserMock {
         var person = Person.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .createdAt(LocalDateTime.now())
                 .address(loadAddress())
                 .contact(loadContact())
                 .build();
@@ -83,7 +82,7 @@ public class UserMock {
                 .state(STATE)
                 .zipCode(ZIPCODE)
                 .build();
-        address.setId(UUID.fromString("b5afe373-05d5-11ee-900d-7085c2be6d69"));
+        address.setId(1);
         return address;
     }
 
@@ -91,7 +90,7 @@ public class UserMock {
         var contact = Contact.builder().email(EMAIL)
                 .phone(PHONE)
                 .build();
-        contact.setId(UUID.fromString("8541944c-05d5-11ee-900d-7085c2be6d69"));
+        contact.setId(1);
         return contact;
     }
 
@@ -99,12 +98,12 @@ public class UserMock {
         var system = Systems.builder()
                 .name("user_service")
                 .build();
-        system.setId(UUID.fromString("50b56e7d-2c5e-11ee-a204-581122c7752d"));
+        system.setId(1);
         var permission = Permission.builder()
                 .name("user_service_all_permissions")
                 .system(system)
                 .build();
-        permission.setId(UUID.fromString("5a86bd48-2c66-11ee-a204-581122c7752d"));
+        permission.setId(1);
         return permission;
     }
 
@@ -125,7 +124,6 @@ public class UserMock {
         var personResponse = PersonResponse.builder()
                 .name(user.getPerson().getName())
                 .document(user.getPerson().getDocument())
-                .createdAt(user.getPerson().getCreatedAt())
                 .address(AddressResponse.builder()
                         .city(user.getPerson().getAddress().getCity())
                         .complement(user.getPerson().getAddress().getComplement())
@@ -148,7 +146,7 @@ public class UserMock {
                 .permissions(Collections.singletonList(permissionResponse))
                 .build();
 
-        response.setId(user.getId());
+        response.setUuid(user.getUuid());
 
         return response;
     }

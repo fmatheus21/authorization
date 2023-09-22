@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Component
 public class UserCreateConverterImpl implements UserCreateConverter {
@@ -25,14 +27,17 @@ public class UserCreateConverterImpl implements UserCreateConverter {
 
         var person = this.mapper.map(request, Person.class);
 
-        var personType = PersonType.builder().build();
-        personType.setId(request.getPersonTypeUuid());
+        var personType = PersonType.builder()
+                .uuid(UUID.randomUUID())
+                .build();
+        personType.setId(request.getPersonTypeId());
 
         person.setName(CharacterUtil.convertAllUppercaseCharacters(person.getName()));
         person.setDocument(CharacterUtil.removeSpecialCharacters(person.getDocument()));
         person.setPersonType(personType);
 
         var user = User.builder()
+                .uuid(UUID.randomUUID())
                 .person(person)
                 .active(true)
                 .username(CharacterUtil.removeSpecialCharacters(person.getDocument()))
@@ -65,7 +70,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
 
     @Override
     public UserCreateResponse converterToResponse(Person person) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 

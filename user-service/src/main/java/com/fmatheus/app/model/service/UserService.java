@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserService extends GenericService<User, UUID> {
+public interface UserService extends GenericService<User, Integer> {
+
+    Optional<User> findByUuid(UUID uuid);
 
     Optional<User> findByUsername(String username);
 

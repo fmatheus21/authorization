@@ -1,9 +1,11 @@
 package com.fmatheus.app.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 
 @ToString
@@ -16,6 +18,10 @@ import java.util.Collection;
 @Table(name = "permission", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"id"})})
 public class Permission extends Base {
+
+    @NotNull
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;

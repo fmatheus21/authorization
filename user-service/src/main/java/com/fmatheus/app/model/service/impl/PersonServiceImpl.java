@@ -23,7 +23,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> findById(UUID uuid) {
+    public Optional<Person> findById(Integer id) {
         throw new UnsupportedOperationException();
     }
 
@@ -33,7 +33,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(Integer id) {
         throw new UnsupportedOperationException();
     }
 }

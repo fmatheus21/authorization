@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
@@ -19,6 +21,10 @@ import lombok.*;
         @UniqueConstraint(columnNames = {"id", "name"}),
 })
 public class PersonType extends Base {
+
+    @NotNull
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     @NotNull
     @Size(max = 15)

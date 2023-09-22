@@ -33,7 +33,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Optional<Contact> findById(UUID uuid) {
+    public Optional<Contact> findById(Integer id) {
         throw new UnsupportedOperationException();
     }
 
@@ -43,7 +43,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(Integer id) {
         throw new UnsupportedOperationException();
     }
 }

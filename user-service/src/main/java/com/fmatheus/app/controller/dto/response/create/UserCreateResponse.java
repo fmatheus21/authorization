@@ -9,5 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCreateResponse {
-    private PersonCreateResponse person;
+    private String name;
+    private String document;
+    private AddressCreateResponse address;
+    private ContactCreateResponse contact;
 }

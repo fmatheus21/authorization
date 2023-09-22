@@ -29,8 +29,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<User> findById(UUID uuid) {
-        return this.repository.findById(uuid);
+    public Optional<User> findById(Integer id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<User> findByUuid(UUID uuid) {
+        return this.repository.findByUuid(uuid);
     }
 
 
@@ -41,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(Integer id) {
         throw new UnsupportedOperationException();
     }
 

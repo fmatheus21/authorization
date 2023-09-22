@@ -1,7 +1,10 @@
 package com.fmatheus.app.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -13,6 +16,10 @@ import lombok.*;
         @UniqueConstraint(columnNames = {"name"}),
         @UniqueConstraint(columnNames = {"id"})})
 public class Systems extends Base {
+
+    @NotNull
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 20)

@@ -19,7 +19,7 @@ public class PermissionConverterImpl implements ParmissionConverter {
 
     @Override
     public Permission converterToEntity(Object o) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

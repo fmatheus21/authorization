@@ -1,10 +1,12 @@
 package com.fmatheus.app.controller.dto.request.create;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Builder
@@ -22,7 +24,7 @@ public class UserCreateRequest {
     @Size(max = 20)
     private String document;
 
-    private UUID personTypeUuid;
+    private Integer personTypeId;
 
     @Valid
     @NotNull
@@ -31,4 +33,9 @@ public class UserCreateRequest {
     @Valid
     @NotNull
     private ContactCreateRequest contact;
+
+    @Valid
+    @NotEmpty
+    private Collection<PermissionCreateRequest> permissions;
+
 }

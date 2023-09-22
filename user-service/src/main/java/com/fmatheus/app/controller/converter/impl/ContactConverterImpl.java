@@ -17,7 +17,7 @@ public class ContactConverterImpl implements ContactConverter {
 
     @Override
     public Contact converterToEntity(Object o) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

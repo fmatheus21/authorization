@@ -17,7 +17,7 @@ public class AddressConverterImpl implements AddressConverter {
 
     @Override
     public Address converterToEntity(Object o) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

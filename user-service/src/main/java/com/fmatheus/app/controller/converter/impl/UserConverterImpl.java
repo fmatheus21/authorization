@@ -21,7 +21,7 @@ public class UserConverterImpl implements UserConverter {
 
     @Override
     public User converterToEntity(Object o) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -64,14 +64,14 @@ public class UserRule {
     }
 
     /**
-     * Pesquisa o usuario pelo ID.
+     * Pesquisa o usuario pelo UUID.
      *
-     * @param id ID do usuario enviado na variavel de requisicao.
+     * @param uuid ID do usuario enviado na variavel de requisicao.
      * @return UserResponse
      * @author fernando.matheus
      */
-    public UserResponse findById(UUID id) {
-        var response = this.userService.findById(id).orElseThrow(this.messageResponse::errorRecordNotExist);
+    public UserResponse findByUuid(UUID uuid) {
+        var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.userConverter.converterToResponse(response);
     }
 
@@ -126,10 +126,9 @@ public class UserRule {
             throw this.messageResponse.errorExistPhone();
         }
 
-        var person = this.userCreateConverter.converterToEntity(request);
-        var commit = this.personService.save(person);
+        var commit = this.personService.save(this.userCreateConverter.converterToEntity(request));
 
-        return null;
+        return this.userConverter.converterToResponse(commit.getUser());
     }
 
     /**

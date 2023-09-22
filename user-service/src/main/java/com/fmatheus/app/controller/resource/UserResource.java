@@ -41,9 +41,9 @@ public class UserResource {
 
     @ReadAuthorize
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public UserResponse findById(@PathVariable UUID id) {
-        return this.rule.findById(id);
+    @GetMapping("/{uuid}")
+    public UserResponse findByUuid(@PathVariable UUID uuid) {
+        return this.rule.findByUuid(uuid);
     }
 
     @UpdateAuthorize
