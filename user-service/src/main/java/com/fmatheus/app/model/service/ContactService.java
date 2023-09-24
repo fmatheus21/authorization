@@ -3,7 +3,6 @@ package com.fmatheus.app.model.service;
 import com.fmatheus.app.model.entity.Contact;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface ContactService extends GenericService<Contact, Integer> {
     Optional<Contact> findByEmail(String email);

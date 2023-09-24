@@ -119,7 +119,6 @@ public class SecurityConfig {
         RegisteredClient registeredPassword = RegisteredClient.withId("client")
                 .clientId(this.registredClientProperties.getClientIdTwo())
                 .clientSecret(passwordEncoder().encode(secret))
-                .scope("extension")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope("extension")

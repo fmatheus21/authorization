@@ -13,6 +13,7 @@ import java.util.*;
 @Getter
 public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {
 
+
     @Serial
     private static final long serialVersionUID = 1L;
     private final String username;
@@ -24,6 +25,19 @@ public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthentic
         this.username = (String) Objects.requireNonNull(additionalParameters).get("username");
         this.password = (String) Objects.requireNonNull(additionalParameters).get("password");
         this.scopes = Collections.unmodifiableSet(scopes != null ? new HashSet<>(scopes) : Collections.emptySet());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomAuthenticationToken that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(getUsername(), that.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getUsername());
     }
 
 }

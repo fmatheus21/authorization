@@ -81,11 +81,6 @@ public class UserCreateConverterImpl implements UserCreateConverter {
         throw new UnsupportedOperationException();
     }
 
-
-    /*private Collection<Permission> converterCollectionPermission(Collection<PermissionCreateRequest> permissions) {
-        return new ArrayList<>(permissions.stream().map(this::converterPermission).toList());
-    }*/
-
     private Permission converterPermission(PermissionCreateRequest request) {
         var permission = Permission.builder()
                 .name(request.getName())
