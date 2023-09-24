@@ -1,9 +1,8 @@
-package com.fmatheus.app.controller.dto.request.create;
+package com.fmatheus.app.controller.dto.request.extension;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.UUID;
 
 @Builder
 @Getter

@@ -2,13 +2,12 @@ package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
-import com.fmatheus.app.controller.converter.UserPartialConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
-import com.fmatheus.app.controller.dto.request.update.PasswordUpdateRequest;
-import com.fmatheus.app.controller.dto.request.update.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.PersonResponse;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.request.UserCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.PasswordUpdateRequest;
+import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -52,12 +50,12 @@ public class UserRule {
      *
      * @param pageable Pageable
      * @param filter   Objeto contendo os filtros de pesquisa.
-     * @return Page<PersonResponse>
+     * @return Page<UserReadResponse>
      * @author fernando.matheus
      */
-    public Page<PersonResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public Page<UserReadResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var list = this.userService.findAllFilter(pageable, filter);
-        var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson())).stream().toList();
+        var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson()));
         return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
     }
 
@@ -65,10 +63,10 @@ public class UserRule {
      * Pesquisa o usuario pelo UUID.
      *
      * @param uuid ID do usuario enviado na variavel de requisicao.
-     * @return PersonResponse
+     * @return UserReadResponse
      * @author fernando.matheus
      */
-    public PersonResponse findByUuid(UUID uuid) {
+    public UserReadResponse findByUuid(UUID uuid) {
         var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.personConverter.converterToResponse(response.getPerson());
     }
@@ -78,10 +76,10 @@ public class UserRule {
      *
      * @param request Objeto enviado no corpo da requisicao.
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
-     * @return PersonResponse
+     * @return UserReadResponse
      * @author fernando.matheus
      */
-    public PersonResponse update(UserUpdateRequest request, Jwt jwt) {
+    public UserReadResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
@@ -98,37 +96,40 @@ public class UserRule {
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
      * @author fernando.matheus
      */
-    public void updatePassword(PasswordUpdateRequest request, Jwt jwt) {
+    public MessageResponseHandler updatePassword(PasswordUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
+
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw this.messageResponse.errorPasswordNotMatchException();
         }
-        var password = this.passwordEncoder.encode(request.getPassword());
-        result.setPassword(password);
+
+        var encodedPassword = this.passwordEncoder.encode(request.getPassword());
+        result.setPassword(encodedPassword);
         this.userService.save(result);
+
+        return this.messageResponse.messageSuccessUpdate();
     }
 
-    public PersonResponse create(UserCreateRequest request) {
-        var user = this.userService.findByUsername(request.getDocument()).orElse(null);
-        if (Objects.nonNull(user)) {
+    public UserReadResponse create(UserCreateRequest request) {
+
+        if (this.userService.findByUsername(request.getDocument()).isPresent()) {
             throw this.messageResponse.errorExistDocument();
         }
 
-        var contact = this.contactService.findByEmail(request.getContact().getEmail()).orElse(null);
-        if (Objects.nonNull(contact)) {
+        if (this.contactService.findByEmail(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
         }
 
-        contact = this.contactService.findByPhone(request.getContact().getPhone()).orElse(null);
-        if (Objects.nonNull(contact)) {
+        if (this.contactService.findByPhone(request.getContact().getPhone()).isPresent()) {
             throw this.messageResponse.errorExistPhone();
         }
 
-        var commit = this.personService.save(this.userCreateConverter.converterToEntity(request));
+        var converter = this.personConverter.converterToResponse(this.personService.save(this.userCreateConverter.converterToEntity(request)));
+        converter.setMessage(this.messageResponse.messageSuccessCreate());
 
-        //return this.personConverter.converterToResponse(commit.getUser());
-        return null;
+        return converter;
+
     }
 
     /**

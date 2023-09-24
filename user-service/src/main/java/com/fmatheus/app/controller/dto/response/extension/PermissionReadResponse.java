@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response;
+package com.fmatheus.app.controller.dto.response.extension;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PermissionResponse extends BaseUuid {
+public class PermissionReadResponse extends BaseUuid {
     private String name;
-    private SystemsResponse system;
+    private SystemsReadResponse system;
 }

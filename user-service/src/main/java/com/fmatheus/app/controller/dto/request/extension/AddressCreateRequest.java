@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.request.create;
+package com.fmatheus.app.controller.dto.request.extension;
 
 
 import jakarta.validation.constraints.NotNull;

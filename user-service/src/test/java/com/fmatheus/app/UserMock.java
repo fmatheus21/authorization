@@ -1,6 +1,14 @@
 package com.fmatheus.app;
 
-import com.fmatheus.app.controller.dto.response.*;
+import com.fmatheus.app.controller.dto.request.extension.AddressCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.ContactCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.PermissionCreateRequest;
+import com.fmatheus.app.controller.dto.request.UserCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.AddressUpdateRequest;
+import com.fmatheus.app.controller.dto.request.extension.ContactUpdateRequest;
+import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.dto.response.extension.*;
 import com.fmatheus.app.model.entity.*;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 
@@ -10,7 +18,13 @@ import java.util.UUID;
 
 public class UserMock {
 
-    private static final UUID uuid = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
+    private static final UUID USER_UUID = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
+    private static final UUID PERMISSION_UUID = UUID.fromString("f8ed48e0-5879-11ee-94e1-581122c7752d");
+    private static final String PERMISSION_NAME = "user_service_all_permissions";
+    private static final LocalDateTime CREATED_AT = LocalDateTime.now();
+    private static final LocalDateTime UPDATED_AT = LocalDateTime.now();
+    private static final String SYSTEM_NAME = "user_service";
+    private static final UUID SYSTEM_UUID = UUID.fromString("50b56e7d-2c5e-11ee-a204-581122c7752d");
     private static final String USER_NAME = "67780886050";
     private static final String NAME = "Fernando Braga Matheus";
     private static final String EMAIL = "fernando.matheuss@hotmail.com";
@@ -26,53 +40,8 @@ public class UserMock {
     private static final Integer ID_PERSON = 1;
 
 
-
-    /*public static UserPartialResponse loadUserPartialResponse() {
-        var user = UserPartialResponse.builder()
-                .username(USER_NAME)
-                .active(true)
-                .person(PersonPartialResponse.builder()
-                        .name(NAME)
-                        .createdAt(LocalDateTime.now())
-                        .build())
-                .contact(ContactResponse.builder()
-                        .email(EMAIL)
-                        .phone(PHONE)
-                        .build())
-                .build();
-        user.setUuid(uuid);
-        return user;
-    }
-
     public static User loadUser() {
-        var user = User.builder()
-                .username(USER_NAME)
-                .active(true)
-                .person(loadPerson())
-                .build();
-        user.setUuid(uuid);
-        return user;
-    }
 
-
-    public static UserRepositoryFilter loadUserRepositoryFilter() {
-        return UserRepositoryFilter.builder()
-                .name("Fernando")
-                .build();
-    }
-
-    private static Person loadPerson() {
-        var person = Person.builder()
-                .name(NAME)
-                .document(DOCUMENT)
-                .address(loadAddress())
-                .contact(loadContact())
-                .build();
-        person.setId(ID_PERSON);
-        return person;
-    }
-
-    private static Address loadAddress() {
         var address = Address.builder()
                 .place(PLACE)
                 .number(NUMBER)
@@ -83,71 +52,172 @@ public class UserMock {
                 .zipCode(ZIPCODE)
                 .build();
         address.setId(1);
-        return address;
-    }
 
-    private static Contact loadContact() {
         var contact = Contact.builder().email(EMAIL)
                 .phone(PHONE)
                 .build();
         contact.setId(1);
-        return contact;
+
+        var person = Person.builder()
+                .name(NAME)
+                .document(DOCUMENT)
+                .address(address)
+                .contact(contact)
+                .build();
+        person.setId(ID_PERSON);
+
+        var user = User.builder()
+                .uuid(USER_UUID)
+                .username(USER_NAME)
+                .password(null)
+                .active(true)
+                .createdAt(CREATED_AT)
+                .updatedAt(UPDATED_AT)
+                .build();
+        user.setId(1);
+
+        user.setPerson(person);
+
+        return user;
     }
 
-    private static Permission loadPermission() {
-        var system = Systems.builder()
-                .name("user_service")
+    public static Person loadPerson() {
+
+        var address = Address.builder()
+                .place(PLACE)
+                .number(NUMBER)
+                .complement(COMPLEMENT)
+                .district(DISTRICT)
+                .city(CITY)
+                .state(STATE)
+                .zipCode(ZIPCODE)
                 .build();
-        system.setId(1);
-        var permission = Permission.builder()
-                .name("user_service_all_permissions")
+        address.setId(1);
+
+        var contact = Contact.builder().email(EMAIL)
+                .phone(PHONE)
+                .build();
+        contact.setId(1);
+
+        var person = Person.builder()
+                .name(NAME)
+                .document(DOCUMENT)
+                .address(address)
+                .contact(contact)
+                .build();
+        person.setId(ID_PERSON);
+
+        var user = User.builder()
+                .uuid(USER_UUID)
+                .username(USER_NAME)
+                .password(null)
+                .active(true)
+                .createdAt(CREATED_AT)
+                .updatedAt(UPDATED_AT)
+                .build();
+        user.setId(1);
+
+        person.setUser(user);
+
+        return person;
+    }
+
+
+    public static UserRepositoryFilter loadUserRepositoryFilter() {
+        return UserRepositoryFilter.builder()
+                .name("xxxxxxx")
+                .build();
+    }
+
+    public static UserReadResponse loadPersonResponse() {
+        var person = UserReadResponse.builder()
+                .name(NAME)
+                .document(DOCUMENT)
+                .address(AddressReadResponse.builder()
+                        .city(CITY)
+                        .complement(COMPLEMENT)
+                        .district(DISTRICT)
+                        .number(NUMBER)
+                        .state(STATE)
+                        .place(PLACE)
+                        .zipCode(ZIPCODE)
+                        .build())
+                .contact(ContactReadResponse.builder()
+                        .phone(PHONE)
+                        .email(EMAIL)
+                        .build())
+                .message(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate())
+                .build();
+
+        var system = SystemsReadResponse.builder()
+                .name(SYSTEM_NAME)
+                .build();
+        system.setUuid(SYSTEM_UUID);
+
+        var permission = PermissionReadResponse.builder()
+                .name(PERMISSION_NAME)
                 .system(system)
                 .build();
-        permission.setId(1);
-        return permission;
+        permission.setUuid(PERMISSION_UUID);
+
+        var user = com.fmatheus.app.controller.dto.response.extension.UserReadResponse.builder()
+                .username(USER_NAME)
+                .active(true)
+                .createdAt(CREATED_AT)
+                .updatedAt(UPDATED_AT)
+                .permissions(Collections.singletonList(permission))
+                .build();
+        user.setUuid(USER_UUID);
+
+        return person;
     }
 
-    public static UserResponse loadUserResponse() {
-        var user = loadUser();
-        var permission = loadPermission();
 
-        var systemResponse = SystemsResponse.builder()
-                .name("user_service")
+    public static UserCreateRequest loadUserCreateRequest() {
+
+        var permission = PermissionCreateRequest.builder()
+                .id(1)
+                .name(PERMISSION_NAME)
                 .build();
 
-
-        var permissionResponse = PermissionResponse.builder()
-                .name(permission.getName())
-                .system(systemResponse)
-                .build();
-
-        var personResponse = PersonResponse.builder()
-                .name(user.getPerson().getName())
-                .document(user.getPerson().getDocument())
-                .address(AddressResponse.builder()
-                        .city(user.getPerson().getAddress().getCity())
-                        .complement(user.getPerson().getAddress().getComplement())
-                        .district(user.getPerson().getAddress().getDistrict())
-                        .number(user.getPerson().getAddress().getNumber())
-                        .state(user.getPerson().getAddress().getState())
-                        .place(user.getPerson().getAddress().getPlace())
-                        .zipCode(user.getPerson().getAddress().getZipCode())
+        return UserCreateRequest.builder()
+                .name(NAME)
+                .document(DOCUMENT)
+                .personTypeId(1)
+                .address(AddressCreateRequest.builder()
+                        .city(CITY)
+                        .complement(COMPLEMENT)
+                        .district(DISTRICT)
+                        .number(NUMBER)
+                        .state(STATE)
+                        .place(PLACE)
+                        .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactResponse.builder()
-                        .phone(user.getPerson().getContact().getPhone())
-                        .email(user.getPerson().getContact().getEmail())
+                .contact(ContactCreateRequest.builder()
+                        .phone(PHONE)
+                        .email(EMAIL)
+                        .build())
+                .permissions(Collections.singletonList(permission))
+                .build();
+    }
+
+    public static UserUpdateRequest loadUserUpdateRequest() {
+        return UserUpdateRequest.builder()
+                .name(NAME)
+                .address(AddressUpdateRequest.builder()
+                        .city(CITY)
+                        .complement(COMPLEMENT)
+                        .district(DISTRICT)
+                        .number(NUMBER)
+                        .state(STATE)
+                        .place(PLACE)
+                        .zipCode(ZIPCODE)
+                        .build())
+                .contact(ContactUpdateRequest.builder()
+                        .phone(PHONE)
+                        .email(EMAIL)
                         .build())
                 .build();
+    }
 
-        var response = UserResponse.builder()
-                .username(user.getUsername())
-                .active(user.isActive())
-                .person(personResponse)
-                .permissions(Collections.singletonList(permissionResponse))
-                .build();
-
-        response.setUuid(user.getUuid());
-
-        return response;
-    }*/
 }

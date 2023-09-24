@@ -1,6 +1,8 @@
-package com.fmatheus.app.controller.dto.response.create;
+package com.fmatheus.app.controller.dto.response;
 
 
+import com.fmatheus.app.controller.dto.response.extension.AddressCreateResponse;
+import com.fmatheus.app.controller.dto.response.extension.ContactCreateResponse;
 import lombok.*;
 
 @Builder

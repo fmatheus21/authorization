@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response.create;
+package com.fmatheus.app.controller.dto.response.extension;
 
 
 import lombok.*;

@@ -111,7 +111,7 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scope(OidcScopes.OPENID)
-                .scope("read")
+                .scope("extension")
                 .scope("write")
                 .build();
 
@@ -119,10 +119,10 @@ public class SecurityConfig {
         RegisteredClient registeredPassword = RegisteredClient.withId("client")
                 .clientId(this.registredClientProperties.getClientIdTwo())
                 .clientSecret(passwordEncoder().encode(secret))
-                .scope("read")
+                .scope("extension")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .scope("read")
+                .scope("extension")
                 .scope("write")
                 .redirectUri("http://127.0.0.1:8080/login/oauth2/code/myoauth2")
                 .redirectUri("http://insomnia")

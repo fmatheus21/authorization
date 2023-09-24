@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
-import com.fmatheus.app.controller.dto.response.PersonResponse;
+import com.fmatheus.app.controller.dto.response.UserReadResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Permission;
 import com.fmatheus.app.model.entity.Person;
@@ -9,6 +9,8 @@ import com.fmatheus.app.model.entity.Systems;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 
 @RequiredArgsConstructor
@@ -23,9 +25,9 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     @Override
-    public PersonResponse converterToResponse(Person person) {
+    public UserReadResponse converterToResponse(Person person) {
         this.converterPerson(person);
-        return this.mapper.map(person, PersonResponse.class);
+        return this.mapper.map(person, UserReadResponse.class);
     }
 
     private void converterPerson(Person person) {
@@ -57,7 +59,9 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     private Systems converterSystems(Systems systems) {
-        systems.setName(CharacterUtil.convertAllLowercaseCharacters(systems.getName()));
+        if (Objects.nonNull(systems)) {
+            systems.setName(CharacterUtil.convertAllLowercaseCharacters(systems.getName()));
+        }
         return systems;
     }
 

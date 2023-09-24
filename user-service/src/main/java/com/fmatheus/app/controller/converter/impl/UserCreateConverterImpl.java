@@ -2,9 +2,9 @@ package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.config.properties.CryptoProperties;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
-import com.fmatheus.app.controller.dto.request.create.PermissionCreateRequest;
-import com.fmatheus.app.controller.dto.request.create.UserCreateRequest;
-import com.fmatheus.app.controller.dto.response.create.UserCreateResponse;
+import com.fmatheus.app.controller.dto.request.extension.PermissionCreateRequest;
+import com.fmatheus.app.controller.dto.request.UserCreateRequest;
+import com.fmatheus.app.controller.dto.response.UserCreateResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.controller.util.PasswordGeneratorUtil;
 import com.fmatheus.app.model.entity.*;
@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component

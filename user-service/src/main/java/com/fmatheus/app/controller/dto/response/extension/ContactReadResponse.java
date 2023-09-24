@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response;
+package com.fmatheus.app.controller.dto.response.extension;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactResponse {
+public class ContactReadResponse {
     private String email;
     private String phone;
 }

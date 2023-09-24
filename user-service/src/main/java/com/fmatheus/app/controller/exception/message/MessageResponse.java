@@ -17,10 +17,9 @@ public class MessageResponse {
     @Autowired
     private MessageSource messageSource;
 
-
     private MessageResponseHandler messageResponse(MessagesEnum messagesEnum) {
-        String message = this.messageSource.getMessage(messagesEnum.getMessage(), null, LocaleContextHolder.getLocale());
-        return new MessageResponseHandler(messagesEnum, messagesEnum.getHttpSttus().getReasonPhrase(), message);
+        return new MessageResponseHandler(messagesEnum, messagesEnum.getHttpSttus().getReasonPhrase(),
+                this.messageSource.getMessage(messagesEnum.getMessage(), null, LocaleContextHolder.getLocale()));
     }
 
     public MessageResponseHandler messageSuccessUpdate() {

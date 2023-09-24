@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response;
+package com.fmatheus.app.controller.dto.response.extension;
 
 import com.fmatheus.app.controller.dto.BaseUuid;
 import lombok.*;
@@ -9,6 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemsResponse extends BaseUuid {
+public class SystemsReadResponse extends BaseUuid {
     private String name;
 }

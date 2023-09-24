@@ -1,5 +1,8 @@
-package com.fmatheus.app.controller.dto.request.create;
+package com.fmatheus.app.controller.dto.request;
 
+import com.fmatheus.app.controller.dto.request.extension.AddressCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.ContactCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.PermissionCreateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
