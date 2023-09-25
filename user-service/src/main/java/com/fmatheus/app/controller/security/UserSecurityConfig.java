@@ -17,13 +17,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class UserSecurityConfig {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/actuator/*",
+            "/swagger-ui/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Initializer Filter Chain.");
         return http
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/test").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
-                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(new CustomJwtAuthenticationConverter())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //.httpBasic(withDefaults())

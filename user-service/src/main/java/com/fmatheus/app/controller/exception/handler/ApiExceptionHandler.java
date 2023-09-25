@@ -13,6 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -42,6 +44,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String cause;
 
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_NOT_READABLE;
@@ -51,12 +55,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, error, headers, status, request);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         var erros = this.createErros(ex.getBindingResult());
         return handleExceptionInternal(ex, erros, headers, status, request);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<Object> handleBadRequestException(RuntimeException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_BAD_REQUEST;
@@ -66,6 +72,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({PasswordNotMatchException.class})
     public ResponseEntity<Object> handlePasswordNotMatchException(RuntimeException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_PASSWORD_NOT_MATCH;
@@ -75,6 +82,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<Object> handleDataIntegrityViolationException(RuntimeException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION;
@@ -84,6 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({ForbiddenException.class})
     public ResponseEntity<Object> handleForbiddenException(RuntimeException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_NOT_PERMISSION;
@@ -93,6 +102,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, error, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({EmptyResultDataAccessException.class})
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_NOT_FOUND;
@@ -102,6 +112,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, error, new HttpHeaders(), messageEnum.getHttpSttus(), request);
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({UserInactiveException.class})
     public ResponseEntity<Object> handleUserInactiveException(RuntimeException ex, WebRequest request) {
         var messageEnum = MessagesEnum.ERROR_NOT_UNAUTHORIZED;

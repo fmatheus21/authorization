@@ -2,6 +2,11 @@ user-service:
   security:
     crypto:
       random-password: 8
+  openapi:
+    description: User Service API
+    title: User Service
+    version: 1.0.0
+
 
 logging:
   pattern:
@@ -41,6 +46,15 @@ spring:
         jwt:
           issuer-uri: ${JWT_ISSUER_URI:http://localhost:9000/api/v1}
           jwk-set-uri: ${JWT_JWK_URI:http://localhost:9000/api/v1/oauth2/jwks}
+
+
+springdoc:
+  swagger-ui:
+    tagsSorter: alpha
+    path: /swagger-ui.html
+    operationsSorter: method
+  api-docs:
+    path: /v3/api-docs
 
 
 
