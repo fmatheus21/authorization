@@ -1,0 +1,90 @@
+version: "3.7"
+
+services:
+
+  authorization-server-db:
+    image: mysql:8.0.29
+    container_name: authorization-server-db
+    hostname: authorization-server-db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: admin123
+      MYSQL_DATABASE: authorization-server
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_TCP_PORT: 3310
+    ports:
+      - "3310:3310"
+    networks:
+      - authorization-network
+
+  authorization-server:
+    image: fmatheus21/authorization-server
+    container_name: authorization-server
+    hostname: authorization-server
+    restart: always
+    build:
+      context: .
+      dockerfile: authorization-server/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.APPLICATION.NAME: authorization-server
+      SPRING.DATASOURCE.URL: jdbc:mysql://authorization-server-db:3310/authorization-server?useSSL=false&useTimezone=true&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING.DATASOURCE.USERNAME: docker
+      SPRING.DATASOURCE.PASSWORD: admin123
+      SPRING.FLYWAY.URL: jdbc:mysql://authorization-server-db:3310/authorization-server?useSSL=false&useTimezone=true&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING.FLYWAY.USERNAME: docker
+      SPRING.FLYWAY.PASSWORD: admin123
+      SPRING.JPA.SHOWSQL: "false"
+      SERVER.PORT: "9000"
+      CONTEXT_PATH: /api/v1
+      CLIENT_ID_ONE: client_credentials
+      CLIENT_SECRET_ONE: 975731ab-34d0-11ee-8422-581122c7752d
+      CLIENT_ID_TWO: authorization_code
+      CLIENT_SECRET_TWO: 17686e8b-34d2-11ee-8422-581122c7752d
+      JKS_KEYPASS: 123456
+      JKS_STOREPASS: 123456
+      JKS_ALIAS: oauthkey
+      JKS_PATH: keystore/oauthkey.jks
+      RSA_PRIVATE_KEY: classpath:certs/private.pem
+      RSA_PUBLIC_KEY: classpath:certs/public.pem
+    ports:
+      - "9000:9000"
+    depends_on:
+      - authorization-server-db
+    networks:
+      - authorization-network
+
+  user-service:
+    image: fmatheus21/user-service
+    container_name: user-service
+    hostname: user-service
+    restart: always
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.APPLICATION.NAME: user-service
+      SPRING.DATASOURCE.URL: jdbc:mysql://authorization-server-db:3310/authorization-server?useSSL=false&useTimezone=true&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING.DATASOURCE.USERNAME: docker
+      SPRING.DATASOURCE.PASSWORD: admin123
+      SPRING.JPA.SHOWSQL: "true"
+      JWT_ISSUER_URI: http://authorization-server:9000/api/v1
+      JWT_JWK_URI: http://authorization-server:9000/api/v1/oauth2/jwks
+      SERVER.PORT: "9100"
+      CONTEXT_PATH: /api/v1
+    ports:
+      - "9100:9100"
+    depends_on:
+      - authorization-server-db
+      - authorization-server
+    networks:
+      - authorization-network
+
+networks:
+  authorization-network:
+    driver: bridge

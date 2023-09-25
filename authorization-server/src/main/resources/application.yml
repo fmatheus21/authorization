@@ -1,23 +1,25 @@
 authorization-server:
   security:
     registred-client:
-      client-id-one: 'client_credentials'
-      client-secret-one: '975731ab-34d0-11ee-8422-581122c7752d'
-      client-id-two: 'authorization_code'
-      client-secret-two: '17686e8b-34d2-11ee-8422-581122c7752d'
+      client-id-one: ${CLIENT_ID_ONE:client_credentials}
+      client-secret-one: ${CLIENT_SECRET_ONE:975731ab-34d0-11ee-8422-581122c7752d}
+      client-id-two: ${CLIENT_ID_TWO:authorization_code}
+      client-secret-two: ${CLIENT_SECRET_TWO:17686e8b-34d2-11ee-8422-581122c7752d}
     jks:
-      keypass: 123456
-      storepass: 123456
-      alias: oauthkey
-      path: keystore/oauthkey.jks
+      keypass: ${JKS_KEYPASS:123456}
+      storepass: ${JKS_STOREPASS:123456}
+      alias: ${JKS_ALIAS:oauthkey}
+      path: ${JKS_PATH:keystore/oauthkey.jks}
     rsa:
-      private-key: classpath:certs/private.pem
-      public-key: classpath:certs/public.pem
+      private-key: ${RSA_PRIVATE_KEY:classpath:certs/private.pem}
+      public-key: ${RSA_PUBLIC_KEY:classpath:certs/public.pem}
 logging:
   pattern:
     level: '%5p [${spring.properties.name:},%X{traceId:-},%X{spanId:-}]'
 server:
   port: 9000
+  servlet:
+    context-path: ${CONTEXT_PATH:/api/v1}
 spring:
   application:
     name: authorization-server

@@ -9,7 +9,7 @@ logging:
 server:
   port: 9100
   servlet:
-    context-path: /api/v1
+    context-path: ${CONTEXT_PATH:/api/v1}
 spring:
   application:
     name: user-server
@@ -39,8 +39,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
-          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:9000/api/v1}
+          jwk-set-uri: ${JWT_JWK_URI:http://localhost:9000/api/v1/oauth2/jwks}
 
 
 

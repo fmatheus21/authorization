@@ -11,6 +11,7 @@ import com.fmatheus.app.controller.security.authorize.CreateAuthorize;
 import com.fmatheus.app.controller.security.authorize.ReadAuthorize;
 import com.fmatheus.app.controller.security.authorize.UpdateAuthorize;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -65,6 +66,12 @@ public class UserResource {
     @PostMapping
     public UserReadResponse create(@RequestBody @Valid UserCreateRequest request) {
         return this.rule.create(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/test")
+    public void test(HttpServletRequest request) {
+        System.out.println("Testing... " + request.getRequestURL().toString());
     }
 
 }
