@@ -113,8 +113,8 @@ public class UserRule {
 
     public UserReadResponse create(UserCreateRequest request) {
 
-        if (this.userService.findByUsername(request.getDocument()).isPresent()) {
-            throw this.messageResponse.errorExistDocument();
+        if (this.userService.findByUsername(request.getContact().getEmail()).isPresent()) {
+            throw this.messageResponse.errorExistEmail();
         }
 
         if (this.contactService.findByEmail(request.getContact().getEmail()).isPresent()) {

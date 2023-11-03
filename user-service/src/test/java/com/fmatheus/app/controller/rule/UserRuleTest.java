@@ -92,12 +92,12 @@ class UserRuleTest {
     @BeforeEach
     public void setUp() {
         openMocks(this);
-        rule = new UserRule(passwordEncoder, userService, personService, contactService, personConverter,
-                userUpdateConverter, userCreateConverter, messageResponse);
+        this.rule = new UserRule(this.passwordEncoder, this.userService, this.personService, this.contactService, this.personConverter,
+                this.userUpdateConverter, this.userCreateConverter, this.messageResponse);
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", "67780886050");
-        when(jwt.getClaims()).thenReturn(claims);
+        when(this.jwt.getClaims()).thenReturn(claims);
     }
 
     /**
@@ -143,7 +143,7 @@ class UserRuleTest {
         assertTrue(actualResult.isEmpty());
         verify(this.userService).findAllFilter(pageable, filter);
 
-        var result = rule.findAllFilter(pageable, filter);
+        var result = this.rule.findAllFilter(pageable, filter);
 
         assertTrue(result.isEmpty());
     }
@@ -169,7 +169,7 @@ class UserRuleTest {
         assertEquals(User.class, actualResult.get().getClass());
         verify(this.userService).findByUuid(ID);
 
-        var result = rule.findByUuid(ID);
+        var result = this.rule.findByUuid(ID);
         assertNotNull(result);
         assertEquals(response, result);
     }
@@ -182,8 +182,8 @@ class UserRuleTest {
     @DisplayName("findByUuid - Erro ao pesquisar o registro pelo ID")
     void findByUuidException() {
         UUID uuid = UUID.randomUUID();
-        when(userService.findByUuid(any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(RuntimeException.class, () -> rule.findByUuid(uuid));
+        when(this.userService.findByUuid(any(UUID.class))).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> this.rule.findByUuid(uuid));
     }
 
     /**
@@ -197,20 +197,20 @@ class UserRuleTest {
         var person = UserMock.loadPerson();
         var response = UserMock.loadPersonResponse();
 
-        when(messageResponse.messageSuccessCreate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate());
-        when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
-        when(contactService.findByEmail(anyString())).thenReturn(Optional.empty());
-        when(contactService.findByPhone(anyString())).thenReturn(Optional.empty());
-        when(personService.save(any())).thenReturn(person);
-        when(personConverter.converterToEntity(any(Person.class))).thenReturn(person);
-        when(personConverter.converterToResponse(any(Person.class))).thenReturn(response);
+        when(this.messageResponse.messageSuccessCreate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate());
+        when(this.userService.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(this.contactService.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(this.contactService.findByPhone(anyString())).thenReturn(Optional.empty());
+        when(this.personService.save(any())).thenReturn(person);
+        when(this.personConverter.converterToEntity(any(Person.class))).thenReturn(person);
+        when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(response);
 
-        var result = rule.create(UserMock.loadUserCreateRequest());
+        var result = this.rule.create(UserMock.loadUserCreateRequest());
 
-        verify(userService).findByUsername("67780886050");
-        verify(contactService).findByEmail("fernando.matheuss@hotmail.com");
-        verify(contactService).findByPhone("21986731552");
-        verify(personService).save(any());
+        verify(this.userService).findByUsername("fernando.matheuss@hotmail.com");
+        verify(this.contactService).findByEmail("fernando.matheuss@hotmail.com");
+        verify(this.contactService).findByPhone("21986731552");
+        verify(this.personService).save(any());
         assertThat(result).isNotNull();
 
     }
@@ -226,12 +226,12 @@ class UserRuleTest {
         var request = UserMock.loadUserCreateRequest();
         var user = UserMock.loadUser();
 
-        when(messageResponse.errorExistDocument()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_DOCUMENT));
-        when(userService.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(this.messageResponse.errorExistEmail()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL));
+        when(this.userService.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> rule.create(request))
-                .withMessage("message.error.exist-document");
+                .isThrownBy(() -> this.rule.create(request))
+                .withMessage("message.error.exist-email");
 
     }
 
@@ -246,11 +246,11 @@ class UserRuleTest {
         var request = UserMock.loadUserCreateRequest();
         var contact = UserMock.loadUser().getPerson().getContact();
 
-        when(messageResponse.errorExistEmail()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL));
-        when(contactService.findByEmail(anyString())).thenReturn(Optional.of(contact));
+        when(this.messageResponse.errorExistEmail()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL));
+        when(this.contactService.findByEmail(anyString())).thenReturn(Optional.of(contact));
 
         assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> rule.create(request))
+                .isThrownBy(() -> this.rule.create(request))
                 .withMessage("message.error.exist-email");
     }
 
@@ -265,11 +265,11 @@ class UserRuleTest {
         var request = UserMock.loadUserCreateRequest();
         var contact = UserMock.loadUser().getPerson().getContact();
 
-        when(messageResponse.errorExistPhone()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_PHONE));
-        when(contactService.findByPhone(anyString())).thenReturn(Optional.of(contact));
+        when(this.messageResponse.errorExistPhone()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_PHONE));
+        when(this.contactService.findByPhone(anyString())).thenReturn(Optional.of(contact));
 
         assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> rule.create(request))
+                .isThrownBy(() -> this.rule.create(request))
                 .withMessage("message.error.exist-phone");
     }
 
@@ -284,15 +284,15 @@ class UserRuleTest {
         var request = UserMock.loadUserUpdateRequest();
         var user = UserMock.loadUser();
 
-        when(messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
-        when(userService.findByUsername(any(String.class))).thenReturn(Optional.of(user));
+        when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
+        when(this.userService.findByUsername(any(String.class))).thenReturn(Optional.of(user));
         when(this.userUpdateConverter.converterToUpdate(any(User.class), any(UserUpdateRequest.class))).thenReturn(user);
         when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(UserMock.loadPersonResponse());
-        when(userService.save(any(User.class))).thenReturn(user);
+        when(this.userService.save(any(User.class))).thenReturn(user);
 
-        var response = rule.update(request, jwt);
+        var response = this.rule.update(request, this.jwt);
 
-        verify(userService).save(any(User.class));
+        verify(this.userService).save(any(User.class));
         assertNotNull(response);
         assertEquals("Fernando Braga Matheus", response.getName());
     }
@@ -307,11 +307,11 @@ class UserRuleTest {
 
         var request = UserMock.loadUserUpdateRequest();
 
-        when(messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));
-        when(userService.findByUsername(any(String.class))).thenReturn(Optional.empty());
+        when(this.messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));
+        when(this.userService.findByUsername(any(String.class))).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> rule.update(request, jwt))
+                .isThrownBy(() -> this.rule.update(request, this.jwt))
                 .withMessage("message.error.user-not-exist");
 
     }
@@ -328,14 +328,14 @@ class UserRuleTest {
         var user = UserMock.loadUser();
         PasswordUpdateRequest request = new PasswordUpdateRequest("password123", "password123");
 
-        when(jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
-        when(messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
-        when(userService.findByUsername("67780886050")).thenReturn(Optional.of(user));
-        when(passwordEncoder.encode("password123")).thenReturn("encodedPassword123");
+        when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
+        when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
+        when(this.userService.findByUsername("67780886050")).thenReturn(Optional.of(user));
+        when(this.passwordEncoder.encode("password123")).thenReturn("encodedPassword123");
 
-        rule.updatePassword(request, jwt);
+        this.rule.updatePassword(request, this.jwt);
 
-        verify(userService).save(any(User.class));
+        verify(this.userService).save(any(User.class));
     }
 
 
@@ -349,13 +349,13 @@ class UserRuleTest {
 
         PasswordUpdateRequest request = new PasswordUpdateRequest("password123", "password456");
         User user = new User();
-        when(jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
-        when(messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));
-        when(messageResponse.errorPasswordNotMatchException()).thenReturn(new PasswordNotMatchException());
-        when(userService.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
+        when(this.messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));
+        when(this.messageResponse.errorPasswordNotMatchException()).thenReturn(new PasswordNotMatchException());
+        when(this.userService.findByUsername(anyString())).thenReturn(Optional.of(user));
 
         assertThatExceptionOfType(PasswordNotMatchException.class)
-                .isThrownBy(() -> rule.updatePassword(request, jwt))
+                .isThrownBy(() -> this.rule.updatePassword(request, jwt))
                 .withMessage("message.error.password-not-match");
     }
 

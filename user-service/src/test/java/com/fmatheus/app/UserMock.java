@@ -25,7 +25,7 @@ public class UserMock {
     private static final LocalDateTime UPDATED_AT = LocalDateTime.now();
     private static final String SYSTEM_NAME = "user_service";
     private static final UUID SYSTEM_UUID = UUID.fromString("50b56e7d-2c5e-11ee-a204-581122c7752d");
-    private static final String USER_NAME = "67780886050";
+    private static final String USER_NAME = "fernando.matheuss@hotmail.com";
     private static final String NAME = "Fernando Braga Matheus";
     private static final String EMAIL = "fernando.matheuss@hotmail.com";
     private static final String PHONE = "21986731552";

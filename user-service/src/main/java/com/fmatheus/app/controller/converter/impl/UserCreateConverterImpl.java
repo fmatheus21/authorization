@@ -61,13 +61,12 @@ public class UserCreateConverterImpl implements UserCreateConverter {
                 .uuid(UUID.randomUUID())
                 .person(person)
                 .active(true)
-                .username(CharacterUtil.removeSpecialCharacters(person.getDocument()))
+                .username(contact.getEmail())
                 .password(this.passwordEncoder.encode(PasswordGeneratorUtil.randomPassword(this.cryptoProperties.getRandomPassword())))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .permissions(permissions)
                 .build();
-
 
         person.setAddress(address);
         person.setContact(contact);

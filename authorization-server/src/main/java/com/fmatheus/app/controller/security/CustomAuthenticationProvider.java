@@ -1,12 +1,12 @@
 package com.fmatheus.app.controller.security;
 
 
+import com.fmatheus.app.controller.util.CharacterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -68,7 +68,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.customAuthenticationToken = (CustomAuthenticationToken) authentication;
         this.clientPrincipal = getAuthenticatedClientElseThrowInvalidClient(this.customAuthenticationToken);
         this.registeredClient = this.clientPrincipal.getRegisteredClient();
-        this.username = this.customAuthenticationToken.getUsername();
+        this.username = CharacterUtil.convertAllLowercaseCharacters(this.customAuthenticationToken.getUsername());
         this.password = this.customAuthenticationToken.getPassword();
         User user = this.validateUser();
         this.authorizedScopes.addAll(registeredClient.getScopes());
@@ -111,7 +111,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         log.info("Comparando senha do usuario: {}", username);
         CharSequence charPassword = new StringBuilder(this.password);
-        if (!this.passwordEncoder.matches(charPassword, user.getPassword()) || !user.getUsername().equals(this.username)) {
+        if (!this.passwordEncoder.matches(charPassword, user.getPassword()) || !Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(user.getUsername())).equals(this.username)) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
         }
 
