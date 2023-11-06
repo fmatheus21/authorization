@@ -4,9 +4,9 @@ import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.request.extension.PasswordUpdateRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.dto.request.extension.PasswordUpdateRequest;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
 import com.fmatheus.app.model.entity.User;
@@ -53,7 +53,7 @@ public class UserRule {
      * @return Page<UserReadResponse>
      * @author fernando.matheus
      */
-    public Page<UserReadResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public Page<PersonResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var list = this.userService.findAllFilter(pageable, filter);
         var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson()));
         return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
@@ -66,7 +66,7 @@ public class UserRule {
      * @return UserReadResponse
      * @author fernando.matheus
      */
-    public UserReadResponse findByUuid(UUID uuid) {
+    public PersonResponse findByUuid(UUID uuid) {
         var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.personConverter.converterToResponse(response.getPerson());
     }
@@ -79,7 +79,7 @@ public class UserRule {
      * @return UserReadResponse
      * @author fernando.matheus
      */
-    public UserReadResponse update(UserUpdateRequest request, Jwt jwt) {
+    public PersonResponse update(UserUpdateRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
@@ -111,7 +111,7 @@ public class UserRule {
         return this.messageResponse.messageSuccessUpdate();
     }
 
-    public UserReadResponse create(UserCreateRequest request) {
+    public PersonResponse create(UserCreateRequest request) {
 
         if (this.userService.findByUsername(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
@@ -124,8 +124,8 @@ public class UserRule {
         if (this.contactService.findByPhone(request.getContact().getPhone()).isPresent()) {
             throw this.messageResponse.errorExistPhone();
         }
-
-        var converter = this.personConverter.converterToResponse(this.personService.save(this.userCreateConverter.converterToEntity(request)));
+        var commit = this.personService.save(this.userCreateConverter.converterToEntity(request));
+        var converter = this.personConverter.converterToResponse(commit);
         converter.setMessage(this.messageResponse.messageSuccessCreate());
 
         return converter;

@@ -7,7 +7,8 @@ import com.fmatheus.app.controller.dto.request.UserCreateRequest;
 import com.fmatheus.app.controller.dto.request.extension.AddressUpdateRequest;
 import com.fmatheus.app.controller.dto.request.extension.ContactUpdateRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
+import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.dto.response.extension.*;
 import com.fmatheus.app.model.entity.*;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
-public class UserMock {
+public class PersonMock {
 
     private static final UUID USER_UUID = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
     private static final UUID PERMISSION_UUID = UUID.fromString("f8ed48e0-5879-11ee-94e1-581122c7752d");
@@ -129,11 +130,11 @@ public class UserMock {
                 .build();
     }
 
-    public static UserReadResponse loadPersonResponse() {
-        var person = UserReadResponse.builder()
+    public static PersonResponse loadPersonResponse() {
+        var person = PersonResponse.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .address(AddressReadResponse.builder()
+                .address(AddressResponse.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)
                         .district(DISTRICT)
@@ -142,25 +143,25 @@ public class UserMock {
                         .place(PLACE)
                         .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactReadResponse.builder()
+                .contact(ContactResponse.builder()
                         .phone(PHONE)
                         .email(EMAIL)
                         .build())
                 .message(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate())
                 .build();
 
-        var system = SystemsReadResponse.builder()
+        var system = SystemsResponse.builder()
                 .name(SYSTEM_NAME)
                 .build();
         system.setUuid(SYSTEM_UUID);
 
-        var permission = PermissionReadResponse.builder()
+        var permission = PermissionResponse.builder()
                 .name(PERMISSION_NAME)
                 .system(system)
                 .build();
         permission.setUuid(PERMISSION_UUID);
 
-        var user = com.fmatheus.app.controller.dto.response.extension.UserReadResponse.builder()
+        var user = UserResponse.builder()
                 .username(USER_NAME)
                 .active(true)
                 .createdAt(CREATED_AT)

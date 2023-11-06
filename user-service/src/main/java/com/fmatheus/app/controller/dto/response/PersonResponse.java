@@ -1,8 +1,9 @@
 package com.fmatheus.app.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fmatheus.app.controller.dto.response.extension.AddressReadResponse;
-import com.fmatheus.app.controller.dto.response.extension.ContactReadResponse;
+import com.fmatheus.app.controller.dto.response.extension.AddressResponse;
+import com.fmatheus.app.controller.dto.response.extension.ContactResponse;
+import com.fmatheus.app.controller.dto.response.extension.PersonTypeResponse;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import lombok.*;
 
@@ -13,11 +14,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserReadResponse {
+public class PersonResponse {
     private String name;
     private String document;
-    private AddressReadResponse address;
-    private ContactReadResponse contact;
-    private com.fmatheus.app.controller.dto.response.extension.UserReadResponse user;
+    private PersonTypeResponse personType;
+    private AddressResponse address;
+    private ContactResponse contact;
+    private UserResponse user;
     private MessageResponseHandler message;
 }

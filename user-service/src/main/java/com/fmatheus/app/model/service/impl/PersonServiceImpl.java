@@ -23,7 +23,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Optional<Person> findById(Integer id) {
-        throw new UnsupportedOperationException();
+        return this.repository.findById(id);
     }
 
     @Override

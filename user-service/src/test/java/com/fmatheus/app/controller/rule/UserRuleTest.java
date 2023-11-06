@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.rule;
 
 import com.fmatheus.app.MessageResponseHandlerMock;
-import com.fmatheus.app.UserMock;
+import com.fmatheus.app.PersonMock;
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
@@ -109,12 +109,12 @@ class UserRuleTest {
     void findAllFilter() {
 
         Pageable pageable = PageRequest.of(0, 10);
-        UserRepositoryFilter filter = UserMock.loadUserRepositoryFilter();
-        var user = UserMock.loadUser();
+        UserRepositoryFilter filter = PersonMock.loadUserRepositoryFilter();
+        var user = PersonMock.loadUser();
         var page = new PageImpl<>(Collections.singletonList(user));
 
         when(this.userService.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
-        when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(UserMock.loadPersonResponse());
+        when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(PersonMock.loadPersonResponse());
         when(this.userService.totalPaginator(any(UserRepositoryFilter.class))).thenReturn(1L);
 
         var actualResult = this.userService.findAllFilter(pageable, filter);
@@ -135,7 +135,7 @@ class UserRuleTest {
     @DisplayName("findAllFilter - Sucesso na listagem de registros vazia.")
     void findAllFilterEmpty() {
         Pageable pageable = PageRequest.of(0, 10);
-        UserRepositoryFilter filter = UserMock.loadUserRepositoryFilter();
+        UserRepositoryFilter filter = PersonMock.loadUserRepositoryFilter();
         Page<User> page = Page.empty();
         when(this.userService.findAllFilter(any(Pageable.class), any(UserRepositoryFilter.class))).thenReturn(page);
 
@@ -157,8 +157,8 @@ class UserRuleTest {
     void findByUuidSuccess() {
 
         var ID_CONSULT = UUID.fromString("ae46dc08-2c64-11ee-a204-581122c7752d");
-        var optional = Optional.of(UserMock.loadUser());
-        var response = UserMock.loadPersonResponse();
+        var optional = Optional.of(PersonMock.loadUser());
+        var response = PersonMock.loadPersonResponse();
 
         when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(response);
         when(this.userService.findByUuid(ID_CONSULT)).thenReturn(optional);
@@ -194,8 +194,8 @@ class UserRuleTest {
     @DisplayName("create - Sucesso ao criar registro.")
     void createTestSuccess() {
 
-        var person = UserMock.loadPerson();
-        var response = UserMock.loadPersonResponse();
+        var person = PersonMock.loadPerson();
+        var response = PersonMock.loadPersonResponse();
 
         when(this.messageResponse.messageSuccessCreate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate());
         when(this.userService.findByUsername(anyString())).thenReturn(Optional.empty());
@@ -205,7 +205,7 @@ class UserRuleTest {
         when(this.personConverter.converterToEntity(any(Person.class))).thenReturn(person);
         when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(response);
 
-        var result = this.rule.create(UserMock.loadUserCreateRequest());
+        var result = this.rule.create(PersonMock.loadUserCreateRequest());
 
         verify(this.userService).findByUsername("fernando.matheuss@hotmail.com");
         verify(this.contactService).findByEmail("fernando.matheuss@hotmail.com");
@@ -223,8 +223,8 @@ class UserRuleTest {
     @DisplayName("create - Quando o nome de usuario existir, lançar excecao")
     void createTestUsernameExistsException() {
 
-        var request = UserMock.loadUserCreateRequest();
-        var user = UserMock.loadUser();
+        var request = PersonMock.loadUserCreateRequest();
+        var user = PersonMock.loadUser();
 
         when(this.messageResponse.errorExistEmail()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL));
         when(this.userService.findByUsername(anyString())).thenReturn(Optional.of(user));
@@ -243,8 +243,8 @@ class UserRuleTest {
     @DisplayName("create - Quando o e-mail existir, lanca excecao")
     void createTestEmailExistsException() {
 
-        var request = UserMock.loadUserCreateRequest();
-        var contact = UserMock.loadUser().getPerson().getContact();
+        var request = PersonMock.loadUserCreateRequest();
+        var contact = PersonMock.loadUser().getPerson().getContact();
 
         when(this.messageResponse.errorExistEmail()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_EMAIL));
         when(this.contactService.findByEmail(anyString())).thenReturn(Optional.of(contact));
@@ -262,8 +262,8 @@ class UserRuleTest {
     @DisplayName("create - Quando o telefone existir, lanca excecao")
     void createTestPhoneExistsException() {
 
-        var request = UserMock.loadUserCreateRequest();
-        var contact = UserMock.loadUser().getPerson().getContact();
+        var request = PersonMock.loadUserCreateRequest();
+        var contact = PersonMock.loadUser().getPerson().getContact();
 
         when(this.messageResponse.errorExistPhone()).thenReturn(new BadRequestException(MessagesEnum.ERROR_EXIST_PHONE));
         when(this.contactService.findByPhone(anyString())).thenReturn(Optional.of(contact));
@@ -281,13 +281,13 @@ class UserRuleTest {
     @DisplayName("update - Sucesso ao atualizar registro")
     void updateTestSuccess() {
 
-        var request = UserMock.loadUserUpdateRequest();
-        var user = UserMock.loadUser();
+        var request = PersonMock.loadUserUpdateRequest();
+        var user = PersonMock.loadUser();
 
         when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
         when(this.userService.findByUsername(any(String.class))).thenReturn(Optional.of(user));
         when(this.userUpdateConverter.converterToUpdate(any(User.class), any(UserUpdateRequest.class))).thenReturn(user);
-        when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(UserMock.loadPersonResponse());
+        when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(PersonMock.loadPersonResponse());
         when(this.userService.save(any(User.class))).thenReturn(user);
 
         var response = this.rule.update(request, this.jwt);
@@ -305,7 +305,7 @@ class UserRuleTest {
     @DisplayName("update - Quando o usuario nao existir, lanca excecao")
     void updateTestUserDoesNotExistException() {
 
-        var request = UserMock.loadUserUpdateRequest();
+        var request = PersonMock.loadUserUpdateRequest();
 
         when(this.messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));
         when(this.userService.findByUsername(any(String.class))).thenReturn(Optional.empty());
@@ -325,7 +325,7 @@ class UserRuleTest {
     @DisplayName("updatePassword - Sucsso ao atualizar senha")
     void updatePasswordTestSuccess() {
 
-        var user = UserMock.loadUser();
+        var user = PersonMock.loadUser();
         PasswordUpdateRequest request = new PasswordUpdateRequest("password123", "password123");
 
         when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));

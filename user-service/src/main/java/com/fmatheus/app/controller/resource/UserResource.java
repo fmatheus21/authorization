@@ -4,7 +4,7 @@ package com.fmatheus.app.controller.resource;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
 import com.fmatheus.app.controller.dto.request.extension.PasswordUpdateRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
 import com.fmatheus.app.controller.exception.UnauthorizedException;
@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,7 +46,7 @@ public class UserResource {
 
     @ReadAuthorize
     @GetMapping
-    public ResponseEntity<Page<UserReadResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public ResponseEntity<Page<PersonResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var response = this.rule.findAllFilter(pageable, filter);
         return !response.isEmpty() ? ResponseEntity.ok(response) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -55,7 +54,7 @@ public class UserResource {
 
     @Operation(summary = "Consult registration", description = "Consult registration by UUID", security = @SecurityRequirement(name = "security_auth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserReadResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PersonResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UnauthorizedException.class))),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))),
@@ -63,14 +62,14 @@ public class UserResource {
     @ReadAuthorize
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public UserReadResponse findByUuid(@Parameter(description = "Uuid of the user to search") @PathVariable UUID uuid) {
+    public PersonResponse findByUuid(@Parameter(description = "Uuid of the user to search") @PathVariable UUID uuid) {
         return this.rule.findByUuid(uuid);
     }
 
     @UpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
-    public UserReadResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public PersonResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         return this.rule.update(request, jwt);
     }
 
@@ -84,14 +83,9 @@ public class UserResource {
     @CreateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public UserReadResponse create(@RequestBody @Valid UserCreateRequest request) {
+    public PersonResponse create(@RequestBody @Valid UserCreateRequest request) {
         return this.rule.create(request);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/test")
-    public void test(HttpServletRequest request) {
-        System.out.println("Testing... " + request.getRequestURL().toString());
-    }
 
 }

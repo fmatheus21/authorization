@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
-import com.fmatheus.app.controller.dto.response.UserReadResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Permission;
 import com.fmatheus.app.model.entity.Person;
@@ -25,13 +25,16 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     @Override
-    public UserReadResponse converterToResponse(Person person) {
+    public PersonResponse converterToResponse(Person person) {
         this.converterPerson(person);
-        return this.mapper.map(person, UserReadResponse.class);
+        return this.mapper.map(person, PersonResponse.class);
     }
 
     private void converterPerson(Person person) {
         person.setName(CharacterUtil.convertFirstUppercaseCharacter(person.getName()));
+
+        var personType = person.getPersonType();
+        personType.setName(CharacterUtil.convertFirstUppercaseCharacter(personType.getName()));
 
         var address = person.getAddress();
         address.setPlace(CharacterUtil.convertFirstUppercaseCharacter(address.getPlace()));
@@ -45,11 +48,16 @@ public class PersonConverterImpl implements PersonConverter {
         contact.setEmail(CharacterUtil.convertAllLowercaseCharacters(contact.getEmail()));
         contact.setPhone(CharacterUtil.removeSpecialCharacters(contact.getPhone()));
 
-        var permissions = person.getUser().getPermissions().stream().map(this::converterPermission).toList();
+        var user = person.getUser();
+        user.setUsername(CharacterUtil.convertAllLowercaseCharacters(user.getUsername()));
+
+        var permissions = user.getPermissions().stream().map(this::converterPermission).toList();
+        user.setPermissions(permissions);
 
         person.setAddress(address);
         person.setContact(contact);
-        person.getUser().setPermissions(permissions);
+        person.setUser(user);
+
     }
 
     private Permission converterPermission(Permission permission) {

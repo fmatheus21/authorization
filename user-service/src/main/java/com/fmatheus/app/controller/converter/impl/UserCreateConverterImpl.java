@@ -32,7 +32,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
         person.setId(null);
 
         var personType = PersonType.builder().build();
-        personType.setId(request.getPersonTypeId());
+        personType.setId(request.getPersonType().getId());
 
         person.setName(CharacterUtil.convertAllUppercaseCharacters(person.getName()));
         person.setDocument(CharacterUtil.removeSpecialCharacters(person.getDocument()));

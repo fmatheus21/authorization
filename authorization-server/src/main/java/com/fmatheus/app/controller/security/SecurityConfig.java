@@ -213,7 +213,7 @@ public class SecurityConfig {
                         .collect(Collectors.toSet());
                 if (context.getTokenType().getValue().equals("access_token")) {
                     context.getClaims()
-                            .claim("id", customUserDetails.getUser().getId().toString())
+                            .claim("uuid", customUserDetails.getUser().getUuid())
                             .claim("username", customUserDetails.getUsername())
                             .claim("fullname", Objects.requireNonNull(CharacterUtil.convertFirstUppercaseCharacter(customUserDetails.getUser().getPerson().getName())))
                             .claim("authorities", authorities);
