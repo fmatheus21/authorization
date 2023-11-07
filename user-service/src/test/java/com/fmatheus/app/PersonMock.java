@@ -1,14 +1,10 @@
 package com.fmatheus.app;
 
-import com.fmatheus.app.controller.dto.request.extension.AddressCreateRequest;
-import com.fmatheus.app.controller.dto.request.extension.ContactCreateRequest;
-import com.fmatheus.app.controller.dto.request.extension.PermissionCreateRequest;
+import com.fmatheus.app.controller.dto.request.extension.*;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.request.extension.AddressUpdateRequest;
-import com.fmatheus.app.controller.dto.request.extension.ContactUpdateRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.dto.response.PersonResponse;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.response.extension.UserReadResponse;
 import com.fmatheus.app.controller.dto.response.extension.*;
 import com.fmatheus.app.model.entity.*;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
@@ -38,7 +34,9 @@ public class PersonMock {
     private static final String CITY = "Rio De Janeiro";
     private static final String STATE = "RJ";
     private static final String ZIPCODE = "22793082";
-    private static final Integer ID_PERSON = 1;
+    private static final Integer PERSON_ID = 1;
+    private static final UUID PERSON_TYPE_UUID = UUID.fromString("0015dc51-05d5-11ee-900d-7085c2be6d69");
+    private static final int PERSON_TYPE_ID = 1;
 
 
     public static User loadUser() {
@@ -65,7 +63,7 @@ public class PersonMock {
                 .address(address)
                 .contact(contact)
                 .build();
-        person.setId(ID_PERSON);
+        person.setId(PERSON_ID);
 
         var user = User.builder()
                 .uuid(USER_UUID)
@@ -106,7 +104,7 @@ public class PersonMock {
                 .address(address)
                 .contact(contact)
                 .build();
-        person.setId(ID_PERSON);
+        person.setId(PERSON_ID);
 
         var user = User.builder()
                 .uuid(USER_UUID)
@@ -134,7 +132,7 @@ public class PersonMock {
         var person = PersonResponse.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .address(AddressResponse.builder()
+                .address(AddressReadResponse.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)
                         .district(DISTRICT)
@@ -143,25 +141,25 @@ public class PersonMock {
                         .place(PLACE)
                         .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactResponse.builder()
+                .contact(ContactReadResponse.builder()
                         .phone(PHONE)
                         .email(EMAIL)
                         .build())
                 .message(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate())
                 .build();
 
-        var system = SystemsResponse.builder()
+        var system = SystemsReadResponse.builder()
                 .name(SYSTEM_NAME)
                 .build();
         system.setUuid(SYSTEM_UUID);
 
-        var permission = PermissionResponse.builder()
+        var permission = PermissionReadResponse.builder()
                 .name(PERMISSION_NAME)
                 .system(system)
                 .build();
         permission.setUuid(PERMISSION_UUID);
 
-        var user = UserResponse.builder()
+        var user = UserReadResponse.builder()
                 .username(USER_NAME)
                 .active(true)
                 .createdAt(CREATED_AT)
@@ -184,7 +182,10 @@ public class PersonMock {
         return UserCreateRequest.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .personTypeId(1)
+                .personType(PersonTypeCreateRequest.builder()
+                        .id(PERSON_TYPE_ID)
+                        .uuid(PERSON_TYPE_UUID)
+                        .build())
                 .address(AddressCreateRequest.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)

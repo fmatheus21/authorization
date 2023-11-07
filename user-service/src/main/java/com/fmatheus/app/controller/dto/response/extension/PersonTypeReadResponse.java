@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonTypeResponse {
+public class PersonTypeReadResponse {
     private UUID uuid;
     private String name;
 }

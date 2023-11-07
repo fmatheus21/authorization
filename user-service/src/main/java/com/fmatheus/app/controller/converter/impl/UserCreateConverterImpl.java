@@ -4,7 +4,7 @@ import com.fmatheus.app.config.properties.CryptoProperties;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.dto.request.extension.PermissionCreateRequest;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.response.UserCreateResponse;
+import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.controller.util.PasswordGeneratorUtil;
 import com.fmatheus.app.model.entity.*;
@@ -76,7 +76,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
     }
 
     @Override
-    public UserCreateResponse converterToResponse(Person person) {
+    public PersonResponse converterToResponse(Person person) {
         throw new UnsupportedOperationException();
     }
 

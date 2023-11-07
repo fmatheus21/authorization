@@ -1,7 +1,6 @@
-package com.fmatheus.app.controller.dto.response;
+package com.fmatheus.app.controller.dto.response.extension;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fmatheus.app.controller.dto.response.extension.PermissionResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,11 +13,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class UserReadResponse {
     private UUID uuid;
     private String username;
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Collection<PermissionResponse> permissions;
+    private Collection<PermissionReadResponse> permissions;
 }

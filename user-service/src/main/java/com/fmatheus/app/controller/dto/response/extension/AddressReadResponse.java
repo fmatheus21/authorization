@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressResponse {
+public class AddressReadResponse {
     private String place;
     private String number;
     private String complement;

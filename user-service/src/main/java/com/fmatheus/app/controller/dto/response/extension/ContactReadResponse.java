@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactResponse {
+public class ContactReadResponse {
     private String email;
     private String phone;
 }
