@@ -1,7 +1,6 @@
 package com.fmatheus.app.model.service.impl;
 
 import com.fmatheus.app.model.entity.Systems;
-import com.fmatheus.app.model.entity.User;
 import com.fmatheus.app.model.repository.SystemsRepository;
 import com.fmatheus.app.model.service.SystemsService;
 import lombok.RequiredArgsConstructor;

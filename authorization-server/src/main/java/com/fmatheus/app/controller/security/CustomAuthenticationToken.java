@@ -18,12 +18,14 @@ public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthentic
     private static final long serialVersionUID = 1L;
     private final String username;
     private final String password;
+    private final UUID projectUuid;
     private final Set<String> scopes;
 
     public CustomAuthenticationToken(Authentication clientPrincipal, @Nullable Set<String> scopes, @Nullable Map<String, Object> additionalParameters) {
         super(new AuthorizationGrantType("custom_password"), clientPrincipal, additionalParameters);
         this.username = (String) Objects.requireNonNull(additionalParameters).get("username");
         this.password = (String) Objects.requireNonNull(additionalParameters).get("password");
+        this.projectUuid = UUID.fromString(Objects.requireNonNull(additionalParameters).get("registration_id").toString());
         this.scopes = Collections.unmodifiableSet(scopes != null ? new HashSet<>(scopes) : Collections.emptySet());
     }
 

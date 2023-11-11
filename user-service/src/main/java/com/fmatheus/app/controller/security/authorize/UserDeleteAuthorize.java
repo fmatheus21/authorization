@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyAuthority('user_service_all_permissions', 'user_service_update')")
-public @interface UpdateAuthorize {
+@PreAuthorize("hasAnyAuthority('user_service/all_authorize', 'user_service/user_delete')")
+public @interface UserDeleteAuthorize {
 }

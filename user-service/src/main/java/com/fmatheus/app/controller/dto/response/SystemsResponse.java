@@ -2,7 +2,7 @@ package com.fmatheus.app.controller.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fmatheus.app.controller.dto.response.extension.SystemsReadResponse;
+import com.fmatheus.app.controller.dto.response.extension.PermissionReadResponse;
 import lombok.*;
 
 import java.util.Collection;
@@ -17,5 +17,5 @@ import java.util.UUID;
 public class SystemsResponse {
     private UUID uuid;
     private String name;
-    private Collection<SystemsReadResponse> systems;
+    private Collection<PermissionReadResponse> permissions;
 }

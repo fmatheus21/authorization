@@ -10,9 +10,9 @@ import com.fmatheus.app.controller.exception.ForbiddenException;
 import com.fmatheus.app.controller.exception.UnauthorizedException;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.controller.rule.UserRule;
-import com.fmatheus.app.controller.security.authorize.CreateAuthorize;
-import com.fmatheus.app.controller.security.authorize.ReadAuthorize;
-import com.fmatheus.app.controller.security.authorize.UpdateAuthorize;
+import com.fmatheus.app.controller.security.authorize.UserCreateAuthorize;
+import com.fmatheus.app.controller.security.authorize.UserReadAuthorize;
+import com.fmatheus.app.controller.security.authorize.UserUpdateAuthorize;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,7 +44,7 @@ public class UserResource {
 
     private final UserRule rule;
 
-    @ReadAuthorize
+    @UserReadAuthorize
     @GetMapping
     public ResponseEntity<Page<PersonResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var response = this.rule.findAllFilter(pageable, filter);
@@ -59,28 +59,28 @@ public class UserResource {
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UnauthorizedException.class))),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServerError.class)))})
-    @ReadAuthorize
+    @UserReadAuthorize
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
     public PersonResponse findByUuid(@Parameter(description = "Uuid of the user to search") @PathVariable UUID uuid) {
         return this.rule.findByUuid(uuid);
     }
 
-    @UpdateAuthorize
+    @UserUpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
     public PersonResponse update(@RequestBody @Valid UserUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         return this.rule.update(request, jwt);
     }
 
-    @UpdateAuthorize
+    @UserUpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/password")
     public MessageResponseHandler updatePassword(@RequestBody @Valid PasswordUpdateRequest request, @AuthenticationPrincipal Jwt jwt) {
         return this.rule.updatePassword(request, jwt);
     }
 
-    @CreateAuthorize
+    @UserCreateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
     public PersonResponse create(@RequestBody @Valid UserCreateRequest request) {

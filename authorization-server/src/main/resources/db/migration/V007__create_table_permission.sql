@@ -11,8 +11,12 @@ CREATE TABLE permission (
   CONSTRAINT fk_systems FOREIGN KEY (id_system) REFERENCES systems (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO permission (id, uuid, id_system, name) VALUES (1, UUID_TO_BIN('f8ed48e0-5879-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE_ALL_PERMISSIONS');
-INSERT INTO permission (id, uuid, id_system, name) VALUES (2, UUID_TO_BIN('898f2f67-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE_CREATE');
-INSERT INTO permission (id, uuid, id_system, name) VALUES (3, UUID_TO_BIN('8c6ce255-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE_READ');
-INSERT INTO permission (id, uuid, id_system, name) VALUES (4, UUID_TO_BIN('8f43c7bc-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE_UPDATE');
-INSERT INTO permission (id, uuid, id_system, name) VALUES (5, UUID_TO_BIN('920a3688-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE_DELETE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (1, UUID_TO_BIN('f8ed48e0-5879-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE/ALL_AUTHORIZE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (2, UUID_TO_BIN('898f2f67-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE/USER_CREATE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (3, UUID_TO_BIN('8c6ce255-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE/USER_READ');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (4, UUID_TO_BIN('8f43c7bc-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE/USER_UPDATE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (5, UUID_TO_BIN('920a3688-587a-11ee-94e1-581122c7752d'), 1, 'USER_SERVICE/USER_DELETE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (6, UUID_TO_BIN('06af1603-7e57-11ee-ae63-581122c7752d'), 1, 'USER_SERVICE/SYSTEMS_CREATE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (7, UUID_TO_BIN('3126696e-7e57-11ee-ae63-581122c7752d'), 1, 'USER_SERVICE/SYSTEMS_READ');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (8, UUID_TO_BIN('348d08c6-7e57-11ee-ae63-581122c7752d'), 1, 'USER_SERVICE/SYSTEMS_UPDATE');
+INSERT INTO permission (id, uuid, id_system, name) VALUES (9, UUID_TO_BIN('388f8d7d-7e57-11ee-ae63-581122c7752d'), 1, 'USER_SERVICE/SYSTEMS_DELETE');

@@ -52,10 +52,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -143,7 +140,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.JWT_BEARER)
                 .authorizationGrantType(new AuthorizationGrantType("custom_password"))
                 .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofHours(1))
+                        .accessTokenTimeToLive(Duration.ofMinutes(1))
                         .refreshTokenTimeToLive(Duration.ofDays(1))
                         .reuseRefreshTokens(false)
                         .build())
@@ -208,6 +205,14 @@ public class SecurityConfig {
             if (principal.getDetails() instanceof CustomUser customUser) {
 
                 CustomUserDetails customUserDetails = customUser.customUserDetails();
+
+                Collection<AuthoritiesAuthentication> roles = new ArrayList<>();
+
+                customUserDetails.getUser().getPermissions().forEach(permission -> roles.add(AuthoritiesAuthentication.builder()
+                        .uuid(permission.getUuid())
+                        .name(CharacterUtil.convertAllLowercaseCharacters(permission.getName()))
+                        .build()));
+
                 Set<String> authorities = customUserDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
@@ -216,7 +221,8 @@ public class SecurityConfig {
                             .claim("uuid", customUserDetails.getUser().getUuid())
                             .claim("username", customUserDetails.getUsername())
                             .claim("fullname", Objects.requireNonNull(CharacterUtil.convertFirstUppercaseCharacter(customUserDetails.getUser().getPerson().getName())))
-                            .claim("authorities", authorities);
+                            .claim("authorities", authorities)
+                            .claim("roles", roles);
                 }
 
             }
@@ -244,7 +250,7 @@ public class SecurityConfig {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
-    //@Bean
+
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));

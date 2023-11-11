@@ -44,6 +44,11 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
         }
 
+        var projectUuid = parameters.getFirst(OAuth2ParameterNames.REGISTRATION_ID);
+        if (!StringUtils.hasText(projectUuid) || parameters.get(OAuth2ParameterNames.REGISTRATION_ID).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
         Set<String> requestedScopes = null;
         if (StringUtils.hasText(scope)) {
             requestedScopes = new HashSet<>(Arrays.asList(StringUtils.delimitedListToStringArray(scope, " ")));
