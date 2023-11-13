@@ -2,6 +2,8 @@ package com.fmatheus.app.controller.security;
 
 
 import com.fmatheus.app.controller.util.CharacterUtil;
+import com.fmatheus.app.model.entity.UserSessions;
+import com.fmatheus.app.model.service.UserSessionsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -26,6 +28,7 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.util.Assert;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,6 +45,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private String username = "";
     private String password = "";
     private UUID uuidSystem;
+    private String ipAddress;
+    private String city;
+    private String country;
+    private String latitude;
+    private String longitude;
+    private String state;
     private final OAuth2AuthorizationService authorizationService;
     private final UserDetailsService userDetailsService;
     private OAuth2Authorization.Builder authorizationBuilder;
@@ -54,6 +63,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private OAuth2RefreshToken refreshToken;
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
     private final Set<String> authorizedScopes = new HashSet<>();
+    private CustomUserDetails customUserDetails;
+
+    @Autowired
+    private UserSessionsService userSessionsService;
 
 
     public CustomAuthenticationProvider(OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator, UserDetailsService userDetailsService) {
@@ -73,6 +86,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.username = CharacterUtil.convertAllLowercaseCharacters(this.customAuthenticationToken.getUsername());
         this.password = this.customAuthenticationToken.getPassword();
         this.uuidSystem = this.customAuthenticationToken.getUuidSystem();
+        this.ipAddress = this.customAuthenticationToken.getIpAddress();
+        this.city = this.customAuthenticationToken.getCity();
+        this.country = this.customAuthenticationToken.getCountry();
+        this.latitude = this.customAuthenticationToken.getLatitude();
+        this.longitude = this.customAuthenticationToken.getLongitude();
+        this.state = this.customAuthenticationToken.getState();
         User user = this.validateUser();
         this.authorizedScopes.addAll(registeredClient.getScopes());
         this.generateNewContextHolder(user);
@@ -105,22 +124,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
     private User validateUser() {
-        CustomUserDetails customUserDetails = null;
+
         try {
-            customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(this.username);
+            this.customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(this.username);
         } catch (UsernameNotFoundException e) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
         }
 
         log.info("Comparando senha do usuario: {}", username);
         CharSequence charPassword = new StringBuilder(this.password);
-        if (!this.passwordEncoder.matches(charPassword, customUserDetails.getPassword()) || !Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(customUserDetails.getUsername())).equals(this.username)) {
+        if (!this.passwordEncoder.matches(charPassword, this.customUserDetails.getPassword()) || !Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(this.customUserDetails.getUsername())).equals(this.username)) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
         }
         log.info("Senha do usuario {} confirmada.", username);
 
         log.info("Verificando se o usuario {} tem permissao para acessar o sistema.", username);
-        var systems = customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
+        var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
         if (systems.isEmpty()) {
             log.error("O usuario {} foi autenticado, mas nao tem permissao para entrar neste sistema.", username);
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
@@ -128,7 +147,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         log.info("O usuario {} tem permissao para acessar o sistema.", username);
 
-        return customUserDetails;
+        return this.customUserDetails;
     }
 
     private void defaultOAuth2TokenContext() {
@@ -157,11 +176,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
      */
     private void generateNewContextHolder(User user) {
         log.info("Gerando novo Context Holder.");
-
-        CustomUserDetails customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(this.username);
-
         var oAuth2ClientAuthenticationToken = (OAuth2ClientAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        var customUser = new CustomUser(customUserDetails, user.getAuthorities());
+        var customUser = new CustomUser(this.customUserDetails, user.getAuthorities());
         oAuth2ClientAuthenticationToken.setDetails(customUser);
 
         var context = SecurityContextHolder.createEmptyContext();
@@ -208,6 +224,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             this.refreshToken = (OAuth2RefreshToken) generatedRefreshToken;
             this.authorizationBuilder.refreshToken(this.refreshToken);
             log.info("Refresh Token gerado.");
+
+            log.info("Salvando informacoes de login.");
+            var userSessions = UserSessions.builder()
+                    .ipAddress(this.ipAddress)
+                    .city(CharacterUtil.convertAllUppercaseCharacters(this.city))
+                    .country(CharacterUtil.convertAllUppercaseCharacters(this.country))
+                    .latitude(this.latitude)
+                    .longitude(this.longitude)
+                    .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
+                    .date(LocalDateTime.now())
+                    .user(this.customUserDetails.getUser())
+                    .build();
+
+            this.userSessionsService.save(userSessions);
+
+            log.info("Informacoes de login salvas.");
         }
     }
 

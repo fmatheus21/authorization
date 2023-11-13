@@ -19,6 +19,12 @@ public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthentic
     private final String username;
     private final String password;
     private final UUID uuidSystem;
+    private final String ipAddress;
+    private final String city;
+    private final String country;
+    private final String latitude;
+    private final String longitude;
+    private final String state;
     private final Set<String> scopes;
 
     public CustomAuthenticationToken(Authentication clientPrincipal, @Nullable Set<String> scopes, @Nullable Map<String, Object> additionalParameters) {
@@ -26,6 +32,12 @@ public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthentic
         this.username = (String) Objects.requireNonNull(additionalParameters).get("username");
         this.password = (String) Objects.requireNonNull(additionalParameters).get("password");
         this.uuidSystem = UUID.fromString(Objects.requireNonNull(additionalParameters).get("uuid_system").toString());
+        this.ipAddress = (String) Objects.requireNonNull(additionalParameters).get("ip_address");
+        this.city = (String) Objects.requireNonNull(additionalParameters).get("city");
+        this.country = (String) Objects.requireNonNull(additionalParameters).get("country");
+        this.latitude = (String) Objects.requireNonNull(additionalParameters).get("latitude");
+        this.longitude = (String) Objects.requireNonNull(additionalParameters).get("longitude");
+        this.state = (String) Objects.requireNonNull(additionalParameters).get("state");
         this.scopes = Collections.unmodifiableSet(scopes != null ? new HashSet<>(scopes) : Collections.emptySet());
     }
 

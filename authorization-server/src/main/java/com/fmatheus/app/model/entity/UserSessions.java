@@ -21,16 +21,28 @@ import java.time.LocalDateTime;
 public class UserSessions extends Base {
 
     @NotNull
-    @Column(name = "location", nullable = false, length = 50)
-    private String location;
-
-    @NotNull
-    @Column(name = "device", nullable = false, length = 50)
-    private String device;
-
-    @NotNull
     @Column(name = "ip_address", nullable = false, length = 20)
     private String ipAddress;
+
+    @NotNull
+    @Column(name = "city", nullable = false, length = 50)
+    private String city;
+
+    @NotNull
+    @Column(name = "country", nullable = false, length = 50)
+    private String country;
+
+    @NotNull
+    @Column(name = "state", nullable = false, length = 50)
+    private String state;
+
+    @NotNull
+    @Column(name = "latitude", nullable = false, length = 30)
+    private String latitude;
+
+    @NotNull
+    @Column(name = "longitude", nullable = false, length = 30)
+    private String longitude;
 
     @NotNull
     @Column(name = "date", nullable = false)

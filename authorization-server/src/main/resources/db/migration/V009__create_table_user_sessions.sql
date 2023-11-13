@@ -1,6 +1,7 @@
 CREATE TABLE user_sessions (
   id int NOT NULL AUTO_INCREMENT,
   id_user int NOT NULL,
+  ip_address varchar(20) NOT NULL,
   city varchar(50) NOT NULL,
   country varchar(50) NOT NULL,
   state varchar(50) NOT NULL,
