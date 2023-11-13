@@ -30,7 +30,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -42,7 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
     private String username = "";
     private String password = "";
-    private UUID projectUuid;
+    private UUID uuidSystem;
     private final OAuth2AuthorizationService authorizationService;
     private final UserDetailsService userDetailsService;
     private OAuth2Authorization.Builder authorizationBuilder;
@@ -73,8 +72,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.registeredClient = this.clientPrincipal.getRegisteredClient();
         this.username = CharacterUtil.convertAllLowercaseCharacters(this.customAuthenticationToken.getUsername());
         this.password = this.customAuthenticationToken.getPassword();
-        this.projectUuid = this.customAuthenticationToken.getProjectUuid();
-        System.out.println("::::::::::::: " + projectUuid);
+        this.uuidSystem = this.customAuthenticationToken.getUuidSystem();
         User user = this.validateUser();
         this.authorizedScopes.addAll(registeredClient.getScopes());
         this.generateNewContextHolder(user);
@@ -122,7 +120,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("Senha do usuario {} confirmada.", username);
 
         log.info("Verificando se o usuario {} tem permissao para acessar o sistema.", username);
-        var systems = customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.projectUuid)).toList();
+        var systems = customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
         if (systems.isEmpty()) {
             log.error("O usuario {} foi autenticado, mas nao tem permissao para entrar neste sistema.", username);
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);

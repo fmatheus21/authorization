@@ -140,7 +140,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.JWT_BEARER)
                 .authorizationGrantType(new AuthorizationGrantType("custom_password"))
                 .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(1))
+                        .accessTokenTimeToLive(Duration.ofDays(1))
                         .refreshTokenTimeToLive(Duration.ofDays(1))
                         .reuseRefreshTokens(false)
                         .build())

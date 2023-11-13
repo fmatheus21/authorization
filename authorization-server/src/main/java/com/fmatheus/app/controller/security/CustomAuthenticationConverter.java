@@ -1,5 +1,6 @@
 package com.fmatheus.app.controller.security;
 
+import com.fmatheus.app.controller.CustomOAuth2ParameterNames;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
@@ -44,8 +45,38 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
         }
 
-        var projectUuid = parameters.getFirst(OAuth2ParameterNames.REGISTRATION_ID);
-        if (!StringUtils.hasText(projectUuid) || parameters.get(OAuth2ParameterNames.REGISTRATION_ID).size() != 1) {
+        var uuidSystem = parameters.getFirst(CustomOAuth2ParameterNames.UUID_SYSTEM);
+        if (!StringUtils.hasText(uuidSystem) || parameters.get(CustomOAuth2ParameterNames.UUID_SYSTEM).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var city = parameters.getFirst(CustomOAuth2ParameterNames.CITY);
+        if (!StringUtils.hasText(city) || parameters.get(CustomOAuth2ParameterNames.UUID_SYSTEM).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var country = parameters.getFirst(CustomOAuth2ParameterNames.COUNTRY);
+        if (!StringUtils.hasText(country) || parameters.get(CustomOAuth2ParameterNames.COUNTRY).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var state = parameters.getFirst(CustomOAuth2ParameterNames.STATE);
+        if (!StringUtils.hasText(state) || parameters.get(CustomOAuth2ParameterNames.STATE).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var latitude = parameters.getFirst(CustomOAuth2ParameterNames.LATITUDE);
+        if (!StringUtils.hasText(latitude) || parameters.get(CustomOAuth2ParameterNames.LATITUDE).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var longitude = parameters.getFirst(CustomOAuth2ParameterNames.LONGITUDE);
+        if (!StringUtils.hasText(longitude) || parameters.get(CustomOAuth2ParameterNames.LONGITUDE).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        var ipAddress = parameters.getFirst(CustomOAuth2ParameterNames.IP_ADDRESS);
+        if (!StringUtils.hasText(ipAddress) || parameters.get(CustomOAuth2ParameterNames.IP_ADDRESS).size() != 1) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
         }
 
