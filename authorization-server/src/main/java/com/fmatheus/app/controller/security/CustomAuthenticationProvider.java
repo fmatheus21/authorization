@@ -225,6 +225,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             this.authorizationBuilder.refreshToken(this.refreshToken);
             log.info("Refresh Token gerado.");
 
+            var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
+
             log.info("Salvando informacoes de login.");
             var userSessions = UserSessions.builder()
                     .ipAddress(this.ipAddress)
@@ -235,6 +237,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                     .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
                     .date(LocalDateTime.now())
                     .user(this.customUserDetails.getUser())
+                    .system(systems.get(0).getSystem())
                     .build();
 
             this.userSessionsService.save(userSessions);

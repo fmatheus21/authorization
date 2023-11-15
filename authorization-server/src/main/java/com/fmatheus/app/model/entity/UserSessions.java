@@ -51,4 +51,8 @@ public class UserSessions extends Base {
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private User user;
+
+    @JoinColumn(name = "id_systems", referencedColumnName = "id", nullable = false)
+    @ManyToOne(optional = false)
+    private Systems system;
 }
