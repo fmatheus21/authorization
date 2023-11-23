@@ -8,6 +8,8 @@ CREATE TABLE user_sessions (
   state varchar(50) NOT NULL,
   latitude varchar(30) NOT NULL,
   longitude varchar(30) NOT NULL,
+  status varchar(15) NOT NULL,
+  message varchar(100) NOT NULL,
   date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE KEY id_UNIQUE (id),

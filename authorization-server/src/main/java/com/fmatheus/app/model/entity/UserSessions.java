@@ -2,6 +2,7 @@ package com.fmatheus.app.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fmatheus.app.controller.StatusSession;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -47,6 +48,15 @@ public class UserSessions extends Base {
     @NotNull
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "status", nullable = false, length = 15)
+    private StatusSession status;
+
+    @NotNull
+    @Column(name = "message", nullable = false, length = 100)
+    private String message;
 
     @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)

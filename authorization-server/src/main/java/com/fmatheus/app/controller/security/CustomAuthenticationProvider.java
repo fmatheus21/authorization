@@ -1,6 +1,7 @@
 package com.fmatheus.app.controller.security;
 
 
+import com.fmatheus.app.controller.StatusSession;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.UserSessions;
 import com.fmatheus.app.model.service.UserSessionsService;
@@ -134,6 +135,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("Comparando senha do usuario: {}", username);
         CharSequence charPassword = new StringBuilder(this.password);
         if (!this.passwordEncoder.matches(charPassword, this.customUserDetails.getPassword()) || !Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(this.customUserDetails.getUsername())).equals(this.username)) {
+            log.info("Usuario ou senha incorreto.");
+            this.saveSession(StatusSession.ACCESS_DENIED);
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
         }
         log.info("Senha do usuario {} confirmada.", username);
@@ -142,6 +145,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
         if (systems.isEmpty()) {
             log.error("O usuario {} foi autenticado, mas nao tem permissao para entrar neste sistema.", username);
+            this.saveSession(StatusSession.UNAUTHORIZED);
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
         }
 
@@ -225,25 +229,31 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             this.authorizationBuilder.refreshToken(this.refreshToken);
             log.info("Refresh Token gerado.");
 
-            var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
+            this.saveSession(StatusSession.SUCCESS);
 
-            log.info("Salvando informacoes de login.");
-            var userSessions = UserSessions.builder()
-                    .ipAddress(this.ipAddress)
-                    .city(CharacterUtil.convertAllUppercaseCharacters(this.city))
-                    .country(CharacterUtil.convertAllUppercaseCharacters(this.country))
-                    .latitude(this.latitude)
-                    .longitude(this.longitude)
-                    .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
-                    .date(LocalDateTime.now())
-                    .user(this.customUserDetails.getUser())
-                    .system(systems.get(0).getSystem())
-                    .build();
-
-            this.userSessionsService.save(userSessions);
-
-            log.info("Informacoes de login salvas.");
         }
+    }
+
+    private void saveSession(StatusSession statusSession) {
+        log.info("Salvando informacoes de login.");
+        var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
+        var userSessions = UserSessions.builder()
+                .ipAddress(this.ipAddress)
+                .city(CharacterUtil.convertAllUppercaseCharacters(this.city))
+                .country(CharacterUtil.convertAllUppercaseCharacters(this.country))
+                .latitude(this.latitude)
+                .longitude(this.longitude)
+                .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
+                .status(statusSession)
+                .message(CharacterUtil.convertAllUppercaseCharacters(statusSession.getValue()))
+                .date(LocalDateTime.now())
+                .user(this.customUserDetails.getUser())
+                .system(systems.get(0).getSystem())
+                .build();
+
+        this.userSessionsService.save(userSessions);
+
+        log.info("Informacoes de login salvas.");
     }
 
     private OAuth2Error oAuth2Error() {
