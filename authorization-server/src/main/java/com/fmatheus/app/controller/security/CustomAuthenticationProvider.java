@@ -238,11 +238,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("Salvando informacoes de login.");
         var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
         var userSessions = UserSessions.builder()
-                .ipAddress(this.ipAddress)
+                .ipAddress(CharacterUtil.convertAllUppercaseCharacters(this.ipAddress))
                 .city(CharacterUtil.convertAllUppercaseCharacters(this.city))
                 .country(CharacterUtil.convertAllUppercaseCharacters(this.country))
-                .latitude(this.latitude)
-                .longitude(this.longitude)
+                .latitude(CharacterUtil.convertAllUppercaseCharacters(this.latitude))
+                .longitude(CharacterUtil.convertAllUppercaseCharacters(this.longitude))
                 .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
                 .status(statusSession)
                 .message(CharacterUtil.convertAllUppercaseCharacters(statusSession.getValue()))

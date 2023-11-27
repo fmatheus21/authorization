@@ -219,7 +219,7 @@ public class SecurityConfig {
                 if (context.getTokenType().getValue().equals("access_token")) {
                     context.getClaims()
                             .claim("uuid", customUserDetails.getUser().getUuid())
-                            .claim("username", customUserDetails.getUsername())
+                            .claim("username", Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(customUserDetails.getUsername())))
                             .claim("fullname", Objects.requireNonNull(CharacterUtil.convertFirstUppercaseCharacter(customUserDetails.getUser().getPerson().getName())))
                             .claim("authorities", authorities)
                             .claim("roles", roles);
