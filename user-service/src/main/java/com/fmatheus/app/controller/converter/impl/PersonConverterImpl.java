@@ -6,10 +6,12 @@ import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Permission;
 import com.fmatheus.app.model.entity.Person;
 import com.fmatheus.app.model.entity.Systems;
+import com.fmatheus.app.model.entity.UserSessions;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 
@@ -54,9 +56,16 @@ public class PersonConverterImpl implements PersonConverter {
         var permissions = user.getPermissions().stream().map(this::converterPermission).toList();
         user.setPermissions(permissions);
 
+        var userSessions = user.getUserSessions().stream().map(this::converterUserSessions)
+                .sorted(Comparator.comparing(UserSessions::getDate).reversed())
+                .limit(10)
+                .toList();
+
+        user.setUserSessions(userSessions);
         person.setAddress(address);
         person.setContact(contact);
         person.setUser(user);
+
 
     }
 
@@ -64,6 +73,17 @@ public class PersonConverterImpl implements PersonConverter {
         permission.setName(CharacterUtil.convertAllLowercaseCharacters(permission.getName()));
         permission.setSystem(this.converterSystems(permission.getSystem()));
         return permission;
+    }
+
+    private UserSessions converterUserSessions(UserSessions userSessions) {
+        userSessions.setIpAddress(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getIpAddress()));
+        userSessions.setCity(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getCity()));
+        userSessions.setCountry(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getCountry()));
+        userSessions.setMessage(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getMessage()));
+        userSessions.setState(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getState()));
+        userSessions.setMessage(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getMessage()));
+        userSessions.getSystem().setDescription(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getSystem().getDescription()));
+        return userSessions;
     }
 
     private Systems converterSystems(Systems systems) {

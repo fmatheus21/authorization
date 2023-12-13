@@ -12,7 +12,6 @@ import java.util.UUID;
 
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@ToString
 @Setter
 @Getter
 @NoArgsConstructor
@@ -53,6 +52,9 @@ public class User extends Base {
     @JoinTable(name = "user_permission_join", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_permission"))
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Permission> permissions;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<UserSessions> userSessions;
 
 
 }

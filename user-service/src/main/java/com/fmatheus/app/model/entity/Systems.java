@@ -26,6 +26,9 @@ public class Systems extends Base {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
+    @Column(name = "description", nullable = false, length = 150)
+    private String description;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "system", fetch = FetchType.LAZY)
     private Collection<Permission> permissions;
 

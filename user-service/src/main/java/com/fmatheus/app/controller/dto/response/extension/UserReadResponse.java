@@ -20,4 +20,5 @@ public class UserReadResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Collection<PermissionReadResponse> permissions;
+    private Collection<UserSessionsReadResponse> userSessions;
 }

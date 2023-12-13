@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.security;
 
 
-import com.fmatheus.app.controller.StatusSession;
+import com.fmatheus.app.controller.enumerable.StatusSession;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.UserSessions;
 import com.fmatheus.app.model.service.UserSessionsService;

@@ -12,4 +12,5 @@ import java.util.UUID;
 public class SystemsReadResponse {
     private UUID uuid;
     private String name;
+    private String description;
 }

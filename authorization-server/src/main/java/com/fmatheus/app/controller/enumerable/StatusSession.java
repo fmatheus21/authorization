@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller;
+package com.fmatheus.app.controller.enumerable;
 
 import lombok.Getter;
 

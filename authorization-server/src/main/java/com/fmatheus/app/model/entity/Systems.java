@@ -21,9 +21,11 @@ public class Systems extends Base {
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
 
-    @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 20)
     private String name;
+
+    @Column(name = "description", nullable = false, length = 150)
+    private String description;
 
 
 }
