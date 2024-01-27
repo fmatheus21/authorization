@@ -2,6 +2,7 @@ package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.dto.response.PersonResponse;
+import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Permission;
 import com.fmatheus.app.model.entity.Person;
@@ -27,9 +28,9 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     @Override
-    public PersonResponse converterToResponse(Person person) {
+    public UserResponse converterToResponse(Person person) {
         this.converterPerson(person);
-        return this.mapper.map(person, PersonResponse.class);
+        return this.mapper.map(person, UserResponse.class);
     }
 
     private void converterPerson(Person person) {

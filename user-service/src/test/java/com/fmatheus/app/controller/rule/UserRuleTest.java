@@ -6,7 +6,7 @@ import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.request.extension.PasswordUpdateRequest;
+import com.fmatheus.app.controller.dto.request.base.PasswordUpdateBase;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.enumerable.MessagesEnum;
 import com.fmatheus.app.controller.exception.BadRequestException;
@@ -318,7 +318,7 @@ class UserRuleTest {
 
 
     /**
-     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateRequest, Jwt)}
+     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateBase, Jwt)}
      */
     @Test
     @Order(11)
@@ -326,7 +326,7 @@ class UserRuleTest {
     void updatePasswordTestSuccess() {
 
         var user = PersonMock.loadUser();
-        PasswordUpdateRequest request = new PasswordUpdateRequest("password123", "password123");
+        PasswordUpdateBase request = new PasswordUpdateBase("password123", "password123");
 
         when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
         when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
@@ -340,14 +340,14 @@ class UserRuleTest {
 
 
     /**
-     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateRequest, Jwt)}
+     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateBase, Jwt)}
      */
     @Test
     @Order(12)
     @DisplayName("updatePassword - Quando as senhas nao conferem, lanca excecao")
     void updateTestPasswordNotMatchException() {
 
-        PasswordUpdateRequest request = new PasswordUpdateRequest("password123", "password456");
+        PasswordUpdateBase request = new PasswordUpdateBase("password123", "password456");
         User user = new User();
         when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
         when(this.messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));

@@ -13,10 +13,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "contact", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "email", "id_person"})
-})
-public class Contact extends Base{
+@Table(name = "contact")
+public class Contact extends Base {
 
     @NotNull
     @Size(max = 80)

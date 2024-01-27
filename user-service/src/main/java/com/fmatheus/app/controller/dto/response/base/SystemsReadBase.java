@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response.extension;
+package com.fmatheus.app.controller.dto.response.base;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemsReadResponse {
+public class SystemsReadBase {
     private UUID uuid;
     private String name;
     private String description;

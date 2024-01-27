@@ -11,17 +11,13 @@ import java.util.UUID;
 
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@ToString
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id_person"}),
-        @UniqueConstraint(columnNames = {"id"}),
-        @UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user")
 public class User extends Base {
 
     @NotNull

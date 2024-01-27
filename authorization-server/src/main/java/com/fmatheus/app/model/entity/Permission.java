@@ -14,8 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "permission", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "permission")
 public class Permission extends Base {
 
     @NotNull

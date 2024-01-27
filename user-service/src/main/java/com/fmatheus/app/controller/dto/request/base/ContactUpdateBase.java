@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.request.extension;
+package com.fmatheus.app.controller.dto.request.base;
 
 
 import jakarta.validation.constraints.Email;
@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactUpdateRequest {
+public class ContactUpdateBase {
 
     @NotNull
     @Size(max = 80)

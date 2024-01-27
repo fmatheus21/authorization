@@ -17,9 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person_type", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "name"}),
-})
+@Table(name = "person_type")
 public class PersonType extends Base {
 
     @NotNull

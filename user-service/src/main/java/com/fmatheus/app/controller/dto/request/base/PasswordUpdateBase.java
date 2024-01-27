@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.request.extension;
+package com.fmatheus.app.controller.dto.request.base;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordUpdateRequest {
+public class PasswordUpdateBase {
 
     @NotNull
     @NotBlank

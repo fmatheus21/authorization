@@ -17,9 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "document"})
-})
+@Table(name = "person")
 public class Person extends Base {
 
     @NotNull

@@ -1,8 +1,8 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.extension.AddressUpdateRequest;
-import com.fmatheus.app.controller.dto.request.extension.ContactUpdateRequest;
+import com.fmatheus.app.controller.dto.request.base.AddressUpdateBase;
+import com.fmatheus.app.controller.dto.request.base.ContactUpdateBase;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Address;
@@ -23,7 +23,7 @@ public class UserUpdateConverterImpl implements UserUpdateConverter {
         return user;
     }
 
-    private Address converteAddress(Address address, AddressUpdateRequest request) {
+    private Address converteAddress(Address address, AddressUpdateBase request) {
         address.setCity(CharacterUtil.convertAllUppercaseCharacters(request.getCity()));
         address.setNumber(CharacterUtil.convertAllUppercaseCharacters(request.getNumber()));
         address.setState(CharacterUtil.convertAllUppercaseCharacters(request.getState()));
@@ -35,7 +35,7 @@ public class UserUpdateConverterImpl implements UserUpdateConverter {
     }
 
 
-    private Contact converterContact(Contact contact, ContactUpdateRequest request) {
+    private Contact converterContact(Contact contact, ContactUpdateBase request) {
         contact.setEmail(CharacterUtil.convertAllLowercaseCharacters(request.getEmail()));
         contact.setPhone(CharacterUtil.removeSpecialCharacters(request.getPhone()));
         return contact;

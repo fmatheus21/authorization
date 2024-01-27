@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.response.extension;
+package com.fmatheus.app.controller.dto.response.base;
 
 import com.fmatheus.app.controller.enumerable.StatusSession;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSessionsReadResponse {
+public class UserSessionsReadBase {
     private String ipAddress;
     private String city;
     private String country;
@@ -20,5 +20,5 @@ public class UserSessionsReadResponse {
     private LocalDateTime date;
     private StatusSession status;
     private String message;
-    private SystemsReadResponse system;
+    private SystemsReadBase system;
 }

@@ -13,9 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "id_person"}),
-})
+@Table(name = "address")
 public class Address extends Base {
 
     @NotNull

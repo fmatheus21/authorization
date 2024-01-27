@@ -1,11 +1,12 @@
 package com.fmatheus.app;
 
-import com.fmatheus.app.controller.dto.request.extension.*;
+import com.fmatheus.app.controller.dto.request.base.*;
+import com.fmatheus.app.controller.dto.request.base.AddressCreateBase;
+import com.fmatheus.app.controller.dto.request.base.ContactCreateBase;
 import com.fmatheus.app.controller.dto.request.UserCreateRequest;
 import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.response.PersonResponse;
-import com.fmatheus.app.controller.dto.response.extension.UserReadResponse;
-import com.fmatheus.app.controller.dto.response.extension.*;
+import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.response.base.*;
 import com.fmatheus.app.model.entity.*;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 
@@ -128,11 +129,11 @@ public class PersonMock {
                 .build();
     }
 
-    public static PersonResponse loadPersonResponse() {
-        var person = PersonResponse.builder()
+    public static UserResponse loadPersonResponse() {
+        var person = UserResponse.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .address(AddressReadResponse.builder()
+                .address(AddressReadBase.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)
                         .district(DISTRICT)
@@ -141,25 +142,25 @@ public class PersonMock {
                         .place(PLACE)
                         .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactReadResponse.builder()
+                .contact(ContactReadBase.builder()
                         .phone(PHONE)
                         .email(EMAIL)
                         .build())
                 .message(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessCreate())
                 .build();
 
-        var system = SystemsReadResponse.builder()
+        var system = SystemsReadBase.builder()
                 .name(SYSTEM_NAME)
                 .build();
         system.setUuid(SYSTEM_UUID);
 
-        var permission = PermissionReadResponse.builder()
+        var permission = PermissionReadBase.builder()
                 .name(PERMISSION_NAME)
                 .system(system)
                 .build();
         permission.setUuid(PERMISSION_UUID);
 
-        var user = UserReadResponse.builder()
+        var user = UserReadBase.builder()
                 .username(USER_NAME)
                 .active(true)
                 .createdAt(CREATED_AT)
@@ -174,7 +175,7 @@ public class PersonMock {
 
     public static UserCreateRequest loadUserCreateRequest() {
 
-        var permission = PermissionCreateRequest.builder()
+        var permission = PermissionCreateBase.builder()
                 .id(1)
                 .name(PERMISSION_NAME)
                 .build();
@@ -182,11 +183,11 @@ public class PersonMock {
         return UserCreateRequest.builder()
                 .name(NAME)
                 .document(DOCUMENT)
-                .personType(PersonTypeCreateRequest.builder()
+                .personType(PersonTypeCreateBase.builder()
                         .id(PERSON_TYPE_ID)
                         .uuid(PERSON_TYPE_UUID)
                         .build())
-                .address(AddressCreateRequest.builder()
+                .address(AddressCreateBase.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)
                         .district(DISTRICT)
@@ -195,7 +196,7 @@ public class PersonMock {
                         .place(PLACE)
                         .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactCreateRequest.builder()
+                .contact(ContactCreateBase.builder()
                         .phone(PHONE)
                         .email(EMAIL)
                         .build())
@@ -206,7 +207,7 @@ public class PersonMock {
     public static UserUpdateRequest loadUserUpdateRequest() {
         return UserUpdateRequest.builder()
                 .name(NAME)
-                .address(AddressUpdateRequest.builder()
+                .address(AddressUpdateBase.builder()
                         .city(CITY)
                         .complement(COMPLEMENT)
                         .district(DISTRICT)
@@ -215,7 +216,7 @@ public class PersonMock {
                         .place(PLACE)
                         .zipCode(ZIPCODE)
                         .build())
-                .contact(ContactUpdateRequest.builder()
+                .contact(ContactUpdateBase.builder()
                         .phone(PHONE)
                         .email(EMAIL)
                         .build())

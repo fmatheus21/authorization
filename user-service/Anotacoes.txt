@@ -1,0 +1,8 @@
+Recursos
+Usuário:
+	- Listar todos os usuários (com paginação)
+	- Procurar por Uuid
+	- Atualizar (Somente nome, endereço e contato)
+	- Atualizar senha (Somente o próprio usuário poderá alterar)
+	- Criar novo usuário
+	- Alterar permissao

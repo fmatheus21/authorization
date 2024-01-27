@@ -2,8 +2,8 @@ package com.fmatheus.app.controller.dto.request;
 
 
 
-import com.fmatheus.app.controller.dto.request.extension.AddressUpdateRequest;
-import com.fmatheus.app.controller.dto.request.extension.ContactUpdateRequest;
+import com.fmatheus.app.controller.dto.request.base.AddressUpdateBase;
+import com.fmatheus.app.controller.dto.request.base.ContactUpdateBase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,9 +23,9 @@ public class UserUpdateRequest {
     private String name;
 
     @Valid
-    private AddressUpdateRequest address;
+    private AddressUpdateBase address;
 
     @Valid
-    private ContactUpdateRequest contact;
+    private ContactUpdateBase contact;
 
 }

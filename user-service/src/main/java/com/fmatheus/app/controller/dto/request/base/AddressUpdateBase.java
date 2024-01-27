@@ -1,4 +1,4 @@
-package com.fmatheus.app.controller.dto.request.extension;
+package com.fmatheus.app.controller.dto.request.base;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressUpdateRequest {
+public class AddressUpdateBase {
 
     @NotNull
     @NotBlank

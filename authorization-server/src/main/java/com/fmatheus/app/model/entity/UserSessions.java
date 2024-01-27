@@ -16,9 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_sessions", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})
-})
+@Table(name = "user_sessions")
 public class UserSessions extends Base {
 
     @NotNull

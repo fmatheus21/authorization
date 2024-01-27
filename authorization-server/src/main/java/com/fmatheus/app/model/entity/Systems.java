@@ -12,9 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "systems", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"}),
-        @UniqueConstraint(columnNames = {"id"})})
+@Table(name = "systems")
 public class Systems extends Base {
 
     @NotNull

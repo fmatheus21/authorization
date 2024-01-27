@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<User> findById(UUID uuid) {
+    public Optional<User> findById(Integer id) {
         throw new UnsupportedOperationException();
     }
 
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(Integer id) {
         throw new UnsupportedOperationException();
     }
 

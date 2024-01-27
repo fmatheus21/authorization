@@ -1,18 +1,16 @@
 package com.fmatheus.app.model.repository.filter;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Classe que contem os atributos de um filtro que sao utilizados em consultas.
  *
  * @author Fernando Matheus
  */
-@Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRepositoryFilter {

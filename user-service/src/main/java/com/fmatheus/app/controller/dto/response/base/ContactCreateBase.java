@@ -1,4 +1,5 @@
-package com.fmatheus.app.controller.dto.response.extension;
+package com.fmatheus.app.controller.dto.response.base;
+
 
 import lombok.*;
 
@@ -7,7 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactReadResponse {
+public class ContactCreateBase {
     private String email;
     private String phone;
 }
