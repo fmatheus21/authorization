@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Builder
@@ -42,5 +43,8 @@ public class Person extends Base {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Contact contact;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person", fetch = FetchType.LAZY)
+    private Collection<User> users;
 
 }

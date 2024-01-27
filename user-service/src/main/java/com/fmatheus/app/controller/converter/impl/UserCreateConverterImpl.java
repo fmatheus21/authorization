@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -70,7 +71,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
 
         person.setAddress(address);
         person.setContact(contact);
-        person.setUser(user);
+        person.setUsers(Collections.singleton(user));
 
         return person;
     }

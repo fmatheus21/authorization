@@ -19,6 +19,7 @@ public class UserReadBase {
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private ProfileReadBase profile;
     private Collection<PermissionReadBase> permissions;
     private Collection<UserSessionsReadBase> userSessions;
 }

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Collection;
+
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Builder
@@ -41,7 +43,7 @@ public class Person extends Base {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Contact contact;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
-    private User user;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    private Collection<User> users;
 
 }

@@ -117,7 +117,7 @@ public class PersonMock {
                 .build();
         user.setId(1);
 
-        person.setUser(user);
+        person.setUsers(Collections.singleton(user));
 
         return person;
     }

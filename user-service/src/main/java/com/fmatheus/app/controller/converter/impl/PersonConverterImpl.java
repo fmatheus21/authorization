@@ -1,13 +1,9 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
-import com.fmatheus.app.controller.dto.response.PersonResponse;
 import com.fmatheus.app.controller.dto.response.UserResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
-import com.fmatheus.app.model.entity.Permission;
-import com.fmatheus.app.model.entity.Person;
-import com.fmatheus.app.model.entity.Systems;
-import com.fmatheus.app.model.entity.UserSessions;
+import com.fmatheus.app.model.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -51,29 +47,38 @@ public class PersonConverterImpl implements PersonConverter {
         contact.setEmail(CharacterUtil.convertAllLowercaseCharacters(contact.getEmail()));
         contact.setPhone(CharacterUtil.removeSpecialCharacters(contact.getPhone()));
 
-        var user = person.getUser();
-        user.setUsername(CharacterUtil.convertAllLowercaseCharacters(user.getUsername()));
+        var users = person.getUsers().stream().map(this::converterUser).toList();
 
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setUsers(users);
+
+
+    }
+
+    private User converterUser(User user) {
+        user.setUsername(CharacterUtil.convertAllLowercaseCharacters(user.getUsername()));
+        var profile = this.convertProfila(user.getProfile());
         var permissions = user.getPermissions().stream().map(this::converterPermission).toList();
         user.setPermissions(permissions);
-
         var userSessions = user.getUserSessions().stream().map(this::converterUserSessions)
                 .sorted(Comparator.comparing(UserSessions::getDate).reversed())
                 .limit(10)
                 .toList();
-
         user.setUserSessions(userSessions);
-        person.setAddress(address);
-        person.setContact(contact);
-        person.setUser(user);
-
-
+        user.setProfile(profile);
+        return user;
     }
 
     private Permission converterPermission(Permission permission) {
         permission.setName(CharacterUtil.convertAllLowercaseCharacters(permission.getName()));
         permission.setSystem(this.converterSystems(permission.getSystem()));
         return permission;
+    }
+
+    private Profile convertProfila(Profile profile) {
+        profile.setName(CharacterUtil.convertFirstUppercaseCharacter(profile.getName()));
+        return profile;
     }
 
     private UserSessions converterUserSessions(UserSessions userSessions) {
