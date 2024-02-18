@@ -2,8 +2,10 @@ package com.fmatheus.app.controller.security;
 
 
 import com.fmatheus.app.controller.enumerable.StatusSession;
+import com.fmatheus.app.controller.proxy.service.FeignLocationService;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.UserSessions;
+import com.fmatheus.app.model.service.SystemsService;
 import com.fmatheus.app.model.service.UserSessionsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +40,10 @@ import java.util.UUID;
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private static final String GRANT_TYPE = "custom_password";
-    private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
-    private String username = "";
-    private String password = "";
+    private String username;
+    private String password;
     private UUID uuidSystem;
-    private String ipAddress;
-    private String city;
-    private String country;
-    private String latitude;
-    private String longitude;
-    private String state;
+    private String zipCode;
     private final OAuth2AuthorizationService authorizationService;
     private final UserDetailsService userDetailsService;
     private OAuth2Authorization.Builder authorizationBuilder;
@@ -67,7 +59,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private CustomUserDetails customUserDetails;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserSessionsService userSessionsService;
+
+    @Autowired
+    private FeignLocationService locationService;
+
+    @Autowired
+    private SystemsService systemsService;
 
 
     public CustomAuthenticationProvider(OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator, UserDetailsService userDetailsService) {
@@ -79,6 +80,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.userDetailsService = userDetailsService;
     }
 
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         this.customAuthenticationToken = (CustomAuthenticationToken) authentication;
@@ -87,12 +89,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.username = CharacterUtil.convertAllLowercaseCharacters(this.customAuthenticationToken.getUsername());
         this.password = this.customAuthenticationToken.getPassword();
         this.uuidSystem = this.customAuthenticationToken.getUuidSystem();
-        this.ipAddress = this.customAuthenticationToken.getIpAddress();
-        this.city = this.customAuthenticationToken.getCity();
-        this.country = this.customAuthenticationToken.getCountry();
-        this.latitude = this.customAuthenticationToken.getLatitude();
-        this.longitude = this.customAuthenticationToken.getLongitude();
-        this.state = this.customAuthenticationToken.getState();
+        this.zipCode = this.customAuthenticationToken.getZipCode();
         User user = this.validateUser();
         this.authorizedScopes.addAll(registeredClient.getScopes());
         this.generateNewContextHolder(user);
@@ -137,17 +134,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!this.passwordEncoder.matches(charPassword, this.customUserDetails.getPassword()) || !Objects.requireNonNull(CharacterUtil.convertAllLowercaseCharacters(this.customUserDetails.getUsername())).equals(this.username)) {
             log.info("Usuario ou senha incorreto.");
             this.saveSession(StatusSession.ACCESS_DENIED);
-            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
+            throw new OAuth2AuthenticationException(OAuthUtil.authentiucationError());
         }
         log.info("Senha do usuario {} confirmada.", username);
-
         log.info("Verificando se o usuario {} tem permissao para acessar o sistema.", username);
-        var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
-        if (systems.isEmpty()) {
-            log.error("O usuario {} foi autenticado, mas nao tem permissao para entrar neste sistema.", username);
-            this.saveSession(StatusSession.UNAUTHORIZED);
-            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.ACCESS_DENIED);
-        }
+
+        this.saveSession(StatusSession.SUCCESS);
 
         log.info("O usuario {} tem permissao para acessar o sistema.", username);
 
@@ -160,7 +152,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 .principal(this.clientPrincipal)
                 .authorizationServerContext(AuthorizationServerContextHolder.getContext())
                 .authorizedScopes(this.authorizedScopes)
-                .authorizationGrantType(new AuthorizationGrantType(GRANT_TYPE))
+                .authorizationGrantType(new AuthorizationGrantType(CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE))
                 .authorizationGrant(this.customAuthenticationToken);
     }
 
@@ -168,7 +160,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.authorizationBuilder = OAuth2Authorization.withRegisteredClient(this.registeredClient)
                 .attribute(Principal.class.getName(), this.clientPrincipal)
                 .principalName(this.clientPrincipal.getName())
-                .authorizationGrantType(new AuthorizationGrantType(GRANT_TYPE))
+                .authorizationGrantType(new AuthorizationGrantType(CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE))
                 .authorizedScopes(this.authorizedScopes);
     }
 
@@ -200,12 +192,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         var generatedAccessToken = this.tokenGenerator.generate(tokenContext);
         if (generatedAccessToken == null) {
-            throw new OAuth2AuthenticationException(this.oAuth2Error());
+            throw new OAuth2AuthenticationException(OAuthUtil.tokenError());
         }
 
         this.accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, generatedAccessToken.getTokenValue(), generatedAccessToken.getIssuedAt(), generatedAccessToken.getExpiresAt(), this.tokenContext.getAuthorizedScopes());
-        if (generatedAccessToken instanceof ClaimAccessor) {
-            this.authorizationBuilder.token(this.accessToken, metadata -> metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, ((ClaimAccessor) generatedAccessToken).getClaims()));
+        if (generatedAccessToken instanceof ClaimAccessor claimAccessor) {
+            this.authorizationBuilder.token(this.accessToken, metadata -> metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, (claimAccessor).getClaims()));
         } else {
             this.authorizationBuilder.accessToken(this.accessToken);
         }
@@ -223,7 +215,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             this.tokenContext = this.tokenContextBuilder.tokenType(OAuth2TokenType.REFRESH_TOKEN).build();
             var generatedRefreshToken = this.tokenGenerator.generate(this.tokenContext);
             if (!(generatedRefreshToken instanceof OAuth2RefreshToken)) {
-                throw new OAuth2AuthenticationException(this.oAuth2Error());
+                throw new OAuth2AuthenticationException(OAuthUtil.tokenError());
             }
             this.refreshToken = (OAuth2RefreshToken) generatedRefreshToken;
             this.authorizationBuilder.refreshToken(this.refreshToken);
@@ -234,31 +226,47 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
+
+    /**
+     * Salva informacoes de localizacao do usuario.
+     *
+     * @param statusSession Status da sessao.
+     */
     private void saveSession(StatusSession statusSession) {
         log.info("Salvando informacoes de login.");
-        var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).toList();
+
+        var system = this.systemsService.findByUuid(this.uuidSystem).orElseThrow(() -> new OAuth2AuthenticationException(OAuthUtil.systemNotFoundError()));
+        var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).findFirst();
+
+        if (systems.isEmpty()) {
+            statusSession = StatusSession.UNAUTHORIZED;
+        }
+
+        var location = this.locationService.findByCep(this.zipCode);
+        var undefined = "UNDEFINED";
         var userSessions = UserSessions.builder()
-                .ipAddress(CharacterUtil.convertAllUppercaseCharacters(this.ipAddress))
-                .city(CharacterUtil.convertAllUppercaseCharacters(this.city))
-                .country(CharacterUtil.convertAllUppercaseCharacters(this.country))
-                .latitude(CharacterUtil.convertAllUppercaseCharacters(this.latitude))
-                .longitude(CharacterUtil.convertAllUppercaseCharacters(this.longitude))
-                .state(CharacterUtil.convertAllUppercaseCharacters(this.state))
+                .zipCode(this.zipCode)
+                .place(Objects.nonNull(location) && location.getLogradouro() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getLogradouro()) : undefined)
+                .district(Objects.nonNull(location) && location.getBairro() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getBairro()) : undefined)
+                .city(Objects.nonNull(location) && location.getLocalidade() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getLocalidade()) : undefined)
+                .uf(Objects.nonNull(location) && location.getUf() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getUf()) : undefined)
                 .status(statusSession)
                 .message(CharacterUtil.convertAllUppercaseCharacters(statusSession.getValue()))
                 .date(LocalDateTime.now())
                 .user(this.customUserDetails.getUser())
-                .system(systems.get(0).getSystem())
+                .system(system)
                 .build();
-
         this.userSessionsService.save(userSessions);
+
+
+        if (systems.isEmpty()) {
+            log.error("O usuario {} foi autenticado, mas nao tem autorizacao para entrar neste sistema.", username);
+            throw new OAuth2AuthenticationException(OAuthUtil.systemNotAllowedError());
+        }
 
         log.info("Informacoes de login salvas.");
     }
 
-    private OAuth2Error oAuth2Error() {
-        return new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR, "O gerador de token falhou ao gerar o token de acesso.", ERROR_URI);
-    }
 
 }
 

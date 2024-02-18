@@ -6,8 +6,8 @@ import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
 import com.fmatheus.app.controller.exception.PasswordNotMatchException;
 import com.fmatheus.app.controller.exception.UserInactiveException;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +26,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Classe que captura as excecoes da api. A anotacao @ControllerAdvice significa
@@ -34,11 +36,11 @@ import java.util.List;
  *
  * @author Fernando Matheus
  */
+@RequiredArgsConstructor
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     private String message;
 
@@ -48,11 +50,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_NOT_READABLE;
-        this.message = messageSource.getMessage(messageEnum.getMessage(), null, LocaleContextHolder.getLocale());
-        this.cause = ex.getCause().toString();
-        var error = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, error, headers, status, request);
+        this.cause = ExceptionUtils.getRootCauseMessage(ex);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        Optional<MessagesEnum> optional = this.returnEnum(this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), optional.isPresent() ? optional.get().getHttpSttus() : MessagesEnum.ERROR_NOT_READABLE.getHttpSttus(), request);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -62,86 +64,87 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, erros, headers, status, request);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<Object> handleBadRequestException(RuntimeException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_BAD_REQUEST;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
         this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var erro = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({PasswordNotMatchException.class})
-    public ResponseEntity<Object> handlePasswordNotMatchException(RuntimeException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_PASSWORD_NOT_MATCH;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
-        this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var erro = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
-    }
-
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    @ExceptionHandler({DataIntegrityViolationException.class})
-    public ResponseEntity<Object> handleDataIntegrityViolationException(RuntimeException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
-        this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var erro = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, erro, new HttpHeaders(), messageEnum.getHttpSttus(), request);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        Optional<MessagesEnum> optional = this.returnEnum(this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), optional.isPresent() ? optional.get().getHttpSttus() : MessagesEnum.ERROR_BAD_REQUEST.getHttpSttus(), request);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({ForbiddenException.class})
     public ResponseEntity<Object> handleForbiddenException(RuntimeException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_NOT_PERMISSION;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
         this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var error = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), messageEnum.getHttpSttus(), request);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), MessagesEnum.ERROR_NOT_PERMISSION.getHttpSttus(), request);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({PasswordNotMatchException.class})
+    public ResponseEntity<Object> handlePasswordNotMatchException(RuntimeException ex, WebRequest request) {
+        this.cause = ExceptionUtils.getRootCauseMessage(ex);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), MessagesEnum.ERROR_PASSWORD_NOT_MATCH.getHttpSttus(), request);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrityViolationException(RuntimeException ex, WebRequest request) {
+        this.cause = ExceptionUtils.getRootCauseMessage(ex);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), MessagesEnum.ERROR_DATA_INTEGRITY_VIOLATION.getHttpSttus(), request);
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({EmptyResultDataAccessException.class})
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_NOT_FOUND;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
         this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var error = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), messageEnum.getHttpSttus(), request);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), MessagesEnum.ERROR_NOT_FOUND.getHttpSttus(), request);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({UserInactiveException.class})
     public ResponseEntity<Object> handleUserInactiveException(RuntimeException ex, WebRequest request) {
-        var messageEnum = MessagesEnum.ERROR_NOT_UNAUTHORIZED;
-        this.message = this.messageSource.getMessage(ex.getMessage(), null, LocaleContextHolder.getLocale());
         this.cause = ExceptionUtils.getRootCauseMessage(ex);
-        var error = this.erroMessageResponse(messageEnum, this.cause, this.message);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), messageEnum.getHttpSttus(), request);
+        this.message = ex.getMessage();
+        var error = this.errorMessageResponse(this.cause, this.message);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), MessagesEnum.ERROR_NOT_UNAUTHORIZED.getHttpSttus(), request);
     }
 
     private MessageResponseHandler createErros(BindingResult result) {
-        this.cause = "Argumentos Inválidos.";
-        this.message = "Erro de validação dos campos.";
-        var messageResponse = this.erroMessageResponse(MessagesEnum.ERROR_BAD_REQUEST, cause, message);
+        this.cause = "Argumentos Inválidos";
+        var messegeResponse = this.errorMessageResponse(this.cause, MessagesEnum.ERROR_BAD_REQUEST.getMessage());
         List<FieldsResponseHandler> fields = new ArrayList<>();
-        result.getFieldErrors().forEach(fieldError -> {
-            this.message = this.messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+        result.getFieldErrors().forEach(fieldErro -> {
+            this.message = this.messageSource.getMessage(fieldErro, LocaleContextHolder.getLocale());
             var field = FieldsResponseHandler.builder()
-                    .field(fieldError.getField())
-                    .message(message)
+                    .field(fieldErro.getField())
+                    .message(this.message)
                     .build();
             fields.add(field);
         });
-        messageResponse.setFields(fields);
-        return messageResponse;
+        messegeResponse.setFields(fields);
+        return messegeResponse;
     }
 
+    private MessageResponseHandler errorMessageResponse(String cause, String message) {
+        Optional<MessagesEnum> optional = this.returnEnum(message);
+        var newMessage = this.messageSource.getMessage(message, null, LocaleContextHolder.getLocale());
+        return optional.map(messegeEnum -> new MessageResponseHandler(messegeEnum, cause, newMessage)).orElseGet(
+                () -> new MessageResponseHandler(MessagesEnum.ERROR_BAD_REQUEST, cause, newMessage));
+    }
 
-    private MessageResponseHandler erroMessageResponse(MessagesEnum messagesEnum, String cause, String message) {
-        return new MessageResponseHandler(messagesEnum, cause, message);
+    private Optional<MessagesEnum> returnEnum(String message) {
+        return Arrays.stream(MessagesEnum.values()).filter(filter -> filter.getMessage().equalsIgnoreCase(message)).findFirst();
     }
 
 

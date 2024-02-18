@@ -20,7 +20,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -64,6 +63,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfig {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
     private final JksProperties jksProperties;
     private final RegistredClientProperties registredClientProperties;
@@ -115,7 +115,7 @@ public class SecurityConfig {
         RegisteredClient registeredClientCredentials = RegisteredClient
                 .withId(UUID.randomUUID().toString())
                 .clientId(this.registredClientProperties.getClientIdOne())
-                .clientSecret(passwordEncoder().encode(clientCredentialsSecret))
+                .clientSecret(this.passwordEncoder.encode(clientCredentialsSecret))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .scope(OidcScopes.OPENID)
@@ -126,7 +126,7 @@ public class SecurityConfig {
         CharSequence secret = new StringBuilder(this.registredClientProperties.getClientSecretTwo());
         RegisteredClient registeredPassword = RegisteredClient.withId("client")
                 .clientId(this.registredClientProperties.getClientIdTwo())
-                .clientSecret(passwordEncoder().encode(secret))
+                .clientSecret(this.passwordEncoder.encode(secret))
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .scope("base")
@@ -138,7 +138,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.JWT_BEARER)
-                .authorizationGrantType(new AuthorizationGrantType("custom_password"))
+                .authorizationGrantType(new AuthorizationGrantType(CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE))
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofDays(1))
                         .refreshTokenTimeToLive(Duration.ofDays(1))
@@ -172,12 +172,6 @@ public class SecurityConfig {
     @Bean
     public OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService() {
         return new InMemoryOAuth2AuthorizationConsentService();
-    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 

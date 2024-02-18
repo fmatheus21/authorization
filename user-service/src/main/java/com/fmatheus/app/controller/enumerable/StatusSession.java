@@ -7,7 +7,7 @@ public enum StatusSession {
 
     SUCCESS("SUCESSO"),
     ACCESS_DENIED("USUARIO OU SENHA INCORRETO"),
-    UNAUTHORIZED("SEM PREMISSAO PARA O SISTEMA");
+    UNAUTHORIZED("SEM AUTORIZAÇÃO PARA O SISTEMA");
 
     private final String value;
 

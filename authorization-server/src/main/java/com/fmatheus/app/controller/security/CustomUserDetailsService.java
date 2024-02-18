@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -32,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         log.info("Procurando pelo usuario {}", username);
-        var user = this.userService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuario ou senha incorreto."));
+        var user = this.userService.findByUsername(username).orElseThrow(() -> new OAuth2AuthenticationException(OAuthUtil.authentiucationError()));
 
         log.info("Usuario encontrado: {}", username);
 

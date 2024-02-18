@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.util;
 
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Fernando Matheus

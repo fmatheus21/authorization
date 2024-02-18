@@ -13,6 +13,14 @@ authorization-server:
     rsa:
       private-key: ${RSA_PRIVATE_KEY:classpath:certs/private.pem}
       public-key: ${RSA_PUBLIC_KEY:classpath:certs/public.pem}
+  feign:
+    location:
+      config:
+        connectTimeout: 1800000
+        readTimeout: 1800000
+        loggerLevel: full
+      resource:
+        find-cep: https://viacep.com.br/ws/%s/json/
 logging:
   pattern:
     level: '%5p [${spring.properties.name:},%X{traceId:-},%X{spanId:-}]'
