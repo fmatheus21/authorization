@@ -8,7 +8,6 @@ import com.fmatheus.app.model.entity.UserSessions;
 import com.fmatheus.app.model.service.SystemsService;
 import com.fmatheus.app.model.service.UserSessionsService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -37,6 +36,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -57,21 +57,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
     private final Set<String> authorizedScopes = new HashSet<>();
     private CustomUserDetails customUserDetails;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserSessionsService userSessionsService;
-
-    @Autowired
-    private FeignLocationService locationService;
-
-    @Autowired
-    private SystemsService systemsService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserSessionsService userSessionsService;
+    private final FeignLocationService locationService;
+    private final SystemsService systemsService;
 
 
-    public CustomAuthenticationProvider(OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator, UserDetailsService userDetailsService) {
+    public CustomAuthenticationProvider(OAuth2AuthorizationService authorizationService, OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
+                                        UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserSessionsService userSessionsService,
+                                        FeignLocationService locationService, SystemsService systemsService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userSessionsService = userSessionsService;
+        this.locationService = locationService;
+        this.systemsService = systemsService;
         Assert.notNull(authorizationService, "authorizationService nao pode ser nulo");
         Assert.notNull(tokenGenerator, "TokenGenerator nao pode ser nulo");
         Assert.notNull(userDetailsService, "UserDetailsService nao pode ser nulo");
@@ -201,6 +199,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         } else {
             this.authorizationBuilder.accessToken(this.accessToken);
         }
+
         log.info("Access Token gerado.");
     }
 
@@ -221,8 +220,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             this.authorizationBuilder.refreshToken(this.refreshToken);
             log.info("Refresh Token gerado.");
 
-            this.saveSession(StatusSession.SUCCESS);
-
         }
     }
 
@@ -233,7 +230,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
      * @param statusSession Status da sessao.
      */
     private void saveSession(StatusSession statusSession) {
-        log.info("Salvando informacoes de login.");
+        log.info("Salvando informacoes de login {}", statusSession);
 
         var system = this.systemsService.findByUuid(this.uuidSystem).orElseThrow(() -> new OAuth2AuthenticationException(OAuthUtil.systemNotFoundError()));
         var systems = this.customUserDetails.getUser().getPermissions().stream().filter(filter -> filter.getSystem().getUuid().equals(this.uuidSystem)).findFirst();

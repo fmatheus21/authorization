@@ -2,7 +2,10 @@ package com.fmatheus.app.controller.security;
 
 import com.fmatheus.app.config.properties.JksProperties;
 import com.fmatheus.app.config.properties.RegistredClientProperties;
+import com.fmatheus.app.controller.proxy.service.FeignLocationService;
 import com.fmatheus.app.controller.util.CharacterUtil;
+import com.fmatheus.app.model.service.SystemsService;
+import com.fmatheus.app.model.service.UserSessionsService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -67,6 +70,9 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JksProperties jksProperties;
     private final RegistredClientProperties registredClientProperties;
+    private final UserSessionsService userSessionsService;
+    private final FeignLocationService locationService;
+    private final SystemsService systemsService;
 
     @Bean
     @Order(1)
@@ -80,7 +86,8 @@ public class SecurityConfig {
                 .getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .tokenEndpoint(tokenEndpoint -> tokenEndpoint
                         .accessTokenRequestConverter(new CustomAuthenticationConverter())
-                        .authenticationProvider(new CustomAuthenticationProvider(authorizationService(), tokenGenerator(), userDetailsService))
+                        .authenticationProvider(new CustomAuthenticationProvider(authorizationService(), tokenGenerator(), this.userDetailsService, this.passwordEncoder,
+                                this.userSessionsService, this.locationService, this.systemsService))
                         .accessTokenRequestConverters(getConverters())
                         .authenticationProviders(getProviders()))
                 .oidc(withDefaults());
