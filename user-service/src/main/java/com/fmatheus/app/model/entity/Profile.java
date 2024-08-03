@@ -3,7 +3,9 @@ package com.fmatheus.app.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
+import java.io.Serial;
+import java.io.Serializable;
+
 
 @Builder
 @Setter
@@ -12,7 +14,15 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(name = "profile")
-public class Profile extends Base {
+public class Profile implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950244234L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @Column(name = "name", nullable = false, length = 15)
     private String name;

@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -16,34 +18,36 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_sessions", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id"})
-})
-public class UserSessions extends Base {
+@Table(name = "user_sessions")
+public class UserSessions implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950290045L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
-    @Column(name = "ip_address", nullable = false, length = 20)
-    private String ipAddress;
+    @Column(name = "zip_code", nullable = false, length = 20)
+    private String zipCode;
 
     @NotNull
-    @Column(name = "city", nullable = false, length = 50)
+    @Column(name = "place", nullable = false, length = 50)
+    private String place;
+
+    @NotNull
+    @Column(name = "district", nullable = false, length = 30)
+    private String district;
+
+    @NotNull
+    @Column(name = "city", nullable = false, length = 30)
     private String city;
 
     @NotNull
-    @Column(name = "country", nullable = false, length = 50)
-    private String country;
-
-    @NotNull
-    @Column(name = "state", nullable = false, length = 50)
-    private String state;
-
-    @NotNull
-    @Column(name = "latitude", nullable = false, length = 30)
-    private String latitude;
-
-    @NotNull
-    @Column(name = "longitude", nullable = false, length = 30)
-    private String longitude;
+    @Column(name = "uf", nullable = false, length = 2)
+    private String uf;
 
     @NotNull
     @Column(name = "date", nullable = false)
@@ -65,5 +69,4 @@ public class UserSessions extends Base {
     @JoinColumn(name = "id_systems", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Systems system;
-
 }

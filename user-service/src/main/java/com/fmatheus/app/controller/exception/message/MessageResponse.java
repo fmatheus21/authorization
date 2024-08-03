@@ -6,16 +6,18 @@ import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
 import com.fmatheus.app.controller.exception.PasswordNotMatchException;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+
+@RequiredArgsConstructor
 @Component
 public class MessageResponse {
-    @Autowired
-    private MessageSource messageSource;
+
+    private final MessageSource messageSource;
 
     private MessageResponseHandler messageResponse(MessagesEnum messagesEnum) {
         return new MessageResponseHandler(messagesEnum, messagesEnum.getHttpSttus().getReasonPhrase(),

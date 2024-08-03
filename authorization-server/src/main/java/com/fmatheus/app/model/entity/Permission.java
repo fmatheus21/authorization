@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -15,7 +17,15 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "permission")
-public class Permission extends Base {
+public class Permission implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950233423L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Column(name = "uuid", nullable = false)

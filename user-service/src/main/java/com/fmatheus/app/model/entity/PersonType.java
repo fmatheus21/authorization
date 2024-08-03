@@ -1,14 +1,13 @@
 package com.fmatheus.app.model.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Builder
@@ -17,10 +16,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person_type", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "name"}),
-})
-public class PersonType extends Base {
+@Table(name = "person_type")
+public class PersonType implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950233521L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Column(name = "uuid", nullable = false)

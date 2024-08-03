@@ -2,9 +2,8 @@ package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.config.properties.CryptoProperties;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
-import com.fmatheus.app.controller.dto.request.base.PermissionCreateBase;
-import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.request.UserCreateDtoRequest;
+import com.fmatheus.app.controller.dto.response.UserDtoResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.controller.util.PasswordGeneratorUtil;
 import com.fmatheus.app.model.entity.*;
@@ -27,7 +26,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
     private final CryptoProperties cryptoProperties;
 
     @Override
-    public Person converterToEntity(UserCreateRequest request) {
+    public Person converterToEntity(UserCreateDtoRequest request) {
 
         var person = this.mapper.map(request, Person.class);
         person.setId(null);
@@ -77,16 +76,15 @@ public class UserCreateConverterImpl implements UserCreateConverter {
     }
 
     @Override
-    public UserResponse converterToResponse(Person person) {
+    public UserDtoResponse converterToResponse(Person person) {
         throw new UnsupportedOperationException();
     }
 
-    private Permission converterPermission(PermissionCreateBase request) {
+    private Permission converterPermission(UserCreateDtoRequest.PermissionRequest request) {
         var permission = Permission.builder()
                 .name(request.getName())
                 .build();
         permission.setId(request.getId());
-
         return permission;
     }
 

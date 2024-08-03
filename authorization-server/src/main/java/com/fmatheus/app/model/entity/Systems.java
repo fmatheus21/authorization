@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @ToString
@@ -14,7 +16,15 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "systems")
-public class Systems extends Base {
+public class Systems implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950255900L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Column(name = "uuid", nullable = false)

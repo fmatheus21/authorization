@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -19,7 +21,15 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(name = "person")
-public class Person extends Base {
+public class Person implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950200934L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Size(max = 70)

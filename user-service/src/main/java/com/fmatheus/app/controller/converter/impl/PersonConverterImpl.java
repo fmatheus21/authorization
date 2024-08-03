@@ -1,7 +1,7 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.PersonConverter;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.response.UserDtoResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     @Override
-    public UserResponse converterToResponse(Person person) {
+    public UserDtoResponse converterToResponse(Person person) {
         this.converterPerson(person);
-        return this.mapper.map(person, UserResponse.class);
+        return this.mapper.map(person, UserDtoResponse.class);
     }
 
     private void converterPerson(Person person) {
@@ -82,11 +82,8 @@ public class PersonConverterImpl implements PersonConverter {
     }
 
     private UserSessions converterUserSessions(UserSessions userSessions) {
-        userSessions.setIpAddress(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getIpAddress()));
         userSessions.setCity(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getCity()));
-        userSessions.setCountry(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getCountry()));
         userSessions.setMessage(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getMessage()));
-        userSessions.setState(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getState()));
         userSessions.setMessage(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getMessage()));
         userSessions.getSystem().setDescription(CharacterUtil.convertFirstUppercaseCharacter(userSessions.getSystem().getDescription()));
         return userSessions;

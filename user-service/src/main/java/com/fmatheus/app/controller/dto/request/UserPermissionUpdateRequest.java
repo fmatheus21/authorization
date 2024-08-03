@@ -1,6 +1,6 @@
 package com.fmatheus.app.controller.dto.request;
 
-import com.fmatheus.app.controller.dto.request.base.PermissionUpdateBase;
+import com.fmatheus.app.controller.enumerable.MethodEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -17,6 +17,22 @@ public class UserPermissionUpdateRequest {
 
     @Valid
     @NotNull
-    private Collection<PermissionUpdateBase> permissions;
+    private Collection<PermissionRequest> permissions;
+
+
+    @ToString
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PermissionRequest {
+
+        @NotNull
+        private Integer id;
+
+        @NotNull
+        private MethodEnum method;
+    }
 
 }

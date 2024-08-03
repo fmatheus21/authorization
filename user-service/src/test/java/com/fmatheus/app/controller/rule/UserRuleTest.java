@@ -5,9 +5,9 @@ import com.fmatheus.app.PersonMock;
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.UserCreateRequest;
-import com.fmatheus.app.controller.dto.request.base.PasswordUpdateBase;
-import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
+import com.fmatheus.app.controller.dto.request.UserCreateDtoRequest;
+import com.fmatheus.app.controller.dto.request.PasswordUpdateDtoRequest;
+import com.fmatheus.app.controller.dto.request.UserUpdateDtoRequest;
 import com.fmatheus.app.controller.enumerable.MessagesEnum;
 import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.PasswordNotMatchException;
@@ -187,7 +187,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#create(UserCreateRequest)}
+     * Metodo de teste: {@link UserRule#create(UserCreateDtoRequest)}
      */
     @Test
     @Order(5)
@@ -216,7 +216,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#create(UserCreateRequest)}
+     * Metodo de teste: {@link UserRule#create(UserCreateDtoRequest)}
      */
     @Test
     @Order(6)
@@ -236,7 +236,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#create(UserCreateRequest)}
+     * Metodo de teste: {@link UserRule#create(UserCreateDtoRequest)}
      */
     @Test
     @Order(7)
@@ -255,7 +255,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#create(UserCreateRequest)}
+     * Metodo de teste: {@link UserRule#create(UserCreateDtoRequest)}
      */
     @Test
     @Order(8)
@@ -274,7 +274,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#update(UserUpdateRequest, Jwt)}
+     * Metodo de teste: {@link UserRule#update(UserUpdateDtoRequest, Jwt)}
      */
     @Test
     @Order(9)
@@ -286,7 +286,7 @@ class UserRuleTest {
 
         when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
         when(this.userService.findByUsername(any(String.class))).thenReturn(Optional.of(user));
-        when(this.userUpdateConverter.converterToUpdate(any(User.class), any(UserUpdateRequest.class))).thenReturn(user);
+        when(this.userUpdateConverter.converterToUpdate(any(User.class), any(UserUpdateDtoRequest.class))).thenReturn(user);
         when(this.personConverter.converterToResponse(any(Person.class))).thenReturn(PersonMock.loadPersonResponse());
         when(this.userService.save(any(User.class))).thenReturn(user);
 
@@ -298,7 +298,7 @@ class UserRuleTest {
     }
 
     /**
-     * Metodo de teste: {@link UserRule#update(UserUpdateRequest, Jwt)}
+     * Metodo de teste: {@link UserRule#update(UserUpdateDtoRequest, Jwt)}
      */
     @Test
     @Order(10)
@@ -318,7 +318,7 @@ class UserRuleTest {
 
 
     /**
-     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateBase, Jwt)}
+     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateDtoRequest, Jwt)}
      */
     @Test
     @Order(11)
@@ -326,7 +326,7 @@ class UserRuleTest {
     void updatePasswordTestSuccess() {
 
         var user = PersonMock.loadUser();
-        PasswordUpdateBase request = new PasswordUpdateBase("password123", "password123");
+        PasswordUpdateDtoRequest request = new PasswordUpdateDtoRequest("password123", "password123");
 
         when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
         when(this.messageResponse.messageSuccessUpdate()).thenReturn(MessageResponseHandlerMock.loadMessageResponseHandlerSuccessUpdate());
@@ -340,14 +340,14 @@ class UserRuleTest {
 
 
     /**
-     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateBase, Jwt)}
+     * Metodo de teste: {@link UserRule#updatePassword(PasswordUpdateDtoRequest, Jwt)}
      */
     @Test
     @Order(12)
     @DisplayName("updatePassword - Quando as senhas nao conferem, lanca excecao")
     void updateTestPasswordNotMatchException() {
 
-        PasswordUpdateBase request = new PasswordUpdateBase("password123", "password456");
+        PasswordUpdateDtoRequest request = new PasswordUpdateDtoRequest("password123", "password456");
         User user = new User();
         when(this.jwt.getClaims()).thenReturn(Map.of("username", "67780886050"));
         when(this.messageResponse.errorUserdNotExist()).thenReturn(new BadRequestException(MessagesEnum.ERROR_USER_NOT_EXIST));

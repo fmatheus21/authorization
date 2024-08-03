@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Builder
 @Getter
 @Setter
@@ -14,7 +17,15 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "contact")
-public class Contact extends Base {
+public class Contact implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950283345L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Size(max = 80)

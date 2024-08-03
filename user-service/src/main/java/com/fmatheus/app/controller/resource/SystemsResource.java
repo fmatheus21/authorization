@@ -1,6 +1,6 @@
 package com.fmatheus.app.controller.resource;
 
-import com.fmatheus.app.controller.dto.response.SystemsResponse;
+import com.fmatheus.app.controller.dto.response.SystemsDtoResponse;
 import com.fmatheus.app.controller.exception.BadRequestException;
 import com.fmatheus.app.controller.exception.ForbiddenException;
 import com.fmatheus.app.controller.exception.UnauthorizedException;
@@ -32,7 +32,7 @@ public class SystemsResource {
 
     @Operation(summary = "Consult registration", description = "Consult registration by UUID", security = @SecurityRequirement(name = "security_auth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SystemsResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SystemsDtoResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UnauthorizedException.class))),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))),
@@ -40,7 +40,7 @@ public class SystemsResource {
     @SystemsReadAuthorize
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")
-    public SystemsResponse findByUuid(@Parameter(description = "Uuid of the system to search") @PathVariable UUID uuid) {
+    public SystemsDtoResponse findByUuid(@Parameter(description = "Uuid of the system to search") @PathVariable UUID uuid) {
         return this.rule.findByUuid(uuid);
     }
 

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 
 @Builder
 @Getter
@@ -13,10 +16,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "id_person"}),
-})
-public class Address extends Base {
+@Table(name = "address")
+public class Address implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2405172041950251807L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     @NotNull
     @Size(max = 70)

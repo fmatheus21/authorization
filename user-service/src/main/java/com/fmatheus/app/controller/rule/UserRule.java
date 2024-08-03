@@ -3,12 +3,11 @@ package com.fmatheus.app.controller.rule;
 import com.fmatheus.app.controller.converter.PersonConverter;
 import com.fmatheus.app.controller.converter.UserCreateConverter;
 import com.fmatheus.app.controller.converter.UserUpdateConverter;
-import com.fmatheus.app.controller.dto.request.UserCreateRequest;
+import com.fmatheus.app.controller.dto.request.UserCreateDtoRequest;
 import com.fmatheus.app.controller.dto.request.UserPermissionUpdateRequest;
-import com.fmatheus.app.controller.dto.request.UserUpdateRequest;
-import com.fmatheus.app.controller.dto.request.base.PasswordUpdateBase;
-import com.fmatheus.app.controller.dto.request.base.PermissionUpdateBase;
-import com.fmatheus.app.controller.dto.response.UserResponse;
+import com.fmatheus.app.controller.dto.request.UserUpdateDtoRequest;
+import com.fmatheus.app.controller.dto.request.PasswordUpdateDtoRequest;
+import com.fmatheus.app.controller.dto.response.UserDtoResponse;
 import com.fmatheus.app.controller.enumerable.MethodEnum;
 import com.fmatheus.app.controller.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.controller.exception.message.MessageResponse;
@@ -28,26 +27,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class UserRule {
 
     private final PasswordEncoder passwordEncoder;
-
     private final UserService userService;
-
     private final PersonService personService;
-
     private final ContactService contactService;
-
     private final PersonConverter personConverter;
-
     private final UserUpdateConverter userUpdateConverter;
-
     private final UserCreateConverter userCreateConverter;
-
     private final MessageResponse messageResponse;
 
 
@@ -59,7 +50,7 @@ public class UserRule {
      * @return Page<UserReadBase>
      * @author fernando.matheus
      */
-    public Page<UserResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
+    public Page<UserDtoResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
         var list = this.userService.findAllFilter(pageable, filter);
         var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson()));
         return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
@@ -72,7 +63,7 @@ public class UserRule {
      * @return UserReadBase
      * @author fernando.matheus
      */
-    public UserResponse findByUuid(UUID uuid) {
+    public UserDtoResponse findByUuid(UUID uuid) {
         var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.personConverter.converterToResponse(response.getPerson());
     }
@@ -85,7 +76,7 @@ public class UserRule {
      * @return UserReadBase
      * @author fernando.matheus
      */
-    public UserResponse update(UserUpdateRequest request, Jwt jwt) {
+    public UserDtoResponse update(UserUpdateDtoRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
@@ -102,7 +93,7 @@ public class UserRule {
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
      * @author fernando.matheus
      */
-    public MessageResponseHandler updatePassword(PasswordUpdateBase request, Jwt jwt) {
+    public MessageResponseHandler updatePassword(PasswordUpdateDtoRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
 
@@ -124,10 +115,10 @@ public class UserRule {
      * - Verifica se o telefone nao existe.
      *
      * @param request Objeto enviado no corpo da requisicao.
-     * @return UserResponse
+     * @return UserDtoResponse
      * @author fernando.matheus
      */
-    public UserResponse create(UserCreateRequest request) {
+    public UserDtoResponse create(UserCreateDtoRequest request) {
 
         if (this.userService.findByUsername(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
@@ -154,11 +145,11 @@ public class UserRule {
         user.setPermissions(request.getPermissions().stream()
                 .filter(filter -> !Objects.equals(filter.getMethod().getValue(), MethodEnum.DELETE.getValue()))
                 .toList().stream()
-                .map(this::converter).collect(Collectors.toList()));
+                .map(this::converter).toList());
         this.userService.save(user);
     }
 
-    private Permission converter(PermissionUpdateBase request) {
+    private Permission converter(UserPermissionUpdateRequest.PermissionRequest request) {
         var permission = new Permission();
         permission.setId(request.getId());
         return permission;

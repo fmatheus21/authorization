@@ -1,8 +1,7 @@
 package com.fmatheus.app.controller.converter.impl;
 
 import com.fmatheus.app.controller.converter.SystemsConverter;
-import com.fmatheus.app.controller.dto.response.SystemsResponse;
-import com.fmatheus.app.controller.dto.response.base.PermissionReadBase;
+import com.fmatheus.app.controller.dto.response.SystemsDtoResponse;
 import com.fmatheus.app.controller.util.CharacterUtil;
 import com.fmatheus.app.model.entity.Permission;
 import com.fmatheus.app.model.entity.Systems;
@@ -22,16 +21,16 @@ public class SystemsConverterImpl implements SystemsConverter {
     }
 
     @Override
-    public SystemsResponse converterToResponse(Systems systems) {
-        var converter = this.mapper.map(systems, SystemsResponse.class);
+    public SystemsDtoResponse converterToResponse(Systems systems) {
+        var converter = this.mapper.map(systems, SystemsDtoResponse.class);
         converter.setName(CharacterUtil.convertAllLowercaseCharacters(converter.getName()));
         var permissions = systems.getPermissions().stream().map(this::converterPermissions).toList();
         converter.setPermissions(permissions);
         return converter;
     }
 
-    private PermissionReadBase converterPermissions(Permission permission) {
-        return PermissionReadBase.builder()
+    private SystemsDtoResponse.PermissionResponse converterPermissions(Permission permission) {
+        return SystemsDtoResponse.PermissionResponse.builder()
                 .uuid(permission.getUuid())
                 .name(CharacterUtil.convertAllLowercaseCharacters(permission.getName()))
                 .build();
