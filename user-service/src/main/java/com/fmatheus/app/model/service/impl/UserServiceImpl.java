@@ -1,8 +1,8 @@
 package com.fmatheus.app.model.service.impl;
 
 
-import com.fmatheus.app.controller.util.CharacterUtil;
-import com.fmatheus.app.model.entity.User;
+import com.fmatheus.app.hexagonal.infra.adapter.input.util.CharacterUtil;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
 import com.fmatheus.app.model.repository.UserRepository;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 import com.fmatheus.app.model.service.UserService;

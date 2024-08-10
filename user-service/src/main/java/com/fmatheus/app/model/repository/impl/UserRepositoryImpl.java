@@ -1,8 +1,8 @@
 package com.fmatheus.app.model.repository.impl;
 
-import com.fmatheus.app.controller.enumerable.EntityEnum;
-import com.fmatheus.app.model.entity.Person;
-import com.fmatheus.app.model.entity.User;
+import com.fmatheus.app.hexagonal.infra.adapter.input.enumerable.EntityEnum;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 import com.fmatheus.app.model.repository.impl.restriction.UserRestriction;
 import com.fmatheus.app.model.repository.query.UserRepositoryQuery;

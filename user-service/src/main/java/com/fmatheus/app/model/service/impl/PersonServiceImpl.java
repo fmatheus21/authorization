@@ -1,6 +1,6 @@
 package com.fmatheus.app.model.service.impl;
 
-import com.fmatheus.app.model.entity.Person;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
 import com.fmatheus.app.model.repository.PersonRepository;
 import com.fmatheus.app.model.service.PersonService;
 import lombok.RequiredArgsConstructor;

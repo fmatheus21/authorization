@@ -1,7 +1,7 @@
 package com.fmatheus.app.model.service.impl;
 
-import com.fmatheus.app.controller.util.CharacterUtil;
-import com.fmatheus.app.model.entity.Contact;
+import com.fmatheus.app.hexagonal.infra.adapter.input.util.CharacterUtil;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Contact;
 import com.fmatheus.app.model.repository.ContactRepository;
 import com.fmatheus.app.model.service.ContactService;
 import lombok.RequiredArgsConstructor;

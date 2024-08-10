@@ -1,10 +1,10 @@
 package com.fmatheus.app.model.repository.impl.restriction;
 
-import com.fmatheus.app.controller.enumerable.EntityEnum;
-import com.fmatheus.app.controller.util.CharacterUtil;
-import com.fmatheus.app.model.entity.Contact;
-import com.fmatheus.app.model.entity.Person;
-import com.fmatheus.app.model.entity.User;
+import com.fmatheus.app.hexagonal.infra.adapter.input.enumerable.EntityEnum;
+import com.fmatheus.app.hexagonal.infra.adapter.input.util.CharacterUtil;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Contact;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;

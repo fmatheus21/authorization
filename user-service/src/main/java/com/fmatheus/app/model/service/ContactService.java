@@ -1,6 +1,6 @@
 package com.fmatheus.app.model.service;
 
-import com.fmatheus.app.model.entity.Contact;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Contact;
 
 import java.util.Optional;
 

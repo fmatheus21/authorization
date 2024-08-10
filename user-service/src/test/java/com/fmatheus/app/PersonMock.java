@@ -1,9 +1,12 @@
 package com.fmatheus.app;
 
-import com.fmatheus.app.controller.dto.request.UserCreateDtoRequest;
-import com.fmatheus.app.controller.dto.request.UserUpdateDtoRequest;
-import com.fmatheus.app.controller.dto.response.UserDtoResponse;
-import com.fmatheus.app.model.entity.*;
+import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserCreateDtoRequest;
+import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserUpdateDtoRequest;
+import com.fmatheus.app.hexagonal.infra.adapter.input.dto.response.UserDtoResponse;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Address;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Contact;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
 import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package com.fmatheus.app.model.repository;
 
-import com.fmatheus.app.model.entity.Systems;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Systems;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
