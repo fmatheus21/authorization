@@ -1,7 +1,7 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,19 +33,19 @@ public class PersonDomain implements Serializable {
     }
 
     public String getName() {
-        return AppUtil.convertFirstUppercaseCharacter(name);
+        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.name)));
     }
 
     public void setName(String name) {
-        this.name = AppUtil.removeSpecialCharacters(AppUtil.removeDuplicateSpace(name));
+        this.name = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(name)));
     }
 
     public String getDocument() {
-        return AppUtil.removeSpecialCharacters(document);
+        return removeSpecialCharacters(document);
     }
 
     public void setDocument(String document) {
-        this.document = AppUtil.removeDuplicateSpace(document);
+        this.document = removeSpecialCharacters(document);
     }
 
     public LocalDateTime getCreatedAt() {
@@ -87,6 +87,7 @@ public class PersonDomain implements Serializable {
     public void setUsers(Collection<UserDomain> users) {
         this.users = users;
     }
+
 
     @Override
     public boolean equals(Object o) {

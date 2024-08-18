@@ -1,12 +1,12 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 
 public class SystemsDomain implements Serializable {
@@ -37,19 +37,19 @@ public class SystemsDomain implements Serializable {
     }
 
     public String getName() {
-        return AppUtil.convertAllLowercaseCharacters(name);
+        return convertAllLowercaseCharacters(name);
     }
 
     public void setName(String name) {
-        this.name = AppUtil.convertAllUppercaseCharacters(name);
+        this.name = convertAllUppercaseCharacters(name);
     }
 
     public String getDescription() {
-        return AppUtil.convertFirstUppercaseCharacter(description);
+        return convertFirstUppercaseCharacter(description);
     }
 
     public void setDescription(String description) {
-        this.description = AppUtil.convertAllUppercaseCharacters(description);
+        this.description = convertAllUppercaseCharacters(description);
     }
 
     public Collection<PermissionDomain> getPermissions() {

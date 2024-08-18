@@ -6,7 +6,7 @@ CREATE TABLE user_sessions (
   place varchar(50) NOT NULL,
   district varchar(30) NOT NULL,
   city varchar(30) NOT NULL,
-  uf varchar(10) NOT NULL,
+  state varchar(10) NOT NULL,
   status varchar(15) NOT NULL,
   message varchar(100) NOT NULL,
   date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

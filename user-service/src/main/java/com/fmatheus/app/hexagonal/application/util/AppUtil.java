@@ -2,7 +2,11 @@ package com.fmatheus.app.hexagonal.application.util;
 
 import com.fmatheus.app.hexagonal.application.domain.exception.ValidationNotNullException;
 
+import java.text.Normalizer;
 import java.util.Objects;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.regex.Pattern;
 
 public class AppUtil {
 
@@ -86,6 +90,15 @@ public class AppUtil {
      */
     public static String convertAllLowercaseCharacters(String value) {
         return Objects.nonNull(value) ? value.toLowerCase().trim() : null;
+    }
+
+    public static String removeAccents(String value) {
+        if (value == null) {
+            return null;
+        }
+        String normalizedText = Normalizer.normalize(value, Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalizedText).replaceAll("");
     }
 
 }

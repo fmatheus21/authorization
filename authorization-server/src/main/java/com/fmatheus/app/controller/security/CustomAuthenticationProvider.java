@@ -246,7 +246,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 .place(Objects.nonNull(location) && location.getLogradouro() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getLogradouro()) : undefined)
                 .district(Objects.nonNull(location) && location.getBairro() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getBairro()) : undefined)
                 .city(Objects.nonNull(location) && location.getLocalidade() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getLocalidade()) : undefined)
-                .uf(Objects.nonNull(location) && location.getUf() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getUf()) : undefined)
+                .state(Objects.nonNull(location) && location.getUf() != null ? CharacterUtil.convertAllUppercaseCharacters(location.getUf()) : undefined)
                 .status(statusSession)
                 .message(CharacterUtil.convertAllUppercaseCharacters(statusSession.getValue()))
                 .date(LocalDateTime.now())

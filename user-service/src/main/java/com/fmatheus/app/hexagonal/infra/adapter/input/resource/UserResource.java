@@ -1,40 +1,17 @@
 package com.fmatheus.app.hexagonal.infra.adapter.input.resource;
 
 
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserCreateDtoRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserPermissionUpdateRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.PasswordUpdateDtoRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserUpdateDtoRequest;
 import com.fmatheus.app.hexagonal.infra.adapter.input.dto.response.UserDtoResponse;
-import com.fmatheus.app.hexagonal.infra.adapter.input.exception.BadRequestException;
-import com.fmatheus.app.hexagonal.infra.adapter.input.exception.ForbiddenException;
-import com.fmatheus.app.hexagonal.infra.adapter.input.exception.UnauthorizedException;
-import com.fmatheus.app.hexagonal.infra.adapter.input.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.hexagonal.infra.adapter.input.facade.UserFacade;
-import com.fmatheus.app.hexagonal.infra.adapter.input.security.authorize.UserCreateAuthorize;
 import com.fmatheus.app.hexagonal.infra.adapter.input.security.authorize.UserReadAuthorize;
-import com.fmatheus.app.hexagonal.infra.adapter.input.security.authorize.UserUpdateAuthorize;
-import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-import java.rmi.ServerError;
-import java.util.UUID;
 
 
 @Tag(name = "Users")
@@ -43,15 +20,15 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserResource {
 
-    private final UserFacade rule;
+    private final UserFacade facade;
 
     @UserReadAuthorize
     @GetMapping
     public ResponseEntity<Page<UserDtoResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
-        var response = this.rule.findAllFilter(pageable, filter);
+        var response = this.facade.findAllFilter(pageable, filter);
         return !response.isEmpty() ? ResponseEntity.ok(response) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+/*
 
     @Operation(summary = "Consult registration", description = "Consult registration by UUID", security = @SecurityRequirement(name = "security_auth"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDtoResponse.class))), @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))), @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UnauthorizedException.class))), @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))), @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServerError.class)))})
@@ -90,5 +67,5 @@ public class UserResource {
         this.rule.updatePermissions(uuid, request);
     }
 
-
+*/
 }

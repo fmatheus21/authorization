@@ -7,7 +7,7 @@ import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Addres
 import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Contact;
 import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
 import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
-import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

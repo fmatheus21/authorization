@@ -1,4 +1,4 @@
-package com.fmatheus.app.model.repository.filter;
+package com.fmatheus.app.hexagonal.infra.adapter.output.persistence.repository.filter;
 
 
 import lombok.*;

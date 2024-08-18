@@ -1,6 +1,6 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 
 import java.io.Serial;
@@ -32,65 +32,59 @@ public class AddressDomain implements Serializable {
     }
 
     public String getPlace() {
-        return AppUtil.convertFirstUppercaseCharacter(this.place);
+        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.place)));
     }
 
     public void setPlace(String place) {
-        AppUtil.isNotNull("place", place);
-        this.place = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(place));
+        this.place = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(place)));
     }
 
     public String getNumber() {
-        return AppUtil.convertFirstUppercaseCharacter(this.number);
+        return convertFirstUppercaseCharacter(this.number);
     }
 
     public void setNumber(String number) {
-        AppUtil.isNotNull("number", number);
-        this.number = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(number));
+        this.number = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(number)));
     }
 
     public String getComplement() {
-        return AppUtil.convertFirstUppercaseCharacter(this.complement);
+        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.complement)));
     }
 
     public void setComplement(String complement) {
-        this.complement = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(complement));
+        this.complement = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(complement)));
     }
 
     public String getDistrict() {
-        return AppUtil.convertFirstUppercaseCharacter(this.district);
+        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.district)));
     }
 
     public void setDistrict(String district) {
-        AppUtil.isNotNull("district", district);
-        this.district = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(district));
+        this.district = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(district)));
     }
 
     public String getCity() {
-        return AppUtil.convertFirstUppercaseCharacter(this.city);
+        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.city)));
     }
 
     public void setCity(String city) {
-        AppUtil.isNotNull("city", city);
-        this.city = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(city));
+        this.city = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(city)));
     }
 
     public String getState() {
-        return AppUtil.convertFirstUppercaseCharacter(this.state);
+        return convertAllUppercaseCharacters(this.state);
     }
 
     public void setState(String state) {
-        AppUtil.isNotNull("state", state);
-        this.state = AppUtil.convertAllUppercaseCharacters(AppUtil.removeSpecialCharacters(state));
+        this.state = convertAllUppercaseCharacters(state);
     }
 
     public String getZipCode() {
-        return AppUtil.removeSpecialCharacters(zipCode);
+        return removeSpecialCharacters(zipCode);
     }
 
     public void setZipCode(String zipCode) {
-        AppUtil.isNotNull("zipCode", zipCode);
-        this.zipCode = AppUtil.removeSpecialCharacters(zipCode);
+        this.zipCode = removeSpecialCharacters(zipCode);
     }
 
     public PersonDomain getPerson() {

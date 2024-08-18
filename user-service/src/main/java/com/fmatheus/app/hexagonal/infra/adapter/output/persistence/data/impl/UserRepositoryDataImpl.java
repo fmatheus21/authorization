@@ -1,11 +1,11 @@
-package com.fmatheus.app.model.repository.impl;
+package com.fmatheus.app.hexagonal.infra.adapter.output.persistence.data.impl;
 
 import com.fmatheus.app.hexagonal.infra.adapter.input.enumerable.EntityEnum;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.data.impl.restriction.UserRestriction;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.data.query.UserRepositoryDataQuery;
 import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Person;
 import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
-import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
-import com.fmatheus.app.model.repository.impl.restriction.UserRestriction;
-import com.fmatheus.app.model.repository.query.UserRepositoryQuery;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-public class UserRepositoryImpl extends UserRestriction implements UserRepositoryQuery {
+public class UserRepositoryDataImpl extends UserRestriction implements UserRepositoryDataQuery {
 
     @PersistenceContext
     private EntityManager manager;

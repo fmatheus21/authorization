@@ -1,5 +1,6 @@
 package com.fmatheus.app.hexagonal.infra.adapter.input.converter.impl;
 
+import com.fmatheus.app.hexagonal.application.domain.PersonDomain;
 import com.fmatheus.app.hexagonal.infra.adapter.input.converter.PersonConverter;
 import com.fmatheus.app.hexagonal.infra.adapter.input.dto.response.UserDtoResponse;
 import com.fmatheus.app.hexagonal.infra.adapter.input.util.CharacterUtil;
@@ -19,17 +20,17 @@ public class PersonConverterImpl implements PersonConverter {
     private final ModelMapper mapper;
 
     @Override
-    public Person converterToEntity(Object o) {
+    public PersonDomain converterToEntity(Object o) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public UserDtoResponse converterToResponse(Person person) {
-        this.converterPerson(person);
+    public UserDtoResponse converterToResponse(PersonDomain person) {
+        //this.converterPerson(person);
         return this.mapper.map(person, UserDtoResponse.class);
     }
 
-    private void converterPerson(Person person) {
+    /*private void converterPerson(PersonDomain person) {
         person.setName(CharacterUtil.convertFirstUppercaseCharacter(person.getName()));
 
         var personType = person.getPersonType();
@@ -47,14 +48,14 @@ public class PersonConverterImpl implements PersonConverter {
         contact.setEmail(CharacterUtil.convertAllLowercaseCharacters(contact.getEmail()));
         contact.setPhone(CharacterUtil.removeSpecialCharacters(contact.getPhone()));
 
-        var users = person.getUsers().stream().map(this::converterUser).toList();
+        //var users = person.getUsers().stream().map(this::converterUser).toList();
 
         person.setAddress(address);
         person.setContact(contact);
-        person.setUsers(users);
+        //person.setUsers(users);
 
 
-    }
+    }*/
 
     private User converterUser(User user) {
         user.setUsername(CharacterUtil.convertAllLowercaseCharacters(user.getUsername()));

@@ -2,6 +2,8 @@ package com.fmatheus.app.config;
 
 
 import com.fmatheus.app.UserServiceApplication;
+import com.fmatheus.app.hexagonal.application.port.UserRepositoryPort;
+import com.fmatheus.app.hexagonal.application.service.impl.UserServicePortImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.convention.NameTokenizers;
@@ -20,6 +22,11 @@ import java.util.Properties;
 @Configuration
 @ComponentScan(basePackageClasses = UserServiceApplication.class)
 public class BeanConfig {
+
+    @Bean
+    public UserServicePortImpl userServicePort(UserRepositoryPort repositoryPort) {
+        return new UserServicePortImpl(repositoryPort);
+    }
 
     @Bean
     public ModelMapper mapper() {

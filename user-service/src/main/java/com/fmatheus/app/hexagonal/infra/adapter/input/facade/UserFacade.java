@@ -1,41 +1,25 @@
 package com.fmatheus.app.hexagonal.infra.adapter.input.facade;
 
+import com.fmatheus.app.hexagonal.application.service.UserServicePort;
 import com.fmatheus.app.hexagonal.infra.adapter.input.converter.PersonConverter;
 import com.fmatheus.app.hexagonal.infra.adapter.input.converter.UserCreateConverter;
 import com.fmatheus.app.hexagonal.infra.adapter.input.converter.UserUpdateConverter;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserCreateDtoRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserPermissionUpdateRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.UserUpdateDtoRequest;
-import com.fmatheus.app.hexagonal.infra.adapter.input.dto.request.PasswordUpdateDtoRequest;
 import com.fmatheus.app.hexagonal.infra.adapter.input.dto.response.UserDtoResponse;
-import com.fmatheus.app.hexagonal.infra.adapter.input.enumerable.MethodEnum;
-import com.fmatheus.app.hexagonal.infra.adapter.input.exception.handler.MessageResponseHandler;
 import com.fmatheus.app.hexagonal.infra.adapter.input.exception.message.MessageResponse;
-import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.Permission;
-import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.entity.User;
-import com.fmatheus.app.model.repository.filter.UserRepositoryFilter;
-import com.fmatheus.app.model.service.ContactService;
-import com.fmatheus.app.model.service.PersonService;
-import com.fmatheus.app.model.service.UserService;
+import com.fmatheus.app.hexagonal.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
 public class UserFacade {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
-    private final PersonService personService;
-    private final ContactService contactService;
+    private final UserServicePort userServicePort;
     private final PersonConverter personConverter;
     private final UserUpdateConverter userUpdateConverter;
     private final UserCreateConverter userCreateConverter;
@@ -51,9 +35,10 @@ public class UserFacade {
      * @author fernando.matheus
      */
     public Page<UserDtoResponse> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
-        var list = this.userService.findAllFilter(pageable, filter);
+        var list = this.userServicePort.findAllFilter(pageable, filter);
         var listConverter = list.map(map -> this.personConverter.converterToResponse(map.getPerson()));
-        return new PageImpl<>(listConverter.stream().toList(), pageable, this.userService.totalPaginator(filter));
+        return new PageImpl<>(listConverter.stream().toList(), pageable, this.userServicePort.total(filter));
+
     }
 
     /**
@@ -63,10 +48,10 @@ public class UserFacade {
      * @return UserReadBase
      * @author fernando.matheus
      */
-    public UserDtoResponse findByUuid(UUID uuid) {
+    /*public UserDtoResponse findByUuid(UUID uuid) {
         var response = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorRecordNotExist);
         return this.personConverter.converterToResponse(response.getPerson());
-    }
+    }*/
 
     /**
      * Atualiza dados do usuario (nome, endereco e contato). Somente o proprio usuario poderar alterar.
@@ -76,7 +61,7 @@ public class UserFacade {
      * @return UserReadBase
      * @author fernando.matheus
      */
-    public UserDtoResponse update(UserUpdateDtoRequest request, Jwt jwt) {
+    /*public UserDtoResponse update(UserUpdateDtoRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
@@ -84,7 +69,7 @@ public class UserFacade {
         converter.setMessage(this.messageResponse.messageSuccessUpdate());
         converter.setUsers(null);
         return converter;
-    }
+    }*/
 
     /**
      * Atualiza a senha do usuario. Somente o proprio usuario poderar alterar.
@@ -93,7 +78,7 @@ public class UserFacade {
      * @param jwt     Token enviado na requisicao. Sera utilizado o username qu vem no token e verificar se o usuario existe na base.
      * @author fernando.matheus
      */
-    public MessageResponseHandler updatePassword(PasswordUpdateDtoRequest request, Jwt jwt) {
+    /*public MessageResponseHandler updatePassword(PasswordUpdateDtoRequest request, Jwt jwt) {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
 
@@ -106,7 +91,7 @@ public class UserFacade {
         this.userService.save(result);
 
         return this.messageResponse.messageSuccessUpdate();
-    }
+    }*/
 
     /**
      * Cria um novo usuario seguindo as seguintes condicoes:
@@ -118,7 +103,7 @@ public class UserFacade {
      * @return UserDtoResponse
      * @author fernando.matheus
      */
-    public UserDtoResponse create(UserCreateDtoRequest request) {
+    /*public UserDtoResponse create(UserCreateDtoRequest request) {
 
         if (this.userService.findByUsername(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
@@ -153,7 +138,7 @@ public class UserFacade {
         var permission = new Permission();
         permission.setId(request.getId());
         return permission;
-    }
+    }*/
 
 
     /**
@@ -163,7 +148,7 @@ public class UserFacade {
      * @return User
      * @author fernando.matheus
      */
-    private User findUser(String username) {
+    /*private User findUser(String username) {
         return this.userService.findByUsername(username).orElseThrow(this.messageResponse::errorUserdNotExist);
-    }
+    }*/
 }

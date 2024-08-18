@@ -30,7 +30,7 @@ public class SystemsResource {
 
     private final SystemsFacade rule;
 
-    @Operation(summary = "Consult registration", description = "Consult registration by UUID", security = @SecurityRequirement(name = "security_auth"))
+    /*@Operation(summary = "Consult registration", description = "Consult registration by UUID", security = @SecurityRequirement(name = "security_auth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SystemsDtoResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))),
@@ -42,7 +42,7 @@ public class SystemsResource {
     @GetMapping("/{uuid}")
     public SystemsDtoResponse findByUuid(@Parameter(description = "Uuid of the system to search") @PathVariable UUID uuid) {
         return this.rule.findByUuid(uuid);
-    }
+    }*/
 
 
 }

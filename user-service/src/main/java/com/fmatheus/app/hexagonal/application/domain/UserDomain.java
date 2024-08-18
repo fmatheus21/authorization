@@ -1,6 +1,6 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -44,11 +44,11 @@ public class UserDomain implements Serializable {
     }
 
     public String getUsername() {
-        return AppUtil.convertAllLowercaseCharacters(username);
+        return convertAllLowercaseCharacters(username);
     }
 
     public void setUsername(String username) {
-        this.username = AppUtil.convertAllUppercaseCharacters(username);
+        this.username = convertAllUppercaseCharacters(username);
     }
 
     public String getPassword() {

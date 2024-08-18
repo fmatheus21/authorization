@@ -1,6 +1,6 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,19 +26,19 @@ public class ContactDomain implements Serializable {
     }
 
     public String getEmail() {
-        return AppUtil.convertAllLowercaseCharacters(email);
+        return convertAllLowercaseCharacters(email);
     }
 
     public void setEmail(String email) {
-        this.email = AppUtil.convertFirstUppercaseCharacter(email);
+        this.email = convertAllLowercaseCharacters(email);
     }
 
     public String getPhone() {
-        return AppUtil.removeSpecialCharacters(phone);
+        return removeSpecialCharacters(phone);
     }
 
     public void setPhone(String phone) {
-        this.phone = AppUtil.removeSpecialCharacters(phone);
+        this.phone = removeSpecialCharacters(phone);
     }
 
     public PersonDomain getPerson() {

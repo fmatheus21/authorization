@@ -117,7 +117,6 @@ public class UserDtoResponse {
         @AllArgsConstructor
         public static class UserSessionsResponse {
             private String city;
-            private String country;
             private String state;
             private LocalDateTime date;
             private StatusSession status;

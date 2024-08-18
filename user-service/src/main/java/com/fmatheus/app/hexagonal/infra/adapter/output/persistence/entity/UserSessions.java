@@ -46,8 +46,8 @@ public class UserSessions implements Serializable {
     private String city;
 
     @NotNull
-    @Column(name = "uf", nullable = false, length = 2)
-    private String uf;
+    @Column(name = "state", nullable = false, length = 2)
+    private String state;
 
     @NotNull
     @Column(name = "date", nullable = false)

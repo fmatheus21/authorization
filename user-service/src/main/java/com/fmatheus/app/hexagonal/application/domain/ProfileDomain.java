@@ -1,6 +1,6 @@
 package com.fmatheus.app.hexagonal.application.domain;
 
-import com.fmatheus.app.hexagonal.application.util.AppUtil;
+import static com.fmatheus.app.hexagonal.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -24,11 +24,11 @@ public class ProfileDomain implements Serializable {
     }
 
     public String getName() {
-        return AppUtil.convertFirstUppercaseCharacter(name);
+        return convertFirstUppercaseCharacter(name);
     }
 
     public void setName(String name) {
-        this.name = AppUtil.convertAllUppercaseCharacters(name);
+        this.name = convertAllUppercaseCharacters(name);
     }
 
     @Override
