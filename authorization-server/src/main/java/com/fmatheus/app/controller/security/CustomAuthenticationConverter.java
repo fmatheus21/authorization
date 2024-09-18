@@ -25,7 +25,7 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
         String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
 
         Set<String> requestedScopes = CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE.equals(grantType) ? this.customCredentials(parameters, grantType) :
-                this.clientCredentials(parameters, grantType);
+                this.clientCredentials(parameters);
 
         Map<String, Object> additionalParameters = this.additionalParameters(parameters);
 
@@ -78,11 +78,7 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
         return requestedScopes;
     }
 
-    private Set<String> clientCredentials(MultiValueMap<String, String> parameters, String grantType) {
-
-        if (!OAuth2ParameterNames.GRANT_TYPE.equals(grantType)) {
-            throw new OAuth2AuthenticationException(OAuthUtil.grantTypeInvalidError());
-        }
+    private Set<String> clientCredentials(MultiValueMap<String, String> parameters) {
 
         var scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
         if (StringUtils.hasText(scope) && parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {

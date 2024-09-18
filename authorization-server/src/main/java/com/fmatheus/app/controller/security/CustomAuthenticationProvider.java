@@ -31,10 +31,7 @@ import org.springframework.util.Assert;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @Slf4j
@@ -88,9 +85,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.password = this.customAuthenticationToken.getPassword();
         this.uuidSystem = this.customAuthenticationToken.getUuidSystem();
         this.zipCode = this.customAuthenticationToken.getZipCode();
-        User user = this.validateUser();
-        this.authorizedScopes.addAll(registeredClient.getScopes());
-        this.generateNewContextHolder(user);
+        this.authorizedScopes.addAll(this.registeredClient != null ? this.registeredClient.getScopes() : Collections.emptySet());
+
+        if (this.clientPrincipal.getPrincipal().equals(AuthorizationGrantType.AUTHORIZATION_CODE.getValue())) {
+            User user = this.validateUser();
+            this.generateNewContextHolder(user);
+        }
+
         this.defaultOAuth2TokenContext();
         this.authorizationBuilder();
         this.generateAccessToken();
