@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyAuthority('user_service/all_authorize', 'user_service/systems_read')")
+@PreAuthorize("hasAnyAuthority('user_service/all_authorize', 'user_service/systems_read', 'client_credentials')")
 public @interface SystemsReadAuthorize {
 }
