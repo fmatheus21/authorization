@@ -24,12 +24,27 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
 
         String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
 
+        Set<String> requestedScopes = CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE.equals(grantType) ? this.customCredentials(parameters, grantType) :
+                this.clientCredentials(parameters, grantType);
+
+        Map<String, Object> additionalParameters = this.additionalParameters(parameters);
+
+        Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
+        return new CustomAuthenticationToken(clientPrincipal, requestedScopes, additionalParameters);
+
+    }
+
+
+    private Set<String> customCredentials(MultiValueMap<String, String> parameters, String grantType) {
+
         if (!CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE.equals(grantType)) {
             throw new OAuth2AuthenticationException(OAuthUtil.grantTypeInvalidError());
         }
+
         if (!StringUtils.hasText(grantType) || parameters.get(OAuth2ParameterNames.GRANT_TYPE).size() != 1) {
             throw new OAuth2AuthenticationException(OAuthUtil.grantTypeError());
         }
+
         var username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if (!StringUtils.hasText(username) || parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
             throw new OAuth2AuthenticationException(OAuthUtil.usernameError());
@@ -60,11 +75,26 @@ public class CustomAuthenticationConverter implements AuthenticationConverter {
             requestedScopes = new HashSet<>(Arrays.asList(StringUtils.delimitedListToStringArray(scope, " ")));
         }
 
-        Map<String, Object> additionalParameters = this.additionalParameters(parameters);
+        return requestedScopes;
+    }
 
-        Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
-        return new CustomAuthenticationToken(clientPrincipal, requestedScopes, additionalParameters);
+    private Set<String> clientCredentials(MultiValueMap<String, String> parameters, String grantType) {
 
+        if (!OAuth2ParameterNames.GRANT_TYPE.equals(grantType)) {
+            throw new OAuth2AuthenticationException(OAuthUtil.grantTypeInvalidError());
+        }
+
+        var scope = parameters.getFirst(OAuth2ParameterNames.SCOPE);
+        if (StringUtils.hasText(scope) && parameters.get(OAuth2ParameterNames.SCOPE).size() != 1) {
+            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+        }
+
+        Set<String> requestedScopes = null;
+        if (StringUtils.hasText(scope)) {
+            requestedScopes = new HashSet<>(Arrays.asList(StringUtils.delimitedListToStringArray(scope, " ")));
+        }
+
+        return requestedScopes;
     }
 
     /**

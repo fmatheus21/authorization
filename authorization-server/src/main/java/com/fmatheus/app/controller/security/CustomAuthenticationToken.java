@@ -25,7 +25,7 @@ public class CustomAuthenticationToken extends OAuth2AuthorizationGrantAuthentic
         super(new AuthorizationGrantType(CustomOAuth2ParameterNames.CUSTOM_GRANT_TYPE), clientPrincipal, additionalParameters);
         this.username = (String) Objects.requireNonNull(additionalParameters).get("username");
         this.password = (String) Objects.requireNonNull(additionalParameters).get("password");
-        this.uuidSystem = UUID.fromString(Objects.requireNonNull(additionalParameters).get("uuid_system").toString());
+        this.uuidSystem = additionalParameters.get("uuid_system") != null ? UUID.fromString(Objects.requireNonNull(additionalParameters).get("uuid_system").toString()) : null;
         this.zipCode = (String) Objects.requireNonNull(additionalParameters).get("zip_code");
         this.scopes = Collections.unmodifiableSet(scopes != null ? new HashSet<>(scopes) : Collections.emptySet());
     }
