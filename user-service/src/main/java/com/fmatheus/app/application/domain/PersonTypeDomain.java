@@ -26,7 +26,7 @@ public class PersonTypeDomain implements Serializable {
     }
 
     public String getName() {
-        return convertFirstUppercaseCharacter(name);
+        return this.name;
     }
 
     public void setName(String name) {

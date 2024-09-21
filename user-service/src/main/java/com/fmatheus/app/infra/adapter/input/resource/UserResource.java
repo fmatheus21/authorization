@@ -1,12 +1,14 @@
 package com.fmatheus.app.infra.adapter.input.resource;
 
 
+import com.fmatheus.app.infra.adapter.input.dto.request.UserCreateDtoRequest;
 import com.fmatheus.app.infra.adapter.input.dto.response.UserDtoResponse;
 import com.fmatheus.app.infra.adapter.input.exception.BadRequestException;
 import com.fmatheus.app.infra.adapter.input.exception.ForbiddenException;
 import com.fmatheus.app.infra.adapter.input.exception.ServerErrorException;
 import com.fmatheus.app.infra.adapter.input.exception.UnauthorizedException;
 import com.fmatheus.app.infra.adapter.input.facade.UserFacade;
+import com.fmatheus.app.infra.adapter.input.security.authorize.UserCreateAuthorize;
 import com.fmatheus.app.infra.adapter.input.security.authorize.UserReadAuthorize;
 import com.fmatheus.app.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +61,13 @@ public class UserResource {
         return this.facade.findByUuid(uuid);
     }
 
+    @UserCreateAuthorize
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping
+    public UserDtoResponse create(@RequestBody @Valid UserCreateDtoRequest request) {
+        return this.facade.create(request);
+    }
+
    /* @UserUpdateAuthorize
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
@@ -72,12 +82,7 @@ public class UserResource {
         return this.rule.updatePassword(request, jwt);
     }
 
-    @UserCreateAuthorize
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping
-    public UserDtoResponse create(@RequestBody @Valid UserCreateDtoRequest request) {
-        return this.rule.create(request);
-    }
+
 
     @UserCreateAuthorize
     @ResponseStatus(HttpStatus.OK)

@@ -32,7 +32,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getPlace() {
-        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.place)));
+        return this.place;
     }
 
     public void setPlace(String place) {
@@ -40,7 +40,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getNumber() {
-        return convertFirstUppercaseCharacter(this.number);
+        return this.number;
     }
 
     public void setNumber(String number) {
@@ -48,7 +48,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getComplement() {
-        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.complement)));
+        return this.complement;
     }
 
     public void setComplement(String complement) {
@@ -56,7 +56,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getDistrict() {
-        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.district)));
+        return this.district;
     }
 
     public void setDistrict(String district) {
@@ -64,7 +64,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getCity() {
-        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.city)));
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -72,7 +72,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getState() {
-        return convertAllUppercaseCharacters(this.state);
+        return this.state;
     }
 
     public void setState(String state) {
@@ -80,7 +80,7 @@ public class AddressDomain implements Serializable {
     }
 
     public String getZipCode() {
-        return removeSpecialCharacters(zipCode);
+        return zipCode;
     }
 
     public void setZipCode(String zipCode) {

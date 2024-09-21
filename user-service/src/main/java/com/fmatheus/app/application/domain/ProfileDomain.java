@@ -24,7 +24,7 @@ public class ProfileDomain implements Serializable {
     }
 
     public String getName() {
-        return AppUtil.convertFirstUppercaseCharacter(name);
+        return this.name;
     }
 
     public void setName(String name) {

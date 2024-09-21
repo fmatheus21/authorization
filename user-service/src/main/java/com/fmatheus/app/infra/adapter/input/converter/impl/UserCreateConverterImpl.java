@@ -1,5 +1,6 @@
 package com.fmatheus.app.infra.adapter.input.converter.impl;
 
+import com.fmatheus.app.application.domain.*;
 import com.fmatheus.app.infra.adapter.config.properties.CryptoProperties;
 import com.fmatheus.app.infra.adapter.input.converter.UserCreateConverter;
 import com.fmatheus.app.infra.adapter.input.dto.request.UserCreateDtoRequest;
@@ -26,7 +27,60 @@ public class UserCreateConverterImpl implements UserCreateConverter {
     private final CryptoProperties cryptoProperties;
 
     @Override
-    public Person converterToEntity(UserCreateDtoRequest request) {
+    public PersonDomain converterToEntity(UserCreateDtoRequest request) {
+        var date = LocalDateTime.now();
+        var person = this.mapper.map(request, PersonDomain.class);
+        person.setCreatedAt(date);
+        person.setId(null);
+
+        var personType = person.getPersonType();
+        personType.setId(request.getPersonType().getId());
+        person.setPersonType(personType);
+
+        var address = person.getAddress();
+        address.setPerson(person);
+
+        var contact = person.getContact();
+        contact.setPerson(person);
+
+        var permissions = new ArrayList<>(request.getPermissions().stream().map(this::converterPermission).toList());
+
+        var profile = new ProfileDomain();
+        profile.setId(request.getProfile().getId());
+        profile.setName(request.getProfile().getName());
+
+        var user = new UserDomain();
+        user.setUuid(UUID.randomUUID());
+        user.setPerson(person);
+        user.setProfile(profile);
+        user.setActive(true);
+        user.setUsername(contact.getEmail());
+        user.setPassword(this.passwordEncoder.encode(PasswordGeneratorUtil.randomPassword(this.cryptoProperties.getRandomPassword())));
+        user.setCreatedAt(date);
+        user.setUpdatedAt(date);
+        user.setPermissions(permissions);
+
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setUsers(Collections.singleton(user));
+
+        return person;
+    }
+
+    @Override
+    public UserDtoResponse converterToResponse(PersonDomain personDomain) {
+        return this.mapper.map(personDomain, UserDtoResponse.class);
+    }
+
+    private PermissionDomain converterPermission(UserCreateDtoRequest.PermissionRequest request) {
+        var permission = new PermissionDomain();
+        permission.setName(request.getName());
+        permission.setId(request.getId());
+        return permission;
+    }
+
+    /*@Override
+    public PersonDomain converterToEntity(UserCreateDtoRequest request) {
 
         var person = this.mapper.map(request, Person.class);
         person.setId(null);
@@ -86,6 +140,6 @@ public class UserCreateConverterImpl implements UserCreateConverter {
                 .build();
         permission.setId(request.getId());
         return permission;
-    }
+    }*/
 
 }

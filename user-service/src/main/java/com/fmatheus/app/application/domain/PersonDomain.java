@@ -33,7 +33,7 @@ public class PersonDomain implements Serializable {
     }
 
     public String getName() {
-        return convertFirstUppercaseCharacter(removeDuplicateSpace(removeAccents(this.name)));
+        return this.name;
     }
 
     public void setName(String name) {
@@ -41,7 +41,7 @@ public class PersonDomain implements Serializable {
     }
 
     public String getDocument() {
-        return removeSpecialCharacters(document);
+        return this.document;
     }
 
     public void setDocument(String document) {

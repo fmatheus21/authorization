@@ -1,6 +1,6 @@
 package com.fmatheus.app.application.domain;
 
-import com.fmatheus.app.application.util.AppUtil;
+import static com.fmatheus.app.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -37,19 +37,19 @@ public class SystemsDomain implements Serializable {
     }
 
     public String getName() {
-        return AppUtil.convertAllLowercaseCharacters(name);
+        return this.name;
     }
 
     public void setName(String name) {
-        this.name = AppUtil.convertAllUppercaseCharacters(name);
+        this.name = convertAllUppercaseCharacters(name);
     }
 
     public String getDescription() {
-        return AppUtil.convertFirstUppercaseCharacter(description);
+        return this.description;
     }
 
     public void setDescription(String description) {
-        this.description = AppUtil.convertAllUppercaseCharacters(description);
+        this.description = convertAllUppercaseCharacters(description);
     }
 
     public Collection<PermissionDomain> getPermissions() {

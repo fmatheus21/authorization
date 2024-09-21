@@ -1,6 +1,6 @@
 package com.fmatheus.app.application.domain;
 
-import com.fmatheus.app.application.util.AppUtil;
+import static com.fmatheus.app.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,43 +33,43 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public String getZipCode() {
-        return AppUtil.removeSpecialCharacters(this.zipCode);
+        return this.zipCode;
     }
 
     public void setZipCode(String zipCode) {
-        this.zipCode = AppUtil.removeSpecialCharacters(zipCode);
+        this.zipCode = removeSpecialCharacters(zipCode);
     }
 
     public String getPlace() {
-        return AppUtil.convertFirstUppercaseCharacter(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(this.place)));
+        return this.place;
     }
 
     public void setPlace(String place) {
-        this.place = AppUtil.convertAllUppercaseCharacters(AppUtil.removeDuplicateSpace(AppUtil.removeSpecialCharacters(place)));
+        this.place = convertAllUppercaseCharacters(removeDuplicateSpace(removeSpecialCharacters(place)));
     }
 
     public String getDistrict() {
-        return AppUtil.convertFirstUppercaseCharacter(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(this.district)));
+        return this.district;
     }
 
     public void setDistrict(String district) {
-        this.district = AppUtil.convertAllUppercaseCharacters(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(district)));
+        this.district = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(district)));
     }
 
     public String getCity() {
-        return AppUtil.convertFirstUppercaseCharacter(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(this.city)));
+        return this.city;
     }
 
     public void setCity(String city) {
-        this.city = AppUtil.convertAllUppercaseCharacters(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(city)));
+        this.city = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(city)));
     }
 
     public String getState() {
-        return AppUtil.convertAllUppercaseCharacters(this.state);
+        return this.state;
     }
 
     public void setState(String state) {
-        this.state = AppUtil.convertAllUppercaseCharacters(state);
+        this.state = convertAllUppercaseCharacters(state);
     }
 
     public LocalDateTime getDate() {
@@ -89,11 +89,11 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public String getMessage() {
-        return AppUtil.convertFirstUppercaseCharacter(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(this.message)));
+        return this.message;
     }
 
     public void setMessage(String message) {
-        this.message = AppUtil.convertAllUppercaseCharacters(AppUtil.removeDuplicateSpace(AppUtil.removeAccents(message)));
+        this.message = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(message)));
     }
 
     public UserDomain getUser() {

@@ -26,7 +26,7 @@ public class ContactDomain implements Serializable {
     }
 
     public String getEmail() {
-        return convertAllLowercaseCharacters(email);
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -34,7 +34,7 @@ public class ContactDomain implements Serializable {
     }
 
     public String getPhone() {
-        return removeSpecialCharacters(phone);
+        return this.phone;
     }
 
     public void setPhone(String phone) {

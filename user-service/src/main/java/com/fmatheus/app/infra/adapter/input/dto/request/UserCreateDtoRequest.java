@@ -41,6 +41,10 @@ public class UserCreateDtoRequest {
     @NotEmpty
     private Collection<PermissionRequest> permissions;
 
+    @Valid
+    @NotNull
+    private ProfileRequest profile;
+
 
     @Builder
     @Getter
@@ -121,6 +125,19 @@ public class UserCreateDtoRequest {
     @AllArgsConstructor
     public static class PermissionRequest {
 
+        @NotNull
+        private Integer id;
+
+        @NotNull
+        private String name;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileRequest {
         @NotNull
         private Integer id;
 

@@ -38,13 +38,13 @@ public class UserRepository implements UserRepositoryPort {
 
     @Override
     public Optional<UserDomain> findById(Integer id) {
-        var resutl = this.data.findById(id);
-        return resutl.map(this::convertToDomain);
+        var result = this.data.findById(id);
+        return result.map(this::convertToDomain);
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

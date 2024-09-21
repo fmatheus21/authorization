@@ -2,7 +2,11 @@ package com.fmatheus.app.infra.adapter.config;
 
 
 import com.fmatheus.app.UserServiceApplication;
+import com.fmatheus.app.application.port.ContactRepositoryPort;
+import com.fmatheus.app.application.port.PersonRepositoryPort;
 import com.fmatheus.app.application.port.UserRepositoryPort;
+import com.fmatheus.app.application.service.impl.ContactServicePortImpl;
+import com.fmatheus.app.application.service.impl.PersonServicePortImpl;
 import com.fmatheus.app.application.service.impl.UserServicePortImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -24,8 +28,18 @@ import java.util.Properties;
 public class BeanConfig {
 
     @Bean
+    public PersonServicePortImpl personServicePort(PersonRepositoryPort repositoryPort) {
+        return new PersonServicePortImpl(repositoryPort);
+    }
+
+    @Bean
     public UserServicePortImpl userServicePort(UserRepositoryPort repositoryPort) {
         return new UserServicePortImpl(repositoryPort);
+    }
+
+    @Bean
+    public ContactServicePortImpl contactServicePort(ContactRepositoryPort repositoryPort) {
+        return new ContactServicePortImpl(repositoryPort);
     }
 
     @Bean

@@ -1,9 +1,12 @@
 package com.fmatheus.app.infra.adapter.input.facade;
 
+import com.fmatheus.app.application.service.ContactServicePort;
+import com.fmatheus.app.application.service.PersonServicePort;
 import com.fmatheus.app.application.service.UserServicePort;
 import com.fmatheus.app.infra.adapter.input.converter.PersonConverter;
 import com.fmatheus.app.infra.adapter.input.converter.UserCreateConverter;
 import com.fmatheus.app.infra.adapter.input.converter.UserUpdateConverter;
+import com.fmatheus.app.infra.adapter.input.dto.request.UserCreateDtoRequest;
 import com.fmatheus.app.infra.adapter.input.dto.response.UserDtoResponse;
 import com.fmatheus.app.infra.adapter.input.exception.message.MessageResponse;
 import com.fmatheus.app.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
@@ -22,6 +25,8 @@ public class UserFacade {
 
     private final PasswordEncoder passwordEncoder;
     private final UserServicePort userServicePort;
+    private final ContactServicePort contactServicePort;
+    private final PersonServicePort personServicePort;
     private final PersonConverter personConverter;
     private final UserUpdateConverter userUpdateConverter;
     private final UserCreateConverter userCreateConverter;
@@ -105,20 +110,20 @@ public class UserFacade {
      * @return UserDtoResponse
      * @author fernando.matheus
      */
-    /*public UserDtoResponse create(UserCreateDtoRequest request) {
+    public UserDtoResponse create(UserCreateDtoRequest request) {
 
-        if (this.userService.findByUsername(request.getContact().getEmail()).isPresent()) {
+        if (this.userServicePort.findByUsername(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
         }
 
-        if (this.contactService.findByEmail(request.getContact().getEmail()).isPresent()) {
+        if (this.contactServicePort.findByEmail(request.getContact().getEmail()).isPresent()) {
             throw this.messageResponse.errorExistEmail();
         }
 
-        if (this.contactService.findByPhone(request.getContact().getPhone()).isPresent()) {
+        if (this.contactServicePort.findByPhone(request.getContact().getPhone()).isPresent()) {
             throw this.messageResponse.errorExistPhone();
         }
-        var commit = this.personService.save(this.userCreateConverter.converterToEntity(request));
+        var commit = this.personServicePort.save(this.userCreateConverter.converterToEntity(request));
         var converter = this.personConverter.converterToResponse(commit);
         converter.setMessage(this.messageResponse.messageSuccessCreate());
 
@@ -126,7 +131,7 @@ public class UserFacade {
 
     }
 
-    public void updatePermissions(UUID uuid, UserPermissionUpdateRequest request) {
+    /*public void updatePermissions(UUID uuid, UserPermissionUpdateRequest request) {
         var user = this.userService.findByUuid(uuid).orElseThrow(this.messageResponse::errorUserdNotExist);
 
         user.setPermissions(request.getPermissions().stream()
