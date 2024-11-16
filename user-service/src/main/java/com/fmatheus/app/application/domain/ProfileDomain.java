@@ -1,7 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import com.fmatheus.app.application.util.AppUtil;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,7 +26,7 @@ public class ProfileDomain implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = AppUtil.convertAllUppercaseCharacters(name);
+        this.name = name;
     }
 
     @Override

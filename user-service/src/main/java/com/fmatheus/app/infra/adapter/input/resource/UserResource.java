@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -38,6 +39,7 @@ public class UserResource {
 
     private final UserFacade facade;
 
+    @Transactional(readOnly = true)
     @UserReadAuthorize
     @GetMapping
     public ResponseEntity<Page<UserDtoResponse>> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
@@ -54,6 +56,7 @@ public class UserResource {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ServerErrorException.class)))
     })
+    @Transactional(readOnly = true)
     @UserReadAuthorize
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{uuid}")

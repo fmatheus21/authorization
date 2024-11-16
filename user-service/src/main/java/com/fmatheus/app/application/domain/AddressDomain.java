@@ -1,8 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import static com.fmatheus.app.application.util.AppUtil.*;
-
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -36,7 +33,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setPlace(String place) {
-        this.place = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(place)));
+        this.place = place;
     }
 
     public String getNumber() {
@@ -44,7 +41,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setNumber(String number) {
-        this.number = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(number)));
+        this.number = number;
     }
 
     public String getComplement() {
@@ -52,7 +49,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setComplement(String complement) {
-        this.complement = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(complement)));
+        this.complement = complement;
     }
 
     public String getDistrict() {
@@ -60,7 +57,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setDistrict(String district) {
-        this.district = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(district)));
+        this.district = district;
     }
 
     public String getCity() {
@@ -68,7 +65,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setCity(String city) {
-        this.city = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(city)));
+        this.city = city;
     }
 
     public String getState() {
@@ -76,7 +73,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setState(String state) {
-        this.state = convertAllUppercaseCharacters(state);
+        this.state = state;
     }
 
     public String getZipCode() {
@@ -84,7 +81,7 @@ public class AddressDomain implements Serializable {
     }
 
     public void setZipCode(String zipCode) {
-        this.zipCode = removeSpecialCharacters(zipCode);
+        this.zipCode = zipCode;
     }
 
     public PersonDomain getPerson() {

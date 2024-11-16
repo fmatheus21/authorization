@@ -1,8 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import com.fmatheus.app.application.util.AppUtil;
-
-import static com.fmatheus.app.application.util.AppUtil.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -43,7 +40,7 @@ public class PermissionDomain implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = convertAllUppercaseCharacters(name);
+        this.name = name;
     }
 
     public Collection<UserDomain> getUsers() {

@@ -1,7 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import static com.fmatheus.app.application.util.AppUtil.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -37,7 +35,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setZipCode(String zipCode) {
-        this.zipCode = removeSpecialCharacters(zipCode);
+        this.zipCode = zipCode;
     }
 
     public String getPlace() {
@@ -45,7 +43,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setPlace(String place) {
-        this.place = convertAllUppercaseCharacters(removeDuplicateSpace(removeSpecialCharacters(place)));
+        this.place = place;
     }
 
     public String getDistrict() {
@@ -53,7 +51,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setDistrict(String district) {
-        this.district = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(district)));
+        this.district = district;
     }
 
     public String getCity() {
@@ -61,7 +59,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setCity(String city) {
-        this.city = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(city)));
+        this.city = city;
     }
 
     public String getState() {
@@ -69,7 +67,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setState(String state) {
-        this.state = convertAllUppercaseCharacters(state);
+        this.state = state;
     }
 
     public LocalDateTime getDate() {
@@ -93,7 +91,7 @@ public class UserSessionsDomain implements Serializable {
     }
 
     public void setMessage(String message) {
-        this.message = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(message)));
+        this.message = message;
     }
 
     public UserDomain getUser() {

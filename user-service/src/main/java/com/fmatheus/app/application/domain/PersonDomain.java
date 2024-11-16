@@ -1,8 +1,6 @@
 package com.fmatheus.app.application.domain;
 
 
-import static com.fmatheus.app.application.util.AppUtil.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -37,7 +35,7 @@ public class PersonDomain implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = convertAllUppercaseCharacters(removeDuplicateSpace(removeAccents(name)));
+        this.name = name;
     }
 
     public String getDocument() {
@@ -45,7 +43,7 @@ public class PersonDomain implements Serializable {
     }
 
     public void setDocument(String document) {
-        this.document = removeSpecialCharacters(document);
+        this.document = document;
     }
 
     public LocalDateTime getCreatedAt() {

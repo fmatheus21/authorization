@@ -72,10 +72,10 @@ public class UserFacade {
         var username = jwt.getClaims().get("username").toString();
         var result = this.findUser(username);
         var commit = this.userService.save(this.userUpdateConverter.converterToUpdate(result, request));
-        var converter = this.personConverter.converterToResponse(commit.getPerson());
-        converter.setMessage(this.messageResponse.messageSuccessUpdate());
-        converter.setUsers(null);
-        return converter;
+        var format = this.personConverter.converterToResponse(commit.getPerson());
+        format.setMessage(this.messageResponse.messageSuccessUpdate());
+        format.setUsers(null);
+        return format;
     }*/
 
     /**
@@ -137,11 +137,11 @@ public class UserFacade {
         user.setPermissions(request.getPermissions().stream()
                 .filter(filter -> !Objects.equals(filter.getMethod().getValue(), MethodEnum.DELETE.getValue()))
                 .toList().stream()
-                .map(this::converter).toList());
+                .map(this::format).toList());
         this.userService.save(user);
     }
 
-    private Permission converter(UserPermissionUpdateRequest.PermissionRequest request) {
+    private Permission format(UserPermissionUpdateRequest.PermissionRequest request) {
         var permission = new Permission();
         permission.setId(request.getId());
         return permission;

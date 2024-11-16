@@ -1,6 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import static com.fmatheus.app.application.util.AppUtil.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -47,7 +46,7 @@ public class UserDomain implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = convertAllUppercaseCharacters(username);
+        this.username = username;
     }
 
     public String getPassword() {

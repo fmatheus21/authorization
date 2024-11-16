@@ -1,7 +1,5 @@
 package com.fmatheus.app.application.domain;
 
-import static com.fmatheus.app.application.util.AppUtil.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,7 +28,7 @@ public class ContactDomain implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = convertAllLowercaseCharacters(email);
+        this.email = email;
     }
 
     public String getPhone() {
@@ -38,7 +36,7 @@ public class ContactDomain implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = removeSpecialCharacters(phone);
+        this.phone = phone;
     }
 
     public PersonDomain getPerson() {

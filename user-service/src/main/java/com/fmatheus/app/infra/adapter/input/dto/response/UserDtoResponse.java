@@ -1,7 +1,6 @@
 package com.fmatheus.app.infra.adapter.input.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fmatheus.app.infra.adapter.input.enumerable.StatusSession;
 import com.fmatheus.app.infra.adapter.input.exception.handler.MessageResponseHandler;
 import lombok.*;
 
@@ -119,7 +118,7 @@ public class UserDtoResponse {
             private String city;
             private String state;
             private LocalDateTime date;
-            private StatusSession status;
+            private String status;
             private String message;
             private SystemsUserSessionsResponse system;
 
