@@ -50,7 +50,7 @@ public class UserServicePortImpl implements UserServicePort {
     @Override
     public Optional<UserDomain> findByUsername(String username) {
         var result = this.repositoryPort.findByUsername(username);
-        return Optional.of(getUserDomainFormat(Objects.requireNonNull(result.orElse(new UserDomain()))));
+        return Optional.ofNullable(getUserDomainFormat(result.orElse(null)));
     }
 
     @Override
