@@ -6,9 +6,9 @@ import java.util.Collection;
 
 import static com.fmatheus.app.application.util.AppUtil.*;
 
-public class DomainFormat {
+public class UserDomainFormat {
 
-    private DomainFormat() {
+    private UserDomainFormat() {
         throw new IllegalStateException(getClass().getName());
     }
 
@@ -21,8 +21,8 @@ public class DomainFormat {
         PersonTypeDomain personType = getPersonTypeDomain(person.getPersonType());
         ContactDomain contact = getContactDomain(person.getContact());
         ProfileDomain profile = getProfileDomain(user.getProfile());
-        Collection<PermissionDomain> permissions = user.getPermissions().stream().map(DomainFormat::getPermissionDomain).toList();
-        Collection<UserSessionsDomain> userSessions = user.getUserSessions().stream().map(DomainFormat::getUserSessionsDomain).toList();
+        Collection<PermissionDomain> permissions = user.getPermissions().stream().map(UserDomainFormat::getPermissionDomain).toList();
+        Collection<UserSessionsDomain> userSessions = user.getUserSessions().stream().map(UserDomainFormat::getUserSessionsDomain).toList();
 
         person.setAddress(address);
         person.setPersonType(personType);
@@ -36,8 +36,25 @@ public class DomainFormat {
         return user;
     }
 
+    public static UserDomain setUserDomainFormat(UserDomain user) {
+        if (user == null) {
+            return null;
+        }
+
+        PersonDomain person = setPersonDomain(user.getPerson());
+
+        user.setPerson(person);
+
+        return user;
+    }
+
     private static PersonDomain getPersonDomain(PersonDomain person) {
         person.setName(removeDuplicateSpace(convertFirstUppercaseCharacter(person.getName())));
+        return person;
+    }
+
+    private static PersonDomain setPersonDomain(PersonDomain person) {
+        person.setName(removeDuplicateSpace(convertAllUppercaseCharacters(person.getName())));
         return person;
     }
 

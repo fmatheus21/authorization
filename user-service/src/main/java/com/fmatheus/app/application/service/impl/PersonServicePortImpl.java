@@ -1,6 +1,9 @@
 package com.fmatheus.app.application.service.impl;
 
 import com.fmatheus.app.application.domain.PersonDomain;
+
+import static com.fmatheus.app.application.format.PersonDomainFormat.*;
+
 import com.fmatheus.app.application.port.PersonRepositoryPort;
 import com.fmatheus.app.application.service.PersonServicePort;
 
@@ -23,7 +26,8 @@ public class PersonServicePortImpl implements PersonServicePort {
 
     @Override
     public PersonDomain save(PersonDomain personDomain) {
-        return this.repositoryPort.save(personDomain);
+        var commit = this.repositoryPort.save(setPersonDomainFormat(personDomain));
+        return getPersonDomainFormat(commit);
     }
 
     @Override

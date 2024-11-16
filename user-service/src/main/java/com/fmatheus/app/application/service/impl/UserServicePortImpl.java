@@ -1,6 +1,7 @@
 package com.fmatheus.app.application.service.impl;
 
-import static com.fmatheus.app.application.format.DomainFormat.*;
+import static com.fmatheus.app.application.format.UserDomainFormat.*;
+
 import com.fmatheus.app.application.port.UserRepositoryPort;
 import com.fmatheus.app.application.domain.UserDomain;
 import com.fmatheus.app.application.service.UserServicePort;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,12 +28,13 @@ public class UserServicePortImpl implements UserServicePort {
 
     @Override
     public UserDomain save(UserDomain personDomain) {
-        return this.repositoryPort.save(personDomain);
+        return this.repositoryPort.save(setUserDomainFormat(personDomain));
     }
 
     @Override
     public Optional<UserDomain> findById(Integer id) {
-        return this.repositoryPort.findById(id);
+        var result = this.repositoryPort.findById(id);
+        return Optional.ofNullable(getUserDomainFormat(result.orElse(null)));
     }
 
     @Override
