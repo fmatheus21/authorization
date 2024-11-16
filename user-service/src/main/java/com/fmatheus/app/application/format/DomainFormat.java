@@ -13,6 +13,9 @@ public class DomainFormat {
     }
 
     public static UserDomain getUserDomainFormat(UserDomain user) {
+        if (user == null) {
+            return null;
+        }
         PersonDomain person = getPersonDomain(user.getPerson());
         AddressDomain address = getAddressDomain(person.getAddress());
         PersonTypeDomain personType = getPersonTypeDomain(person.getPersonType());

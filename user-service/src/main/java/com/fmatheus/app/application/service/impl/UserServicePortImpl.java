@@ -1,6 +1,6 @@
 package com.fmatheus.app.application.service.impl;
 
-import com.fmatheus.app.application.format.DomainFormat;
+import static com.fmatheus.app.application.format.DomainFormat.*;
 import com.fmatheus.app.application.port.UserRepositoryPort;
 import com.fmatheus.app.application.domain.UserDomain;
 import com.fmatheus.app.application.service.UserServicePort;
@@ -44,12 +44,13 @@ public class UserServicePortImpl implements UserServicePort {
     @Override
     public Optional<UserDomain> findByUuid(UUID uuid) {
         var result = this.repositoryPort.findByUuid(uuid);
-        return Optional.of(DomainFormat.getUserDomainFormat(Objects.requireNonNull(result.orElse(new UserDomain()))));
+        return Optional.ofNullable(getUserDomainFormat(result.orElse(null)));
     }
 
     @Override
     public Optional<UserDomain> findByUsername(String username) {
-        return this.repositoryPort.findByUsername(username);
+        var result = this.repositoryPort.findByUsername(username);
+        return Optional.of(getUserDomainFormat(Objects.requireNonNull(result.orElse(new UserDomain()))));
     }
 
     @Override
