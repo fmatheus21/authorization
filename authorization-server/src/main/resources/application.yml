@@ -43,18 +43,23 @@ spring:
         sort-parameter: sort
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 210683
+    password: ${SPRING_DATASOURCE_PASSWORD}
     url: jdbc:mysql://localhost:3306/authorization-server?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
-    username: root
+    username: ${SPRING_DATASOURCE_USERNAME}
   jackson:
     default-property-inclusion: non_null
     serialization:
       fail_on_empty_beans: false
   flyway:
-    password: 210683
+    password: ${SPRING_DATASOURCE_PASSWORD}
     url: jdbc:mysql://localhost:3306/authorization-server?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
-    user: root
+    user: ${SPRING_DATASOURCE_USERNAME}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: ${JPA_SHOW_SQL:false}
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 

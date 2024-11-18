@@ -41,9 +41,7 @@ public class UserDomainFormat {
             return null;
         }
 
-        PersonDomain person = setPersonDomain(user.getPerson());
-
-        user.setPerson(person);
+        SetDomainFormat.setUserDomain(user);
 
         return user;
     }
@@ -53,10 +51,6 @@ public class UserDomainFormat {
         return person;
     }
 
-    private static PersonDomain setPersonDomain(PersonDomain person) {
-        person.setName(removeDuplicateSpace(convertAllUppercaseCharacters(person.getName())));
-        return person;
-    }
 
     private static AddressDomain getAddressDomain(AddressDomain address) {
         address.setPlace(removeDuplicateSpace(convertFirstUppercaseCharacter(address.getPlace())));

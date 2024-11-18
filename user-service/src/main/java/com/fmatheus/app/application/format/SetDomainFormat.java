@@ -2,8 +2,6 @@ package com.fmatheus.app.application.format;
 
 import com.fmatheus.app.application.domain.*;
 
-import java.util.Collection;
-
 import static com.fmatheus.app.application.util.AppUtil.*;
 import static com.fmatheus.app.application.util.AppUtil.convertAllUppercaseCharacters;
 
@@ -11,6 +9,11 @@ public class SetDomainFormat {
 
     private SetDomainFormat() {
         throw new IllegalStateException(getClass().getName());
+    }
+
+    public static PersonDomain setPersonDomain(PersonDomain person) {
+        person.setName(removeDuplicateSpace(convertAllUppercaseCharacters(person.getName())));
+        return person;
     }
 
 
@@ -31,7 +34,9 @@ public class SetDomainFormat {
     }
 
     public static UserDomain setUserDomain(UserDomain user) {
-        user.setUsername(convertAllUppercaseCharacters(user.getUsername()));
+        var userSessions = user.getUserSessions() != null ? user.getUserSessions().stream().map(SetDomainFormat::setUserSessionsDomain).toList() : null;
+        user.setUsername(removeSpecialCharacters(user.getUsername()));
+        user.setUserSessions(userSessions);
         return user;
     }
 

@@ -52,7 +52,7 @@ public class UserCreateConverterImpl implements UserCreateConverter {
         user.setPerson(person);
         user.setProfile(profile);
         user.setActive(true);
-        user.setUsername(contact.getEmail());
+        user.setUsername(person.getDocument());
         user.setPassword(this.passwordEncoder.encode(PasswordGeneratorUtil.randomPassword(this.cryptoProperties.getRandomPassword())));
         user.setCreatedAt(date);
         user.setUpdatedAt(date);

@@ -2,11 +2,14 @@ package com.fmatheus.app.application.service.impl;
 
 import static com.fmatheus.app.application.format.UserDomainFormat.*;
 
+import com.fmatheus.app.application.format.UserDomainFormat;
 import com.fmatheus.app.application.port.UserRepositoryPort;
 import com.fmatheus.app.application.domain.UserDomain;
 import com.fmatheus.app.application.service.UserServicePort;
+import com.fmatheus.app.application.util.AppUtil;
 import com.fmatheus.app.infra.adapter.output.persistence.repository.filter.UserRepositoryFilter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -50,13 +53,15 @@ public class UserServicePortImpl implements UserServicePort {
 
     @Override
     public Optional<UserDomain> findByUsername(String username) {
-        var result = this.repositoryPort.findByUsername(username);
+        var result = this.repositoryPort.findByUsername(AppUtil.removeSpecialCharacters(username));
         return Optional.ofNullable(getUserDomainFormat(result.orElse(null)));
     }
 
     @Override
     public Page<UserDomain> findAllFilter(Pageable pageable, UserRepositoryFilter filter) {
-        return this.repositoryPort.findAllFilter(pageable, filter);
+        var result = this.repositoryPort.findAllFilter(pageable, filter);
+        var format = result.getContent().stream().map(UserDomainFormat::getUserDomainFormat).toList();
+        return new PageImpl<>(format);
     }
 
     @Override
