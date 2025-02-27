@@ -30,9 +30,9 @@ spring:
         sort-parameter: sort
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 210683
+    password: ${SPRING_DATASOURCE_PASSWORD}
     url: jdbc:mysql://localhost:3306/authorization-server?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
-    username: root
+    username: ${SPRING_DATASOURCE_USERNAME}
   jackson:
     #default-property-inclusion: non_null
     serialization:
