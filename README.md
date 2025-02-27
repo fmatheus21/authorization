@@ -20,19 +20,19 @@
 
 <br/>
 
+## Sobre
+Este projeto foi desenvolvido para fins de estudo e é composto por dois módulos: <code>***authorization-server***</code> e <code>***user-service***</code>.
+- **authorization-server:** Responsável pela autenticação e geração de tokens de acesso, garantindo a segurança das requisições ao **user-service**.
+- **user-service:** Sistema de gerenciamento de usuários, permitindo operações como listagem, busca, criação, atualização de dados e permissões. Além disso, apenas o próprio usuário pode alterar sua senha. Este projeto tem implementação de <code>***Arquitetura Hexagonal***</code>.
+
+<br/>
+
 ## Pré-requisitos
 > - Mysql 8
 > - JDK 17
 > - Postman v9.31.0
 > - Docker
 > - Intellij
-
-<br/>
-
-## Sobre
-Este projeto foi desenvolvido para fins de estudo e é composto por dois módulos: <code>***authorization-server***</code> e <code>***user-service***</code>.
-- **authorization-server:** Responsável pela autenticação e geração de tokens de acesso, garantindo a segurança das requisições ao **user-service**.
-- **user-service:** Sistema de gerenciamento de usuários, permitindo operações como listagem, busca, criação, atualização de dados e permissões. Além disso, apenas o próprio usuário pode alterar sua senha. Este projeto tem implementação de <code>***Arquitetura Hexagonal***</code>.
 
 <br/>
 
