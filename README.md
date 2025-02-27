@@ -8,15 +8,22 @@
 
 
 ## Conteúdos
-
-* [Sobre](#sobre)
 * [Pré-requisitos](#pré-requisitos)
+* [Sobre](#sobre)
 * [Como usar](#como-usar-authorization-server)
   * [Authorization-Server](#como-usar-authorization-server)
   * [User-Service](#como-usar-user-service)
 * [Observações](#observações)
 * [Tecnologias](#tecnologias)
 
+<br/>
+
+## Pré-requisitos
+- Mysql 8
+- JDK 17
+- Postman v9.31.0
+- Docker
+- Intellij
 
 <br/>
 
@@ -25,18 +32,9 @@ Este projeto foi desenvolvido para fins de estudo e é composto por dois módulo
 - **authorization-server:** Responsável pela autenticação e geração de tokens de acesso, garantindo a segurança das requisições ao **user-service**.
 - **user-service:** Sistema de gerenciamento de usuários, permitindo operações como listagem, busca, criação, atualização de dados e permissões. Além disso, apenas o próprio usuário pode alterar sua senha. Este projeto tem implementação de <code>***Arquitetura Hexagonal***</code>.
 
-<br/>
-
-## Pré-requisitos
-> - Mysql 8
-> - JDK 17
-> - Postman v9.31.0
-> - Docker
-> - Intellij
 
 <br/>
 
-<a id="como-usar-authorization-server"></a>
 ## Como Usar Authorization-Server
 No diretório <code>***/authorization-server***</code>, edite o arquivo <code>***application.yml***</code>,  e informe as seguintes variáveis de ambiente:
 - <code>***${SPRING_DATASOURCE_USERNAME}***</code>Usuário do seu banco de dados
@@ -53,14 +51,14 @@ Isso irá subir o container do RabbitMQ. Para verificar se o RabbitMQ subiu, ent
 Agora entre na classe <code>***AuthorizationServerApplication***</code> e execute o método <code>***main***</code>. Quando o projeto iniciar, o banco e 
 as tabelas serão criadas através de migrations. 
  
-O projeto roda na url <code>***http://loccalhost:9000/api/v1***</code>
+O projeto roda na url ``http://loccalhost:9000/api/v1``
  
-Para gerar um token de acesso, use o curl abaixo no <code>***Postman***</code>. O curl já tem todas as informações necessárias. O tipo de autenticação é <code>***Basic***</code>.
-> - <code>***username:***</code> authorization_code
-> - <code>***password:***</code> 17686e8b-34d2-11ee-8422-581122c7752d
+Para gerar um token de acesso, use o curl abaixo no ``Postman***``. O curl já tem todas as informações necessárias. O tipo de autenticação é <code>***Basic***</code>.
+- ``username:`` authorization_code
+- ``password:`` 17686e8b-34d2-11ee-8422-581122c7752d
 
 #### CURL
- ```
+ ```sh
  curl --location 'http://localhost:9000/api/v1/oauth2/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --header 'Authorization: Basic YXV0aG9yaXphdGlvbl9jb2RlOjE3Njg2ZThiLTM0ZDItMTFlZS04NDIyLTU4MTEyMmM3NzUyZA==' \
@@ -78,28 +76,27 @@ No diretório <code>***/user-service***</code>, edite o arquivo <code>***applica
 - <code>***${SPRING_DATASOURCE_USERNAME}***</code>Usuário do seu banco de dados
 - <code>***${SPRING_DATASOURCE_PASSWORD}***</code>Senha do seu banco de dados
 
-Agora entre na classe <code>***UserServiceApplication***</code> e execute o método <code>***main***</code>.
+Agora entre na classe ``UserServiceApplication`` e execute o método ``main``.
 
-O projeto roda na url <code>***http://localhost:9100/api/v1***</code>.
-O projeto está documentado com o <code>***Swagger***</code> e você pode acessar pela url <code>***http://localhost:9100/api/v1/swagger-ui/index.html***</code>
+O projeto roda na url ``http://localhost:9100/api/v1``.
+O projeto está documentado com o <code>***Swagger***</code> e você pode acessar pela url ``http://localhost:9100/api/v1/swagger-ui/index.html``
 
 No <code>***Postman***</code>, utilize o curl abaixo para listar usuários. Substitua o `<token>` pelo token gerado no authorization-server.
 #### CURL
- ```
- curl --location 'http://localhost:9100/api/v1/users?document=67780886050' \
+ ```sh
+ curl --location --request POST 'http://localhost:9100/api/v1/users?document=67780886050' \
 --header 'Authorization: Bearer <token>'
  ```
 
 <br/>
 
 ## Observações
->O Projeto ainda está em fase de <code>***desenvolvimento***</code> e logo receberá atualizações.
-> Estou desenvolvendo o <code>***Front-End***</code> em <code>***Angular***</code> para este projeto. Você pode baixá-lo <code>***[AQUI](https://github.com/fmatheus21/user-management)***</code> no meu repositório.
+>O Projeto ainda está em fase de ``desenvolvimento`` e logo receberá atualizações.
+> Estou desenvolvendo o ``Front-End`` em ``Angular`` para este projeto. Você pode baixá-lo <code>***[AQUI](https://github.com/fmatheus21/user-management)***</code> no meu repositório.
 
 <br/>
 
 ## Tecnologias
-
 ![Java](https://img.shields.io/static/v1?label=Java&message=17&color=green)
 ![Spring Boot](https://img.shields.io/static/v1?label=spring-boot&message=3.2.2&color=green)
 ![MySql](https://img.shields.io/static/v1?label=mysql&message=8&color=green)
