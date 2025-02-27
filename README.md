@@ -96,6 +96,8 @@ No <code>***Postman***</code>, utilize o curl abaixo para listar usuários. Subs
 >O Projeto ainda está em fase de <code>***desenvolvimento***</code> e logo receberá atualizações.
 > Estou desenvolvendo o <code>***Front-End***</code> em <code>***Angular***</code> para este projeto. Você pode baixá-lo <code>***[AQUI](https://github.com/fmatheus21/user-management)***</code> no meu repositório.
 
+<br/>
+
 ## Tecnologias
 
 ![Java](https://img.shields.io/static/v1?label=Java&message=17&color=green)
@@ -108,9 +110,3 @@ No <code>***Postman***</code>, utilize o curl abaixo para listar usuários. Subs
 ![modelmapper](https://img.shields.io/static/v1?label=modelmapper&message=3.1.1&color=green)
 ![SpringDoc](https://img.shields.io/static/v1?label=springdoc-openapi&message=2.1.0&color=green)
  
-
-![Lombok](https://img.shields.io/static/v1?label=lombok&message=1.18.4&color=green)
-![ModelMapper](https://img.shields.io/static/v1?label=model-mapper&message=3.1.0&color=green)
-![Commons](https://img.shields.io/static/v1?label=commons-lang3&message=3.12.0&color=green)
-![Flyway](https://img.shields.io/static/v1?label=flywaydb&message=7.7.3&color=green)
-![jUnit](https://img.shields.io/static/v1?label=junit&message=5.8.2&color=green)
