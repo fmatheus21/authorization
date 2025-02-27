@@ -10,7 +10,7 @@
 
 
 * [Sobre](#sobre)
-* [Pré-requisitos](#pre-requisitos)
+* [Pré-requisitos](#pré-requisitos)
 * [Como usar](#como-usar-authorization-server)
   * [Authorization-Server](#como-usar-authorization-server)
   * [User-Service](#como-usar-user-service)
