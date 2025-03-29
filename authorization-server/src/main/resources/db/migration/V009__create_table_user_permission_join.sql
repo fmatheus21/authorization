@@ -6,5 +6,7 @@ CREATE TABLE user_permission_join (
   CONSTRAINT fk_permission_join FOREIGN KEY (id_permission) REFERENCES permission (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO user_permission_join (id_user, id_permission) VALUES (1, 1);
-INSERT INTO user_permission_join (id_user, id_permission) VALUES (1, 10);
+INSERT INTO user_permission_join (id_user, id_permission) VALUES
+(1, 1),
+(1, 10),
+(1, 15);
