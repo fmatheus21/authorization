@@ -42,7 +42,7 @@ No diretório <code>***/authorization-server***</code>, edite o arquivo <code>**
 - <code>***${RABBITMQ_USERNAME}***</code> - Informe 'admin'.
 - <code>***${RABBITMQ_PASSWORD}***</code> - Informe 'admin'.
 
-Execute o Docker na sua máquina. Após o Docker estar em execução, no seu console, entre no diretório <code>***/authoriozation/docker***</code> e execute o seguinte comando:
+Execute o Docker na sua máquina. Após o Docker estar em execução, no seu console, entre no diretório <code>***/authoriozation/docker/rabbitmq***</code> e execute o seguinte comando:
 
 - <code>***docker-compose up -d***</code>
 
